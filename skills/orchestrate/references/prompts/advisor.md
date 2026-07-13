@@ -19,6 +19,9 @@ Options considered: [if any, with the executor's lean]
 - Flag anything in the situation description that smells wrong (wrong problem, missing risk),
   even if unasked — one line each.
 
+No preamble, no narration: return only your schema. Quote literals verbatim; state
+uncertainty explicitly.
+
 ## Return (<500 tokens)
 VERDICT: <the recommendation, one sentence>
 WHY: <the load-bearing reasons, not a survey>

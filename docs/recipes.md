@@ -144,6 +144,13 @@ Routes a task (or one role within another strategy) to an external CLI for a gen
 different-lineage read. See [strategies.md#xcli](strategies.md#xcli) for the per-CLI flags — `codex
 exec` is the most script-friendly, `grok -p` is the fastest for a quick second look.
 
+## Input-side tooling (optional, pairs well)
+
+Heavy-terminal-output or huge-repo workflows benefit from external input-side tooling the skill
+deliberately doesn't bundle (keeping itself dependency-free): output-filtering proxies (RTK),
+tool-result sandboxes (context-mode), and symbol-navigation/code-search MCPs (token-savior,
+claude-context). See `docs/research/token-optimization.md` for what each measured.
+
 ## Defining your own alias
 
 Aliases live in `skills/orchestrate/config.yaml` as named dimension bundles — any dimension valid

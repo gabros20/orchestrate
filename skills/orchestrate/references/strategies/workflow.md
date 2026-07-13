@@ -41,3 +41,6 @@ Not for: work needing mid-run human sign-off between stages (run each stage as i
   (personal). Saved workflows take `args` (structured, not stringified).
 - The controller stays in the loop BETWEEN workflows: understand → design → implement → verify as
   separate runs you read and steer, not one mega-script.
+- `agent()` prompts end with the MINIMAL communication line (`shared/token-economy.md`) — with
+  `schema:` the output shape is already structural; the line kills preamble/narration on the way
+  there.

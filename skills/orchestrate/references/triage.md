@@ -7,7 +7,8 @@ codebase is unknown (then dispatch `prompts/triage-assessor.md` on a mid-tier mo
 
 Estimate total context the work needs (files to read + plan + expected diffs).
 - **< 50K tokens AND tasks are coupled → `solo`.** Do the work directly; add a single reviewer
-  subagent if the change is risky. Orchestration overhead would exceed its return.
+  subagent if the change is risky. Orchestration overhead would exceed its return (measured
+  baselines: one tool-using agent ≈ 4× a chat interaction's tokens; multi-agent ≈ 15×).
 - A loop earns its cost only when ALL four hold (Karpathy test): the task repeats or grinds;
   verification is automated; the token budget can absorb retries; the agent has real tools to see
   failures. Miss one → don't pick `loop`.

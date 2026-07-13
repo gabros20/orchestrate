@@ -23,6 +23,11 @@ non-compliant code is wasted tokens.
   Implementer rationale never downgrades a severity.
 - **Never pre-judge findings** in a reviewer prompt ("don't flag X", "at most Minor", "the plan
   chose this") — if you're typing that, you're dodging a review loop you need.
+- **The coverage rule — never instruct a reviewer to self-filter** ("only flag high-severity",
+  "be conservative", "at most N issues"): measured to silently drop recall. Reviewers report
+  EVERYTHING found, each with severity + confidence; filtering/triage is the CONTROLLER's job at
+  the dedup/merge step. Terseness rules apply to a reviewer's prose, never its finding count.
+  Findings go to the findings file (`shared/contracts.md`) so inline caps can't truncate them.
 - Findings loop: Critical/Important → fix subagent → RE-REVIEW (no skipping); Minor → ledger,
   batch to final review. ⚠️ "cannot verify from diff" → the CONTROLLER resolves (it holds
   cross-task context), never auto-pass.

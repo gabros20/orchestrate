@@ -28,7 +28,9 @@ Prompt: `prompts/sub-orchestrator.md`.
   reduce.
 - Each sub-orchestrator brief: domain scope, its worker budget (count + model tier), the typed
   report it must return (verdict + findings + artifact paths, <1500 tokens), and what it must NOT
-  do (no cross-domain edits, no scope invention).
+  do (no cross-domain edits, no scope invention). Briefs follow the priming anatomy + pass
+  `scripts/brief-check` (`shared/token-economy.md`); sub-orchestrators apply the same standard to
+  their own worker briefs.
 - **Peek before deep**: have each sub-orchestrator sample structure (cheap greps/reads) before
   committing its worker fan-out.
 - Token budget drives shape (it explains ~80% of multi-agent quality variance): give each branch

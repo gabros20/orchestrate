@@ -32,8 +32,10 @@ vibes**. Return contract per worker: verdict first, <1000 tokens, branch/PR ref 
 
 ## Flow
 
-1. Partition → write cards → check no two cards own the same file (grep the lists; overlap → fix
-   the partition or add an integrator-owned seam file both depend on).
+1. Partition → write cards (priming anatomy applies; pin `read:` pointers with `@ <sha>` — every
+   worker gets its own worktree; run `scripts/brief-check` per card) → check no two cards own the
+   same file (grep the lists; overlap → fix the partition or add an integrator-owned seam file
+   both depend on).
 2. Dispatch workers (single message, parallel tool calls), each with `isolation: worktree`, an
    explicit model, its card path, and the repo's gitignored `.env*` copied into the fresh worktree
    (a fresh worktree has none — builds fail mysteriously without it).
@@ -45,7 +47,9 @@ vibes**. Return contract per worker: verdict first, <1000 tokens, branch/PR ref 
    seam conflicts, run the full suite after each merge. Overlapping-write conflicts an integrator
    can't resolve mechanically → back to the owning worker, never hand-merged by the controller.
 6. **Cleanup is mandatory**: `git worktree remove` each finished tree (a leftover pins its branch);
-   verify `git worktree list` is clean; kill any per-worker dev servers.
+   verify `git worktree list` is clean; kill any per-worker dev servers. Before removal, anything
+   still needed from a worktree's `.orchestrate/raw/` is cited (excerpt) in the task report or
+   copied next to it (`shared/token-economy.md`).
 
 ## Limits & failure handling
 

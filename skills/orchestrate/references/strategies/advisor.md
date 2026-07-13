@@ -35,6 +35,14 @@ When to run B: before building on top of an existing project · when it grew mes
 simplifying, not extending · ALWAYS before handing a codebase to a cheaper model (skip the review
 and it executes your existing mistakes faster).
 
+## Server-side alternative (API pipelines)
+
+When building *programmatic* pipelines directly against the API, the native advisor tool
+(`advisor_20260301`, beta header `advisor-tool-2026-03-01`) runs Variant A server-side in ONE
+call: the executor consults the advisor mid-task with shared context, no client orchestration
+(published: +2.7pp SWE-bench Multilingual at −11.9% cost vs Sonnet-alone; consults are 400–700
+tokens). Inside Claude Code, the subagent shape on this page remains the path.
+
 ## Model routing note
 
 "Turn count beats token price" — a too-cheap executor takes 2–3× the turns and loses the savings.

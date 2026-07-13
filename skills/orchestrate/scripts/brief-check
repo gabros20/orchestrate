@@ -1,0 +1,49 @@
+#!/usr/bin/env bash
+# brief-check <brief-file> — validate a task brief against the priming anatomy
+# (references/shared/token-economy.md). Exit 0 = dispatchable; non-zero = one
+# reason per line on stderr. Validates controller-COMPOSED briefs, never raw
+# scripts/task-brief output (that's an input to composition).
+set -euo pipefail
+
+brief="${1:?usage: brief-check <brief-file>}"
+[ -f "$brief" ] || { echo "brief-check: no such file: $brief" >&2; exit 2; }
+
+fail=0
+err() { echo "brief-check: $1" >&2; fail=1; }
+
+# Required sections (case-insensitive heading match anywhere in the file)
+for section in objective scope verification report "stop condition"; do
+  grep -qiE "^#+ .*${section}|^\*\*${section}" "$brief" || err "missing section: ${section}"
+done
+
+# Pointer lines: `read: <path> — <why>` (optional `@ <sha>`; `(will exist)` skipped)
+repo_root="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
+unpinned=0
+while IFS= read -r line; do
+  case "$line" in *"(will exist)"*) continue ;; esac
+  # strip prefix, take the path token (up to first space/—/@)
+  path="$(printf '%s' "$line" | sed -E 's/^[[:space:]]*-?[[:space:]]*read:[[:space:]]*//' | awk '{print $1}')"
+  [ -n "$path" ] || continue
+  case "$path" in
+    /*) resolved="$path" ;;
+    *)  resolved="$repo_root/$path" ;;
+  esac
+  [ -e "$resolved" ] || err "dead pointer: $path (resolved: $resolved)"
+  case "$line" in *"@ "*) : ;; *) unpinned=$((unpinned+1)) ;; esac
+done < <(grep -E '^[[:space:]]*-?[[:space:]]*read:' "$brief" || true)
+
+# Warn (not fail) on unpinned pointers when multiple worktrees are active
+if [ "$unpinned" -gt 0 ] && [ "$(git worktree list 2>/dev/null | wc -l)" -gt 1 ]; then
+  echo "brief-check: warning: $unpinned unpinned pointer(s) with >1 worktree active — pin with '@ <sha>'" >&2
+fi
+
+# Report path's directory must exist (look for a .orchestrate/... .md mention)
+report_path="$(grep -oE '\.orchestrate/[A-Za-z0-9._/-]+\.md' "$brief" | head -1 || true)"
+if [ -n "$report_path" ]; then
+  dir="$repo_root/$(dirname "$report_path")"
+  [ -d "$dir" ] || err "report directory missing: $dir (run scripts/workspace first)"
+else
+  err "no report path found (expected a .orchestrate/<...>.md mention in the report contract)"
+fi
+
+exit "$fail"

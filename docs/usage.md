@@ -261,6 +261,28 @@ task — reach for that shape under budget pressure rather than downgrading the 
 6. **Safety rails are always on** — see below.
 7. **When not to orchestrate**: under ~50K tokens of coupled work, use `solo`. A strategy that
    costs more than it returns is a bug, not a feature.
+8. **Token economy**: prime with pointers, work silent, report dense — see below.
+
+## Token economy
+
+v1.1.0 bakes a token-discipline layer into every strategy
+(`references/shared/token-economy.md` is the full reference). The principles:
+
+- **Cut waste, not information.** Token spend explains ~80% of multi-agent quality variance —
+  the goal is zero *wasted* tokens, never starving workers of context. Underpriming (a worker
+  guessing or round-tripping NEEDS_CONTEXT) costs more than overpriming.
+- **Priming anatomy**: every brief carries objective, scope (including what must NOT change),
+  machine-checkable `read: <path> — why [@ <sha>]` pointers instead of pasted file contents,
+  verbatim interfaces/constraints, a verification command, a report contract, and stop
+  conditions. `scripts/brief-check` validates a brief before dispatch.
+- **Role-scoped communication blocks**: tool-heavy workers get a silence-default working
+  contract (no narration, structured blockers, raw output redirected to `.orchestrate/raw/`);
+  reviewers get a coverage-protected variant (report every finding to a findings file — never
+  self-filter); terse inline roles get one line. Code, commands, and error strings are always
+  quoted verbatim; safety language is never compressed.
+- **Honest numbers**: expect 10–25% session-level savings, not the 65–75% headlines from
+  output-only benchmarks. Measure with your provider's billing page, A/B, before believing
+  anything — including this skill.
 
 ## Safety rails
 

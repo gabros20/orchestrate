@@ -17,6 +17,9 @@ You are assessing a task to recommend an orchestration strategy. Measure; don't 
 - Recurrence: one-shot, grind-until-done, or recurring-on-trigger?
 - Debate-worthiness: multiple valid architectures? unclear root cause? high blast radius?
 
+No preamble, no narration: return only your schema. Quote literals verbatim; state
+uncertainty explicitly.
+
 ## Return (this schema, nothing else)
 scale: small(1-2 files) | medium(3-5) | large(6+)
 est_tokens: <number>

@@ -9,6 +9,10 @@ context — the prompt must carry EVERYTHING.
 **Verify flags before trusting them** — CLIs drift; run `<cli> --help` once per session before
 scripting against it.
 
+**Task text carries the WORKER communication block** (`shared/token-economy.md`) with
+`.orchestrate/raw/` paths made absolute for the CLI's cwd — external workers narrate by default
+and their stdout lands in YOUR context; the contract is the filter.
+
 ## Codex (`codex exec`) — the most script-friendly
 
 ```bash

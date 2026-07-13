@@ -14,21 +14,35 @@ split task → human). Never re-dispatch unchanged.
 
 ## Chat-return schemas (what comes back INLINE — keep it tiny)
 
+Inline returns are CAPPED (≈1–2K tokens max, per this table); report FILES carry the depth and
+are read on demand. Terseness is a grammar, not a vibe — line shapes below are contracts.
+
 | Role | Returns (max) |
 |---|---|
 | implementer | <15 lines: Status · commits · 1-line tests · concerns · report path |
-| reviewer | verdict first (✅/❌/⚠️) · issues as Critical/Important/Minor + file:line · assessment |
+| reviewer | verdict first (✅/❌/⚠️) · counts by severity · findings FILE path (see below) |
 | verifier | `works|broken` · expected · observed · evidence path |
 | sub-orchestrator | <1500 tokens: verdict · findings summary · artifact paths |
 | parallel worker | verdict first, <1000 tokens: branch/PR ref · report path |
 | triage assessor | scale · independence · verifiability · recommended strategy + why |
+| search/explore worker | `path:line — symbol — ≤10-word note` per hit + `totals: <n> files` (or `No match.`) |
+
+Failure returns are single structured lines, never essays:
+`BLOCKED — what / evidence (excerpt + raw path) / what you tried / what you need`.
+
+**Reviewer findings go to a FILE**, collision-proof name
+`review-task<N>-<spec|quality|lens-<k>>-r<round>.md` — inline caps can never truncate findings.
+Reviewer "read-only" means the REPO; `.orchestrate/` is the one place a reviewer writes.
 
 ## Workspace files (`.orchestrate/`, via `scripts/workspace`)
 
 - `run.md` — resolved dimensions, budget, task, timestamp (written at kickoff)
-- `task-N-brief.md` / `task-N-report.md` — per-task handoffs (report named off brief)
+- `task-N-brief.md` / `task-N-report.md` — per-task handoffs (report named off brief); briefs
+  follow the priming anatomy and pass `scripts/brief-check` (`shared/token-economy.md`)
 - `card-<k>.md` — parallel task cards
 - `review-<b7>..<h7>.diff` — review packages
+- `review-task<N>-<kind>-r<round>.md` — reviewer findings files
+- `raw/` — full command/tool output, redirected at execution time (`shared/token-economy.md`)
 - `progress.md` — THE LEDGER (below)
 - `loop-<name>.md` — loop contracts
 

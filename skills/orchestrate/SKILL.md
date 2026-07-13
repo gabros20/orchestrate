@@ -1,12 +1,12 @@
 ---
 name: orchestrate
-version: 1.0.2
+version: 1.1.0
 description: Strategy-selectable subagent orchestration. Use when executing an implementation plan or any multi-step task with subagents — sequential staged cycles, parallel worktree fan-out, hierarchical sub-orchestrator fleets, agent teams, dynamic workflows, goal/Ralph loops, advisor/executor cost splits, adversarial planning, or external CLI engines (codex/grok) as workers. Triggers - /orchestrate, "orchestrate this", "run this plan with subagents", "fan out agents", "goal loop", "agent swarm". The user can force a strategy with strategy=<name>; otherwise a triage pass picks one and says why.
 ---
 
 # Orchestrate
 
-**Version 1.0.2** — if asked which version of orchestrate is installed, answer from this line.
+**Version 1.1.0** — if asked which version of orchestrate is installed, answer from this line.
 (History: `CHANGELOG.md` in the source repo, github.com/gabros20/orchestrate.)
 
 One entry point, nine orchestration strategies. **A strategy is a preset over dimensions**; every
@@ -80,14 +80,18 @@ review=panel:3`.
    open-PR bandwidth cap. Full list: `references/shared/safety-rails.md`.
 7. **When NOT to orchestrate:** <50K tokens of coupled work → `solo` (just do it, optionally one
    reviewer). A strategy that costs more than it returns is a bug.
+8. **Token economy: prime with pointers, work silent, report dense.** Briefs follow the priming
+   anatomy and pass `scripts/brief-check`; every dispatch embeds its ROLE's communication block
+   (`references/shared/token-economy.md`). Quote literals verbatim; never compress safety
+   language. Reviewers report everything — filtering is the controller's job.
 
 ## Files
 
 - `references/triage.md` — auto-selection decision procedure
 - `references/strategies/*.md` — one per strategy: roles, step flow, failure handling, example
-- `references/shared/*.md` — contracts · review-gates · model-routing · isolation · monitoring · safety-rails · handoff
+- `references/shared/*.md` — contracts · review-gates · model-routing · isolation · monitoring · safety-rails · handoff · token-economy
 - `references/prompts/*.md` — dispatch templates (implementer, reviewers, verifier, sub-orchestrator, …)
-- `scripts/` — `workspace` · `task-brief PLAN N` · `review-package BASE HEAD`
+- `scripts/` — `workspace` · `task-brief PLAN N` · `review-package BASE HEAD` · `brief-check BRIEF`
 - `config.yaml` — saved aliases (named dimension presets)
 
 Read ONLY the strategy file you selected plus the shared files it names. Do not preload everything.

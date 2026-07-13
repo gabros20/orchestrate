@@ -4,7 +4,8 @@ Preset: `topology=staged planning=plan-first review=dual isolation=off trigger=o
 Sequential per-task cycles. The controller never implements; every task gets a FRESH subagent with
 a curated brief; two ordered reviews gate every task. Descends from superpowers SDD.
 
-Read with this file: `shared/contracts.md`, `shared/review-gates.md`, `shared/model-routing.md`.
+Read with this file: `shared/contracts.md`, `shared/review-gates.md`, `shared/model-routing.md`,
+`shared/token-economy.md` (communication blocks + priming anatomy).
 Prompts: `prompts/implementer.md`, `prompts/spec-reviewer.md`, `prompts/quality-reviewer.md`.
 
 ## Setup (once per run)
@@ -25,10 +26,12 @@ brief → dispatch implementer → (questions? answer, re-dispatch) → implemen
   → spec review → (fix → re-review)* → quality review → (fix → re-review)* → ledger line → next
 ```
 
-1. **Brief**: `scripts/task-brief PLAN_FILE N` → `.orchestrate/task-N-brief.md`. Dispatch the
-   implementer (prompt template) with: brief path, report path (`task-N-report.md`), scene-setting
-   (where this fits, interfaces from prior tasks, resolved ambiguities), and an EXPLICIT model.
-   A dispatch is ONE task — never session history.
+1. **Brief**: `scripts/task-brief PLAN_FILE N` extracts the plan section; COMPOSE the brief
+   around it per the priming anatomy (`shared/token-economy.md`) and gate it with
+   `scripts/brief-check` before dispatch. Dispatch the implementer (prompt template) with: brief
+   path, report path (`task-N-report.md`), scene-setting (where this fits, interfaces from prior
+   tasks, resolved ambiguities), and an EXPLICIT model. A dispatch is ONE task — never session
+   history.
 2. **Record BASE** (`git rev-parse HEAD`) before the implementer starts.
 3. Implementer returns **<15 lines**: Status · commits · one-line test summary · concerns · report
    path. Full detail goes in the report file, not chat.

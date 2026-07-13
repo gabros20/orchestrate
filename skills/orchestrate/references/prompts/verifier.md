@@ -23,6 +23,9 @@ write this code; do not read its rationale — judge behavior only.
 - Do not fix anything. Do not weaken the criteria. If you cannot exercise the path at all,
   report broken with the blocker as "observed".
 
+No preamble, no narration: return only your schema. Quote literals verbatim; state
+uncertainty explicitly.
+
 ## Report (strictly this shape)
 TASK: works | broken
 expected: <one line>

@@ -31,6 +31,13 @@ a handoff FILE and re-dispatch fresh. Never let a degraded context keep driving.
    verify claims against the code; then wait for instructions.
 ```
 
+## Probe-test before trusting it
+
+After writing a handoff (or any compaction summary), probe it: can it answer — *which files
+changed, at which revision? what was the original error? what's the next open item? what must
+not change?* — from its own text + pointers? If not, regenerate. Artifact-trail loss is the
+measured worst failure mode of compression.
+
 ## In this skill
 
 - The ledger (`progress.md`) already carries per-task state — the handoff adds the WHY layer and
