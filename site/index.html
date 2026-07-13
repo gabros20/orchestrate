@@ -154,6 +154,26 @@
   .gate-order .g2{border-color:var(--good); color:var(--good); font-weight:600}
   .gate-order .x{color:var(--glyph)}
 
+  /* token timeline */
+  .tl{list-style:none;margin:22px 0 0;padding:0}
+  .tl li{position:relative;padding:0 0 22px 38px}
+  .tl li::before{content:"";position:absolute;left:11px;top:9px;bottom:-5px;width:2px;background:var(--line)}
+  .tl li:last-child::before{display:none}
+  .tl .dot{position:absolute;left:5px;top:4px;width:14px;height:14px;border-radius:50%;background:var(--panel);border:2.5px solid var(--glyph)}
+  .tl .dot.c{border-color:var(--accent)} .tl .dot.g{border-color:var(--amber)} .tl .dot.r{border-color:var(--good)}
+  .tl .hd{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .tl .hd b{font-family:ui-monospace,Menlo,monospace;font-size:14px}
+  .tl .who{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:1px 9px;font-weight:600}
+  .tl .fx{margin-left:auto;font-family:ui-monospace,Menlo,monospace;font-size:11px;border-radius:999px;padding:2px 10px;border:1px solid;white-space:nowrap}
+  .fx.save{color:var(--good);border-color:var(--good)} .fx.spend{color:var(--amber);border-color:var(--amber)} .fx.qual{color:var(--accent);border-color:var(--accent)}
+  .tl .desc{display:block;font-size:13.5px;color:var(--muted);line-height:1.55;margin-top:5px;max-width:66ch}
+  .tl .desc b{color:var(--ink)}
+  .tl code{background:var(--code-bg);padding:1px 5px;border-radius:4px;font-size:12px;font-family:ui-monospace,Menlo,monospace}
+  .tl details{margin-top:8px} .tl summary{cursor:pointer;font-size:12.5px;color:var(--accent);font-family:ui-monospace,Menlo,monospace}
+  .tl summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+  .tl details .term{margin-top:8px;font-size:12.5px}
+  @media (max-width:560px){ .tl .fx{margin-left:0} }
+
   /* files */
   .files{background:var(--code-bg); border:1px solid var(--line); border-radius:8px; padding:16px 20px; font-family:ui-monospace,Menlo,monospace; font-size:13px; line-height:1.9; overflow-x:auto; white-space:pre}
   .files .d{color:var(--muted)}
@@ -348,23 +368,39 @@
       <div class="use"><b>Who:</b> advisors, triage assessors, verifiers, debate prompts, workflow agents.</div>
       <div class="mech">One line: no preamble, return only the schema. A 244-token contract on a 4-line return would be net-negative — blocks are <b>role-scoped</b> for exactly that reason.</div></div>
   </div>
-  <p style="margin-top:22px"><b>The input side — priming anatomy.</b> Cost discipline never starves a worker: briefs <b>prime with pointers, not payloads</b> — exact paths with a why (pinned <code class="mono">@ sha</code> in worktree runs), inlining only what's semantically complete, stable, and cheaper than rediscovery. <code class="mono">scripts/brief-check</code> gates every dispatch; a clarifying round-trip after dispatch costs a full worker turn.</p>
-  <div class="term"><span class="c"># .orchestrate/task-3-brief.md — passes scripts/brief-check</span>
+  <p style="margin-top:22px"><b>The life of a dispatch</b> — where tokens get spent, saved, and where quality is guarded. Dot color = actor: <span class="mono" style="color:var(--accent)">controller</span> · <span class="mono" style="color:var(--amber)">gate</span> · <span class="mono" style="color:var(--glyph)">worker</span> · <span class="mono" style="color:var(--good)">reviewer</span>.</p>
+  <ol class="tl">
+    <li><span class="dot c"></span>
+      <div class="hd"><b>compose the brief</b><span class="who">controller</span><span class="fx qual">input quality ↑</span></div>
+      <span class="desc"><b>Prime with pointers, not payloads</b>: objective, scope with the must-NOT-change list, <code>read: path — why @ sha</code> pointers instead of pasted files, verbatim constraints, a verification command, report contract, stop conditions. Inline only what's semantically complete, stable, and cheaper than rediscovery.</span>
+      <details><summary>example brief ▸</summary><div class="term"><span class="c"># .orchestrate/task-3-brief.md</span>
 <span class="p">Objective</span>     extract the rate-limit middleware; done = suite green, public API unchanged
 <span class="p">Scope</span>         in: src/middleware · out: auth flow · must NOT change: response shape
 <span class="p">Pointers</span>      read: src/middleware/rate.ts — current implementation @ 4f2c91a
               read: src/config/limits.ts — constants to honor
 <span class="p">Verification</span>  pnpm test middleware
 <span class="p">Report</span>        .orchestrate/task-3-report.md · inline &lt;15 lines
-<span class="p">Stop</span>          BLOCKED if the storage backend is ambiguous — don't guess</div>
-  <ul class="rules">
-    <li><b>redirect, don't dump</b>Noisy commands go to <span class="mono">.orchestrate/raw/</span> at execution time — the dump never enters context; chat carries the decisive excerpt + path.</li>
-    <li><b>never compress</b>Code, diffs, commands, exact errors: verbatim. Security warnings and irreversible-action confirmations: full prose, always.</li>
-    <li><b>reviewers report everything</b>Terseness binds a reviewer's prose, never its finding count — self-filtering silently drops recall.</li>
-    <li><b>controller diet</b>The controller reads reports, not diffs; targeted inspection only when a gate is ambiguous or reviewers conflict.</li>
-    <li><b>minor ≠ default</b>Workers pick-and-note trivial local choices; anything touching security, compatibility, or public behavior escalates.</li>
-    <li><b>honest numbers</b>Expect 10–25% session-level savings, not 65–75% headlines. A/B on your billing page before believing anyone — including this page.</li>
-  </ul>
+<span class="p">Stop</span>          BLOCKED if the storage backend is ambiguous — don't guess</div></details></li>
+    <li><span class="dot g"></span>
+      <div class="hd"><b>brief-check</b><span class="who">gate</span><span class="fx save">saves a worker turn</span></div>
+      <span class="desc"><code>scripts/brief-check</code> fails dead pointers, missing sections, and a missing report path <b>before</b> dispatch — a clarifying round-trip after dispatch costs a full worker turn. Underpriming is the expensive failure, not overpriming.</span></li>
+    <li><span class="dot c"></span>
+      <div class="hd"><b>dispatch</b><span class="who">controller</span><span class="fx spend">spends ≈244 tok</span></div>
+      <span class="desc">The role's communication block rides along <b>verbatim and byte-stable</b> (cache-friendly); the model is explicit. That ≈244-token spend buys back hundreds-to-thousands of narration tokens per worker turn.</span></li>
+    <li><span class="dot"></span>
+      <div class="hd"><b>work</b><span class="who">worker</span><span class="fx save">−narration −dumps</span></div>
+      <span class="desc">Silence-default: no tool-call narration, no restating the brief. Noisy commands <b>redirect to <code>.orchestrate/raw/</code> at execution time</b> — the dump never enters context. Trivial local choices: pick-and-note; anything touching security, compatibility, or public behavior escalates.</span></li>
+    <li><span class="dot"></span>
+      <div class="hd"><b>report</b><span class="who">worker</span><span class="fx save">compounds every turn</span></div>
+      <span class="desc">Dense, schema'd, capped — the return becomes <b>controller input re-read on every later turn</b>, so every saved token compounds. Code, commands, and exact errors stay verbatim; uncertainty stated, only rhetorical hedging cut. Blockers are structured: <code>BLOCKED — what / evidence / tried / need</code>.</span></li>
+    <li><span class="dot r"></span>
+      <div class="hd"><b>review</b><span class="who">reviewer</span><span class="fx qual">recall guard</span></div>
+      <span class="desc"><b>Never self-filters</b> — every finding with severity + confidence goes to a findings <b>file</b> (inline caps can't truncate); inline is verdict + counts. Filtering is the controller's job, from reports — it inspects the diff only when a gate is ambiguous.</span></li>
+    <li><span class="dot c"></span>
+      <div class="hd"><b>ledger</b><span class="who">controller</span><span class="fx save">cheap resume</span></div>
+      <span class="desc">One line per gated unit in <code>progress.md</code>. On resume or compaction the ledger + <code>git log</code> are the truth — no transcript re-reading, no re-dispatched completed work.</span></li>
+  </ol>
+  <div class="note"><b>Honest numbers:</b> expect 10–25% session-level savings, not the 65–75% output-only headlines. A/B on your provider's billing page before believing anyone — including this page.</div>
 </section>
 
 <section id="gates">
