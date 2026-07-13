@@ -12,6 +12,13 @@ tagged in git as `v<version>`. Every release PR updates **both** plus this file.
 
 ## [Unreleased]
 
+### Added
+- `docs/designs/v1.1.0-token-optimization.md` — implementation design for the token/context
+  optimization release (role-scoped communication contracts, priming anatomy with pinned
+  pointers, `brief-check` validator, findings files, raw-output redirection, non-regression
+  measurement gate). Twice reviewed by an external gpt-5.6-sol advisor ("ship with amendments" →
+  amendments adopted). Design only; implementation lands with v1.1.0.
+
 ## [1.0.2] — 2026-07-13
 
 ### Changed
