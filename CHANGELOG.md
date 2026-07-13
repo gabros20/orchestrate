@@ -13,6 +13,9 @@ tagged in git as `v<version>`. Every release PR updates **both** plus this file.
 ## [Unreleased]
 
 ### Changed
+- Site + visual guide: the "Gates & safety rails" gate strip replaced with the numbered
+  workflow pipeline (plan-veto → execute → spec → quality → evidence verify, gate-colored) plus
+  an explicit fix→re-review loop strip; old pill-row markup and CSS removed.
 - Site + visual guide: new "Token economy" section — role-scoped block cards with honest
   per-dispatch costs, and a **life-of-a-dispatch timeline** (actor-coded steps with per-step
   token-effect badges: spent / saved / quality-guarded; expandable example brief); disk map and
