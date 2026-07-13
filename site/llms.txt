@@ -26,9 +26,10 @@ format, so any agent that reads a `SKILL.md` can use it.
 - [docs/usage.md](https://raw.githubusercontent.com/gabros20/orchestrate/main/docs/usage.md): invoking `/orchestrate`, dimensions, resuming runs.
 - [docs/strategies.md](https://raw.githubusercontent.com/gabros20/orchestrate/main/docs/strategies.md): all nine strategies in depth — when to use each, their mechanics.
 - [docs/recipes.md](https://raw.githubusercontent.com/gabros20/orchestrate/main/docs/recipes.md): composed dimension recipes and saved aliases.
-- [docs/RESEARCH.md](https://raw.githubusercontent.com/gabros20/orchestrate/main/docs/RESEARCH.md): the evidence and sources behind the design choices.
+- [docs/research/foundations.md](https://raw.githubusercontent.com/gabros20/orchestrate/main/docs/research/foundations.md): the evidence and sources behind the design choices.
+- [docs/research/token-optimization.md](https://raw.githubusercontent.com/gabros20/orchestrate/main/docs/research/token-optimization.md): research record on token/context/cost optimization for multi-agent orchestration.
 
 ## Optional
 
-- [docs/DESIGN.md](https://raw.githubusercontent.com/gabros20/orchestrate/main/docs/DESIGN.md): design record — why the skill is shaped the way it is.
+- [docs/designs/v1.0.0-initial-architecture.md](https://raw.githubusercontent.com/gabros20/orchestrate/main/docs/designs/v1.0.0-initial-architecture.md): implementation design shipped in v1.0.0 — why the skill is shaped the way it is.
 - [Visual guide](https://orchestrate-skill.vercel.app): every strategy, dimension, and alias on one page.

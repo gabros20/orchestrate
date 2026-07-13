@@ -1,6 +1,7 @@
 # Token & context optimization for multi-agent orchestration — research record
 
-*Research date: 2026-07-13 · Status: research only — no skill behavior changed yet.*
+> **Status:** research only — not yet implemented (opportunities O1–O14 below are candidates for a future release; when implemented, the design will land as `../designs/v<version>-token-optimization.md`). Research date: 2026-07-13.
+
 *Method: X/Twitter sweep (13 queries, 9 full-thread reads via x-relay), web research agent,
 skills-ecosystem survey agent, primary-source reads (repos, SKILL.md files, benchmark docs).*
 

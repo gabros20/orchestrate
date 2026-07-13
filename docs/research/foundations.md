@@ -1,5 +1,7 @@
 # /orchestrate — research record, learnings, and design grounding
 
+> **Status:** implemented — this research fed the **v1.0.0** initial release (design: [../designs/v1.0.0-initial-architecture.md](../designs/v1.0.0-initial-architecture.md) · [CHANGELOG](../../CHANGELOG.md)).
+
 Extracted context for the `orchestrate` skill: every source consulted, what each taught, the
 convergent principles, and a traceability map from design decisions back to evidence. Built
 2026-07-10. Companion docs: `PLAN.md` (the build plan), `resources/GUIDE.html` (visual guide).

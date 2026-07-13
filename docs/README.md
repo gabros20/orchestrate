@@ -26,10 +26,24 @@ elaboration and shortcuts on top of it.
 
 ## Background (not needed to use the skill)
 
-- **[RESEARCH.md](RESEARCH.md)** — the evidence and sources (X posts, official Claude Code docs,
-  prior orchestration skills, CLI docs) that fed the design.
-- **[DESIGN.md](DESIGN.md)** — the design record: why strategies are presets over dimensions, the
-  file layout, and the decisions made while building the skill.
+Two folders separate *what we learned* from *what we shipped*:
+
+- **[research/](research/)** — research records: the evidence and sources gathered before any
+  implementation. Version-agnostic; each doc's header states its status (which release implemented
+  it, or "research only — not yet implemented").
+  - [research/foundations.md](research/foundations.md) — the original research that fed v1.0.0
+    (X posts, official Claude Code docs, prior orchestration skills, CLI docs).
+  - [research/token-optimization.md](research/token-optimization.md) — token/context/cost
+    optimization for multi-agent orchestration (research only as of v1.0.1).
+- **[designs/](designs/)** — implementation designs that shipped, one per release that changed
+  behavior. **The filename carries the release version** (`v<version>-<topic>.md`) and the header
+  states the version + date; [CHANGELOG.md](../CHANGELOG.md) is the cross-reference.
+  - [designs/v1.0.0-initial-architecture.md](designs/v1.0.0-initial-architecture.md) — why
+    strategies are presets over dimensions, the file layout, the build decisions.
+
+Lifecycle: research lands in `research/` → when acted on, an implementation design lands in
+`designs/` as `v<next-version>-<topic>.md` → the release bumps `version:` in SKILL.md, adds a
+CHANGELOG entry, and tags `v<version>`.
 
 Read these if you want to know *why* something works the way it does, or if you're extending the
 skill yourself.
