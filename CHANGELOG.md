@@ -12,6 +12,12 @@ tagged in git as `v<version>`. Every release PR updates **both** plus this file.
 
 ## [Unreleased]
 
+### Changed
+- Site + visual guide: new "Token economy" section (role-scoped blocks with honest per-dispatch
+  costs, priming-anatomy example brief, the six token laws); disk map and run pipeline updated
+  for `brief-check`, `token-economy.md`, findings files, and `.orchestrate/raw/`. Site only —
+  no skill behavior change.
+
 ## [1.1.0] — 2026-07-13
 
 Token & context optimization across every strategy — cut narration, duplication, raw dumps, and
