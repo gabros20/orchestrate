@@ -129,12 +129,12 @@ Every strategy is a preset over these; you can override any of them on top of a 
 
 ```
 skills/orchestrate/   the skill: SKILL.md (router), config.yaml (aliases), references/, scripts/
-docs/                 RESEARCH.md (evidence + sources), DESIGN.md (design record)
+docs/                 research/ (research records), designs/ (versioned implementation designs)
 site/                 the visual guide, deploys to orchestrate-skill.vercel.app
 install.sh            installer (claude | codex | all)
 ```
 
-More docs: [docs/RESEARCH.md](docs/RESEARCH.md) · [docs/DESIGN.md](docs/DESIGN.md) ·
+More docs: [docs/research/](docs/research/) · [docs/designs/](docs/designs/) ·
 [docs/installation.md](docs/installation.md) · [docs/usage.md](docs/usage.md) ·
 [docs/strategies.md](docs/strategies.md) · [docs/recipes.md](docs/recipes.md)
 
