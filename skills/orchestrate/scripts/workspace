@@ -7,4 +7,5 @@ root="$(git rev-parse --show-toplevel 2>/dev/null)" || { echo "not a git repo" >
 ws="$root/.orchestrate"
 mkdir -p "$ws"
 [ -f "$ws/.gitignore" ] || printf '*\n' > "$ws/.gitignore"
+"$(cd "$(dirname "$0")" && pwd)/toolbox" >/dev/null 2>&1 || true   # orientation recipes (idempotent)
 printf '%s\n' "$ws"

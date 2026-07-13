@@ -359,15 +359,15 @@
   workers need. Workers are <b>quiet while working, dense when reporting</b> — via three
   role-scoped communication blocks pasted verbatim into every dispatch:</p>
   <div class="cards">
-    <div class="card"><div class="top"><h3>WORKER<em>&approx;244 tok</em></h3></div>
+    <div class="card"><div class="top"><h3>WORKER<em>&approx;285 tok</em></h3></div>
       <div class="use"><b>Who:</b> implementers, sub-orchestrators, integrators, loop executors, xcli workers.</div>
       <div class="mech">Silence-default while working — no tool-call narration, no restating the brief. Structured blockers (<code>BLOCKED — what / evidence / tried / need</code>), noisy output redirected to <code>.orchestrate/raw/</code>, literals quoted verbatim. Safety messages are never silenced.</div></div>
-    <div class="card"><div class="top"><h3>REVIEWER<em>&approx;115 tok</em></h3></div>
+    <div class="card"><div class="top"><h3>REVIEWER<em>&approx;139 tok</em></h3></div>
       <div class="use"><b>Who:</b> spec, quality, panel, and consensus reviewers.</div>
       <div class="mech"><b>Never self-filters</b> — every finding reported with severity + confidence (suppression measurably drops recall). Full findings go to a findings <b>file</b>; inline is verdict + counts, so caps can never truncate them. Filtering is the controller's job.</div></div>
     <div class="card"><div class="top"><h3>MINIMAL<em>&approx;18 tok</em></h3></div>
       <div class="use"><b>Who:</b> advisors, triage assessors, verifiers, debate prompts, workflow agents.</div>
-      <div class="mech">One line: no preamble, return only the schema. A 244-token contract on a 4-line return would be net-negative — blocks are <b>role-scoped</b> for exactly that reason.</div></div>
+      <div class="mech">One line: no preamble, return only the schema. A 285-token contract on a 4-line return would be net-negative — blocks are <b>role-scoped</b> for exactly that reason.</div></div>
   </div>
   <p style="margin-top:22px"><b>The life of a dispatch</b> — where tokens get spent, saved, and where quality is guarded. Dot color = actor: <span class="mono" style="color:var(--accent)">controller</span> · <span class="mono" style="color:var(--amber)">gate</span> · <span class="mono" style="color:var(--glyph)">worker</span> · <span class="mono" style="color:var(--good)">reviewer</span>.</p>
   <ol class="tl">
@@ -386,11 +386,11 @@
       <div class="hd"><b>brief-check</b><span class="who">gate</span><span class="fx save">saves a worker turn</span></div>
       <span class="desc"><code>scripts/brief-check</code> fails dead pointers, missing sections, and a missing report path <b>before</b> dispatch — a clarifying round-trip after dispatch costs a full worker turn. Underpriming is the expensive failure, not overpriming.</span></li>
     <li><span class="dot c"></span>
-      <div class="hd"><b>dispatch</b><span class="who">controller</span><span class="fx spend">spends ≈244 tok</span></div>
-      <span class="desc">The role's communication block rides along <b>verbatim and byte-stable</b> (cache-friendly); the model is explicit. That ≈244-token spend buys back hundreds-to-thousands of narration tokens per worker turn.</span></li>
+      <div class="hd"><b>dispatch</b><span class="who">controller</span><span class="fx spend">spends ≈285 tok</span></div>
+      <span class="desc">The role's communication block rides along <b>verbatim and byte-stable</b> (cache-friendly); the model is explicit. That ≈285-token spend buys back hundreds-to-thousands of narration tokens per worker turn.</span></li>
     <li><span class="dot"></span>
       <div class="hd"><b>work</b><span class="who">worker</span><span class="fx save">−narration −dumps</span></div>
-      <span class="desc">Silence-default: no tool-call narration, no restating the brief. Noisy commands <b>redirect to <code>.orchestrate/raw/</code> at execution time</b> — the dump never enters context. Trivial local choices: pick-and-note; anything touching security, compatibility, or public behavior escalates.</span></li>
+      <span class="desc"><b>Orients first</b> — tree, manifests, one neighboring module for patterns, via the repo's probed <code>toolbox.md</code> recipes (reading to understand is work, not waste). Then silence-default: no tool-call narration, no restating the brief. Noisy commands <b>redirect to <code>.orchestrate/raw/</code> at execution time</b> — the dump never enters context. Trivial local choices: pick-and-note; anything touching security, compatibility, or public behavior escalates.</span></li>
     <li><span class="dot"></span>
       <div class="hd"><b>report</b><span class="who">worker</span><span class="fx save">compounds every turn</span></div>
       <span class="desc">Dense, schema'd, capped — the return becomes <b>controller input re-read on every later turn</b>, so every saved token compounds. Code, commands, and exact errors stay verbatim; uncertainty stated, only rhetorical hedging cut. Blockers are structured: <code>BLOCKED — what / evidence / tried / need</code>.</span></li>
@@ -442,7 +442,7 @@
   <div class="files"><span class="hl">~/.claude/skills/orchestrate/</span>
 ├─ SKILL.md                    <span class="d">the router — grammar, catalog, universal rules</span>
 ├─ config.yaml                 <span class="d">your saved aliases</span>
-├─ scripts/                    <span class="d">workspace · task-brief · review-package · brief-check</span>
+├─ scripts/                    <span class="d">workspace · task-brief · review-package · brief-check · toolbox</span>
 └─ references/
    ├─ triage.md                <span class="d">the auto-selection procedure</span>
    ├─ strategies/*.md          <span class="d">one file per strategy — read only the one selected</span>
@@ -454,6 +454,7 @@
 ├─ task-N-brief.md / -report.md<span class="d">  per-task handoffs</span>
 ├─ review-&lt;b&gt;..&lt;h&gt;.diff        <span class="d">review packages + reviewer findings files</span>
 ├─ raw/                        <span class="d">redirected command output — dumps never enter context</span>
+├─ toolbox.md                  <span class="d">probed orientation recipes — read, don't re-probe</span>
 └─ progress.md                 <span class="d">THE LEDGER — resume trusts this + git log, not memory</span></div>
 </section>
 

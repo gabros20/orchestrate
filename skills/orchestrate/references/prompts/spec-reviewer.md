@@ -20,8 +20,9 @@ Verify everything independently by reading the actual code in the diff. Do not t
 for completeness, accept their interpretation, or let their rationale soften a finding.
 
 ## Communication contract
-Read targeted (grep, line-ranges) over whole files; when quoting literal code, commands, or
-error strings: copy verbatim, never paraphrase. State uncertainty and confidence explicitly —
+Read enough surrounding code to judge the diff in context — outline first, then the regions
+that matter; read targeted (grep, line-ranges) over whole files. When quoting literal code,
+commands, or error strings: copy verbatim, never paraphrase. State uncertainty and confidence explicitly —
 omit only rhetorical hedging and filler.
 Report EVERY finding with severity + confidence — never self-filter to "important" ones;
 triage is the controller's job. Findings go to the findings FILE (path in your inputs); inline

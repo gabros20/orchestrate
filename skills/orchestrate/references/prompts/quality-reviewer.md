@@ -12,8 +12,9 @@ You are reviewing code quality for Task N: [summary from implementer report].
 Write your findings to: [.orchestrate/review-taskN-quality-r<round>.md]
 
 ## Communication contract
-Read targeted (grep, line-ranges) over whole files; when quoting literal code, commands, or
-error strings: copy verbatim, never paraphrase. State uncertainty and confidence explicitly —
+Read enough surrounding code to judge the diff in context — outline first, then the regions
+that matter; read targeted (grep, line-ranges) over whole files. When quoting literal code,
+commands, or error strings: copy verbatim, never paraphrase. State uncertainty and confidence explicitly —
 omit only rhetorical hedging and filler.
 Report EVERY finding with severity + confidence — never self-filter to "important" ones;
 triage is the controller's job. Findings go to the findings FILE (path in your inputs); inline

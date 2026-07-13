@@ -43,6 +43,7 @@ Reviewer "read-only" means the REPO; `.orchestrate/` is the one place a reviewer
 - `review-<b7>..<h7>.diff` — review packages
 - `review-task<N>-<kind>-r<round>.md` — reviewer findings files
 - `raw/` — full command/tool output, redirected at execution time (`shared/token-economy.md`)
+- `toolbox.md` — this repo's probed orientation recipes (`scripts/toolbox`; read, don't re-probe)
 - `progress.md` — THE LEDGER (below)
 - `loop-<name>.md` — loop contracts
 

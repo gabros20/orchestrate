@@ -3,7 +3,7 @@
 Goal: **zero wasted tokens, not minimal tokens.** Token spend explains ~80% of multi-agent quality
 variance — spending tokens IS the capability. Cut narration, duplication, raw dumps, and
 unstructured returns; never cut brief completeness. Underpriming costs more than overpriming: a
-worker missing context burns turns exploring or round-trips NEEDS_CONTEXT (a full re-dispatch).
+worker missing context burns turns blind-searching or round-trips NEEDS_CONTEXT (a full re-dispatch).
 
 ## The communication blocks (role-scoped — paste the ROLE's block into its dispatch, verbatim)
 
@@ -22,6 +22,9 @@ Minor choices — local, reversible, not user-visible, semantics-preserving (nam
 private helpers) — pick one and note it in your report. Defaults affecting security,
 compatibility, persistence, or public behavior are NOT minor: resolve per your brief or
 escalate.
+Orient before editing — the touched area's file tree, manifests, conventions files, one
+neighboring module for patterns (recipes: .orchestrate/toolbox.md). Reading to understand is
+work, not waste; scale it to the task.
 Tool output: read targeted (grep, line-ranges) over whole files/logs. Redirect noisy commands
 to a file at execution time (cmd > .orchestrate/raw/<task>-<what>.log 2>&1), inspect with
 grep/tail; cite the minimum sufficient excerpt + the file path.
@@ -40,8 +43,9 @@ deliberately absent):
 
 ```
 ## Communication contract
-Read targeted (grep, line-ranges) over whole files; when quoting literal code, commands, or
-error strings: copy verbatim, never paraphrase. State uncertainty and confidence explicitly —
+Read enough surrounding code to judge the diff in context — outline first, then the regions
+that matter; read targeted (grep, line-ranges) over whole files. When quoting literal code,
+commands, or error strings: copy verbatim, never paraphrase. State uncertainty and confidence explicitly —
 omit only rhetorical hedging and filler.
 Report EVERY finding with severity + confidence — never self-filter to "important" ones;
 triage is the controller's job. Findings go to the findings FILE (path in your inputs); inline
@@ -90,6 +94,8 @@ A quality brief contains, in order:
    cheaper than rediscovery* (an interface, invariants, a constraint table — verbatim); on high
    fan-out, inline the one canonical payload every worker needs rather than making N workers
    rediscover it.
+   Every worker/reviewer brief also includes
+   `read: .orchestrate/toolbox.md — orientation recipes`.
 4. **Interfaces & constraints to honor** — exact values, formats, relationships (verbatim).
 5. **Verification** — the command(s)/check(s) that prove done.
 6. **Report contract** — schema, cap, file path to write it.
@@ -102,9 +108,37 @@ worker actually reach every pointer? what requires escalation?* Not answerable �
 now (and run `scripts/brief-check`); a clarifying round-trip after dispatch costs a full worker
 turn.
 
-Anti-patterns: pasting session history · pasting whole files · "explore the codebase and…"
-(unbounded reads) · duplicating plan text a path reference covers · unpinned pointers in
+Anti-patterns: pasting session history · pasting whole files · a brief that says "explore the
+codebase and…" as a substitute for scoping (vague delegation — the worker's own orientation is
+licensed, see below) · duplicating plan text a path reference covers · unpinned pointers in
 parallel/worktree runs.
+
+## Orientation — filling a fresh context is work, not waste
+
+A fresh worker is EXPECTED to orient before editing; the brief's pointers are **entry points,
+not fences**. The ritual, in order (budget scales with the task — a 1-file fix ≈ 5 orientation
+calls, a multi-file integration ≈ 15):
+
+1. **The map** — the brief's pointers + `.orchestrate/toolbox.md` (this repo's probed recipes:
+   structure, outline, search — read it instead of probing for tools).
+2. **Shape** (≤2 calls) — structure-list the touched area (toolbox `structure:` recipe).
+3. **Rules** (≤3 reads) — conventions files (CLAUDE.md/AGENTS.md), the manifest + lockfile name.
+4. **Patterns** (1–3 reads) — ONE neighboring module doing the same kind of thing as the task;
+   the strongest convention signal there is.
+5. **Symbols before bodies** — outline the files you'll touch (toolbox `outline:` recipe), then
+   read only the regions you'll change.
+
+Still banned: whole-repo reads, re-reading what you've read, node_modules/dist/build, pasting
+what you learned into chat (orientation fills YOUR context; the report carries conclusions).
+
+Per role: reviewers orient TARGETED (outline around the diff, surrounding code as needed to
+judge); the loop executor's orientation is CACHED in its contract's Current understanding
+(re-orient only when it's stale — the evolve pass's job); integrators orient on git state
+(worktrees, branches, gates); verifiers/advisors/triage work from provided material.
+
+`toolbox.md` is generated by `scripts/toolbox` at workspace creation (pure shell, zero tokens;
+`--refresh` regenerates); every worker/reviewer brief includes
+`read: .orchestrate/toolbox.md — orientation recipes`.
 
 ## Raw-output convention
 
@@ -139,7 +173,7 @@ before big runs.
 
 ## Honest numbers
 
-The blocks' own cost (measured, words×1.33): WORKER ≈ 244 tokens/dispatch, REVIEWER ≈ 115,
+The blocks' own cost (measured, words×1.33): WORKER ≈ 285 tokens/dispatch, REVIEWER ≈ 139,
 MINIMAL ≈ 18 — vs the hundreds-to-thousands of narration tokens per worker turn they remove,
 and the controller-context bloat every verbose return would re-cost on every later turn.
 Expect **10–25% session-level savings** from output discipline — not the 65–75% output-only

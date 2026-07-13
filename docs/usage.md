@@ -275,6 +275,10 @@ v1.1.0 bakes a token-discipline layer into every strategy
   machine-checkable `read: <path> — why [@ <sha>]` pointers instead of pasted file contents,
   verbatim interfaces/constraints, a verification command, a report contract, and stop
   conditions. `scripts/brief-check` validates a brief before dispatch.
+- **Orientation is licensed, not restrained**: a fresh worker is expected to fill its context —
+  file tree, manifests, conventions, one neighboring module for patterns — via the graded
+  ritual in `token-economy.md`; `scripts/toolbox` probes the repo's tooling once (zero tokens)
+  into `.orchestrate/toolbox.md` so workers read recipes instead of re-probing.
 - **Role-scoped communication blocks**: tool-heavy workers get a silence-default working
   contract (no narration, structured blockers, raw output redirected to `.orchestrate/raw/`);
   reviewers get a coverage-protected variant (report every finding to a findings file — never
