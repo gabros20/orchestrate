@@ -179,7 +179,7 @@
   is gated, budgeted, ledgered, and resumable.</p>
   <nav aria-label="page sections">
     <a href="#run">how a run works</a><a href="#quickstart">presets</a><a href="#cmd">the command</a><a href="#strat">9 strategies</a>
-    <a href="#dims">dimensions</a><a href="#pick">selection</a><a href="#models">model tiers</a>
+    <a href="#dims">dimensions</a><a href="#pick">selection</a><a href="#models">model tiers</a><a href="#tokens">token economy</a>
     <a href="#gates">gates &amp; rails</a><a href="#alias">aliases</a><a href="#files">files</a>
   </nav>
 </header>
@@ -190,7 +190,7 @@
   <div class="pipe">
     <div><b>invoke</b><span>a plan file or a task, plus any args you want to force</span></div>
     <div><b>triage</b><span>measures independence, size, verifiability → picks strategy + says why</span></div>
-    <div><b>dispatch</b><span>fresh subagents per unit, curated briefs, explicit model each</span></div>
+    <div><b>dispatch</b><span>fresh subagents per unit, brief-check-gated briefs, explicit model each</span></div>
     <div><b>gate</b><span>spec review → quality review; fix → re-review until clean</span></div>
     <div><b>ledger</b><span><code>progress.md</code> — one line per gated unit; resume trusts this + git</span></div>
   </div>
@@ -330,6 +330,43 @@
   <p style="margin-top:14px"><b>Two laws:</b> the model is explicit on <i>every</i> dispatch (an omitted model silently inherits the most expensive one), and <b>turn count beats token price</b> — a too-cheap model takes 2–3× the turns and loses the savings.</p>
 </section>
 
+<section id="tokens">
+  <h2>Token economy</h2>
+  <p>Since <b>v1.1.0</b> every dispatch carries a token-discipline layer. The target is <b>zero
+  wasted tokens, not minimal tokens</b> — token spend explains ~80% of multi-agent quality
+  variance, so the skill cuts narration, raw dumps, and unstructured returns, never the context
+  workers need. Workers are <b>quiet while working, dense when reporting</b> — via three
+  role-scoped communication blocks pasted verbatim into every dispatch:</p>
+  <div class="cards">
+    <div class="card"><div class="top"><h3>WORKER<em>&approx;244 tok</em></h3></div>
+      <div class="use"><b>Who:</b> implementers, sub-orchestrators, integrators, loop executors, xcli workers.</div>
+      <div class="mech">Silence-default while working — no tool-call narration, no restating the brief. Structured blockers (<code>BLOCKED — what / evidence / tried / need</code>), noisy output redirected to <code>.orchestrate/raw/</code>, literals quoted verbatim. Safety messages are never silenced.</div></div>
+    <div class="card"><div class="top"><h3>REVIEWER<em>&approx;115 tok</em></h3></div>
+      <div class="use"><b>Who:</b> spec, quality, panel, and consensus reviewers.</div>
+      <div class="mech"><b>Never self-filters</b> — every finding reported with severity + confidence (suppression measurably drops recall). Full findings go to a findings <b>file</b>; inline is verdict + counts, so caps can never truncate them. Filtering is the controller's job.</div></div>
+    <div class="card"><div class="top"><h3>MINIMAL<em>&approx;18 tok</em></h3></div>
+      <div class="use"><b>Who:</b> advisors, triage assessors, verifiers, debate prompts, workflow agents.</div>
+      <div class="mech">One line: no preamble, return only the schema. A 244-token contract on a 4-line return would be net-negative — blocks are <b>role-scoped</b> for exactly that reason.</div></div>
+  </div>
+  <p style="margin-top:22px"><b>The input side — priming anatomy.</b> Cost discipline never starves a worker: briefs <b>prime with pointers, not payloads</b> — exact paths with a why (pinned <code class="mono">@ sha</code> in worktree runs), inlining only what's semantically complete, stable, and cheaper than rediscovery. <code class="mono">scripts/brief-check</code> gates every dispatch; a clarifying round-trip after dispatch costs a full worker turn.</p>
+  <div class="term"><span class="c"># .orchestrate/task-3-brief.md — passes scripts/brief-check</span>
+<span class="p">Objective</span>     extract the rate-limit middleware; done = suite green, public API unchanged
+<span class="p">Scope</span>         in: src/middleware · out: auth flow · must NOT change: response shape
+<span class="p">Pointers</span>      read: src/middleware/rate.ts — current implementation @ 4f2c91a
+              read: src/config/limits.ts — constants to honor
+<span class="p">Verification</span>  pnpm test middleware
+<span class="p">Report</span>        .orchestrate/task-3-report.md · inline &lt;15 lines
+<span class="p">Stop</span>          BLOCKED if the storage backend is ambiguous — don't guess</div>
+  <ul class="rules">
+    <li><b>redirect, don't dump</b>Noisy commands go to <span class="mono">.orchestrate/raw/</span> at execution time — the dump never enters context; chat carries the decisive excerpt + path.</li>
+    <li><b>never compress</b>Code, diffs, commands, exact errors: verbatim. Security warnings and irreversible-action confirmations: full prose, always.</li>
+    <li><b>reviewers report everything</b>Terseness binds a reviewer's prose, never its finding count — self-filtering silently drops recall.</li>
+    <li><b>controller diet</b>The controller reads reports, not diffs; targeted inspection only when a gate is ambiguous or reviewers conflict.</li>
+    <li><b>minor ≠ default</b>Workers pick-and-note trivial local choices; anything touching security, compatibility, or public behavior escalates.</li>
+    <li><b>honest numbers</b>Expect 10–25% session-level savings, not 65–75% headlines. A/B on your billing page before believing anyone — including this page.</li>
+  </ul>
+</section>
+
 <section id="gates">
   <h2>Gates &amp; safety rails</h2>
   <div class="gate-order">
@@ -367,17 +404,18 @@
   <div class="files"><span class="hl">~/.claude/skills/orchestrate/</span>
 ├─ SKILL.md                    <span class="d">the router — grammar, catalog, universal rules</span>
 ├─ config.yaml                 <span class="d">your saved aliases</span>
-├─ scripts/                    <span class="d">workspace · task-brief · review-package</span>
+├─ scripts/                    <span class="d">workspace · task-brief · review-package · brief-check</span>
 └─ references/
    ├─ triage.md                <span class="d">the auto-selection procedure</span>
    ├─ strategies/*.md          <span class="d">one file per strategy — read only the one selected</span>
-   ├─ shared/*.md              <span class="d">contracts · review-gates · model-routing · isolation · monitoring · safety-rails · handoff</span>
+   ├─ shared/*.md              <span class="d">contracts · review-gates · model-routing · isolation · monitoring · safety-rails · handoff · token-economy</span>
    └─ prompts/*.md             <span class="d">10 dispatch templates (implementer, reviewers, verifier, …)</span>
 
 <span class="hl">&lt;your repo&gt;/.orchestrate/</span>     <span class="d">per-run workspace — self-ignoring, invisible to git</span>
 ├─ run.md                      <span class="d">resolved dimensions + budget (the audit trail)</span>
 ├─ task-N-brief.md / -report.md<span class="d">  per-task handoffs</span>
-├─ review-&lt;b&gt;..&lt;h&gt;.diff        <span class="d">review packages</span>
+├─ review-&lt;b&gt;..&lt;h&gt;.diff        <span class="d">review packages + reviewer findings files</span>
+├─ raw/                        <span class="d">redirected command output — dumps never enter context</span>
 └─ progress.md                 <span class="d">THE LEDGER — resume trusts this + git log, not memory</span></div>
 </section>
 
