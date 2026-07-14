@@ -14,6 +14,16 @@ every PR).
 
 ## [Unreleased]
 
+### Site & visual guide
+- Strategy decision strip restructured: six free-wrapping mini-cards became one bordered panel —
+  a 2×3 grid of aligned "question → strategy" rows with internal hairlines (single column <720px).
+- The five-step run pipe and four-step gate pipe (cramped joined cells + floating ▸ arrows)
+  replaced by a numbered vertical stepper (`.steps`, same family as the token timeline): circled
+  numbers on a connector rail, icon+name titles, full-width text; gate steps keep amber/green
+  marker colors. One layout at every viewport.
+- Fixed the `loop` glyph (arrowhead floated off the ring; now sits on the arc) and redrew the
+  `advisor` glyph (executor ⇄ boxed advisor with two dashed consult arrows).
+
 ## [1.3.1] — 2026-07-14
 
 ### Changed
