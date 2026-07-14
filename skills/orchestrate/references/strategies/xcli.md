@@ -45,12 +45,16 @@ cat "$OUT"; git -C /path/to/repo status --short   # read result; inspect what it
 
 ```bash
 grok -p "task" --output-format json          # plain|json|streaming-json
-grok --cwd /path -m <model> -s <name> -p "task"   # named session
+grok --cwd /path -m <model> -s "$(uuidgen)" -p "task"   # session id MUST be a UUID (CLI ≥0.2.x)
 grok -r <id> -p "follow-up"                  # resume; -c = continue last
 ```
+- Models (verified 2026-07-14): the API flagship is **`grok-4.5`** (500k context, built for
+  coding/agentic work, reasoning effort `low|medium|high`, high default) — but the CLI ships its
+  own shorter list; 0.2.101 exposes only `grok-composer-2.5-fast` (default) and `grok-build`, and
+  `-m grok-4.5` errors until the CLI catches up. Run `grok models` before pinning.
 - Approval is all-or-nothing (`--always-approve`) — prefer read-only tasks, or babysit.
 - Sessions on disk: `~/.grok/sessions`. Long-lived JSON-RPC: `grok agent stdio` (ACP).
-- No reasoning-effort flag documented.
+- No reasoning-effort flag in the CLI; effort is an API-side knob.
 
 ## Claude Code as a subprocess (for symmetry / cross-account)
 
@@ -79,5 +83,6 @@ claude -p --bare --output-format stream-json --max-turns 30 \
 ## Division-of-labor heuristic
 
 Claude = reasoning/architecture/review · Codex (GPT lineage) = heavy implementation + honest peer
-counter · Grok = fast second opinion / search-adjacent tasks. Cross-validation: send the same
+counter · Grok = fast second opinion / search-adjacent tasks (and with `grok-4.5` on the API, a
+frontier-class peer for coding and agentic work). Cross-validation: send the same
 review to two engines, dedup findings, keep the union (conflicting severity → higher).

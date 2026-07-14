@@ -14,6 +14,17 @@ every PR).
 
 ## [Unreleased]
 
+## [1.3.1] — 2026-07-14
+
+### Changed
+- `xcli` strategy + model routing updated for **grok 4.5** (verified against docs.x.ai
+  2026-07-14): API flagship `grok-4.5` — 500k context, built for coding/agentic work, reasoning
+  effort `low|medium|high` (high default) — documented as reasoner/advisor/peer tier. Explicitly
+  noted the CLI/API split: grok CLI 0.2.101 exposes only `grok-composer-2.5-fast`/`grok-build`
+  and rejects `-m grok-4.5`; run `grok models` before pinning.
+- grok CLI drift fixed (hit live): `-s` now requires a **UUID** session id, not a name;
+  examples updated in xcli.md and docs/strategies.md.
+
 ### Site & visual guide
 - "The idea" section: the planned V1 **"Life of a task" Remotion animation** shipped as a
   progressive enhancement — a 15s themed loop (light + dark renders from one parameterized
@@ -181,7 +192,8 @@ external gpt-5.6-sol advisor): `docs/designs/v1.1.0-token-optimization.md`.
 - Docs (`docs/`), visual guide (`site/` → orchestrate-skill.vercel.app), skills.sh-standard
   install (`install.sh`, `npx skills add gabros20/orchestrate`).
 
-[Unreleased]: https://github.com/gabros20/orchestrate/compare/v1.3.0...HEAD
+[Unreleased]: https://github.com/gabros20/orchestrate/compare/v1.3.1...HEAD
+[1.3.1]: https://github.com/gabros20/orchestrate/compare/v1.3.0...v1.3.1
 [1.3.0]: https://github.com/gabros20/orchestrate/compare/v1.2.1...v1.3.0
 [1.2.1]: https://github.com/gabros20/orchestrate/compare/v1.2.0...v1.2.1
 [1.2.0]: https://github.com/gabros20/orchestrate/compare/v1.1.0...v1.2.0

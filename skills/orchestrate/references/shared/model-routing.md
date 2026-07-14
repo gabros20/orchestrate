@@ -33,7 +33,10 @@
    routing over downgrading the whole run.
 8. Effort knobs exist beyond model choice: Claude `--effort low..max`, codex
    `-c model_reasoning_effort=low..ultra` (medium default; `ultra` fans out Codex-side subagents —
-   treat as a fan-out decision, not an effort bump). Cheap stage = low effort; judge stage = high.
-9. Engine tier map (codex, verified 2026-07-13): `gpt-5.6-luna` ≈ cheap worker ·
+   treat as a fan-out decision, not an effort bump), grok-4.5 API `reasoning_effort=low|medium|high`
+   (high default; no CLI flag as of grok CLI 0.2.101). Cheap stage = low effort; judge stage = high.
+9. Engine tier map — codex (verified 2026-07-13): `gpt-5.6-luna` ≈ cheap worker ·
    `gpt-5.6-terra` ≈ standard worker/reviewer · `gpt-5.6-sol` ≈ reasoner/advisor/peer.
-   Model lists drift — re-verify slugs before pinning (`strategies/xcli.md`).
+   Grok (verified 2026-07-14): `grok-4.5` = flagship (500k ctx, coding/agentic/reasoning) ≈
+   reasoner/advisor/peer — API-only for now; the grok CLI exposes a separate, shorter list
+   (`grok models`). Model lists drift — re-verify slugs before pinning (`strategies/xcli.md`).

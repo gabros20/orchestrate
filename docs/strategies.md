@@ -327,11 +327,14 @@ drift):
   `-c sandbox_workspace_write.network_access=true`. Never `--dangerously-bypass-approvals-and-sandbox`.
   Follow-up in the same session: `codex exec resume --last "…" </dev/null`. Sessions live under
   `$CODEX_HOME` (default `~/.codex`); Codex is also available as an MCP server (`codex mcp-server`).
-- **Grok** (`grok -p`) — `--output-format plain|json|streaming-json`; named sessions via `--cwd
-  <path> -m <model> -s <name>`; resume via `-r <id>` or continue-last via `-c`. Approval is
-  all-or-nothing (`--always-approve`) — prefer read-only tasks, or babysit it. Sessions on disk at
-  `~/.grok/sessions`; a long-lived JSON-RPC surface exists via `grok agent stdio` (ACP). No
-  documented reasoning-effort flag.
+- **Grok** (`grok -p`) — `--output-format plain|json|streaming-json`; sessions via `--cwd
+  <path> -m <model> -s <uuid>` (the session id must be a UUID on CLI ≥0.2.x); resume via `-r <id>`
+  or continue-last via `-c`. Models: the API flagship is `grok-4.5` (500k context, coding/agentic,
+  reasoning effort `low|medium|high` with high default), but the CLI ships its own shorter list —
+  run `grok models` before pinning (0.2.101 exposes only `grok-composer-2.5-fast` and
+  `grok-build`). Approval is all-or-nothing (`--always-approve`) — prefer read-only tasks, or
+  babysit it. Sessions on disk at `~/.grok/sessions`; a long-lived JSON-RPC surface exists via
+  `grok agent stdio` (ACP). No reasoning-effort flag in the CLI; effort is an API-side knob.
 - **Claude Code as a subprocess** (for symmetry or a separate account) — `claude -p --bare
   --output-format stream-json --max-turns N --model <tier> --permission-mode acceptEdits --agents
   '{"worker":{...}}' "task"`. `--bare` disables auto-discovery for scripts/CI (auth via env);
