@@ -14,6 +14,16 @@ every PR).
 
 ## [Unreleased]
 
+### Site & visual guide
+- Site readability redesign (expert-panel run: codex gpt-5.6-sol high · grok-build · fable 5, two
+  rounds + synthesis — plan in the run workspace): the page now teaches before it references.
+  New narrative order (hero → "The idea" mental-model poster → run spine → preset-over-dimensions
+  override figure → triage decision strip + two-sentence strategy cards → gates → tokens → start);
+  first-read prose cut to ~1,100 words with a strict term-introduction order; two-register icon
+  system (existing topology glyphs for strategies + 27 inlined lucide icons for concepts/steps/
+  rails); grammar, model tiers, and the files tree collapsed into `<details>`; install command
+  added; nav cut 11 → 5 question-shaped anchors. Same palette/type/components throughout.
+
 ## [1.3.0] — 2026-07-14
 
 ### Changed
