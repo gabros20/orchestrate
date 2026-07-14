@@ -76,11 +76,15 @@
   h1 .sl{color:var(--accent)}
   h2{font-family:"Avenir Next Condensed","Arial Narrow",system-ui,sans-serif; text-transform:uppercase; letter-spacing:.09em; font-size:21px; margin:0 0 4px; display:flex; align-items:center; gap:12px}
   h2::after{content:""; flex:1; height:1px; background:var(--line)}
+  h2 .lu{color:var(--accent); width:20px; height:20px}
   section{margin-top:64px}
   .lede{font-size:19px; color:var(--muted); max-width:60ch; margin:0}
   .lede b{color:var(--ink)}
   p{max-width:68ch}
   a{color:var(--accent)}
+
+  /* lucide icons */
+  .lu{width:18px; height:18px; fill:none; stroke:currentColor; stroke-width:1.75; stroke-linecap:round; stroke-linejoin:round; flex:none; vertical-align:-3px}
 
   /* top nav */
   nav{display:flex; flex-wrap:wrap; gap:8px; margin-top:26px}
@@ -92,25 +96,51 @@
   .term .c{color:var(--muted)}
   .term .p{color:var(--accent); font-weight:600}
 
+  /* the idea — poster diagram */
+  .poster{background:var(--panel); border:1px solid var(--line); border-radius:8px; padding:20px; margin-top:20px; display:flex; flex-direction:column; gap:14px}
+  .prow{display:flex; align-items:center; gap:10px; flex-wrap:wrap}
+  .prow .arr{color:var(--glyph); font-size:15px; flex:none}
+  .pbox{border:1px solid var(--line); border-radius:8px; padding:7px 12px; background:var(--bg); display:flex; flex-direction:column; gap:1px; line-height:1.35}
+  .pbox .t{display:flex; align-items:center; gap:7px; font-family:ui-monospace,Menlo,monospace; font-size:12.5px; white-space:nowrap}
+  .pbox small{font-family:system-ui; font-size:10.5px; color:var(--muted); white-space:nowrap}
+  .pbox small.ok{color:var(--good); font-family:ui-monospace,Menlo,monospace}
+  .pbox.ctl{border-color:var(--accent); background:var(--panel)}
+  .pbox.ctl .t{color:var(--accent)}
+  .pbox.gone{opacity:.38; border-style:dashed}
+  .pbox.file{background:var(--code-bg); border-radius:6px}
+  .pbox.file .t .lu{width:14px; height:14px; color:var(--tok-file)}
+  .pledger{border-top:1px dashed var(--line); padding-top:12px; font-family:ui-monospace,Menlo,monospace; font-size:12.5px; line-height:1.9; color:var(--muted); overflow-x:auto}
+  .pledger b{color:var(--ink); font-weight:600}
+  .pledger .ok{color:var(--good)}
+  .pcap{font-size:13.5px; color:var(--muted); margin:14px 0 0; max-width:68ch}
+  .pcap b{color:var(--ink)}
+
   /* pipeline */
   .pipe{display:grid; grid-template-columns:repeat(5,1fr); gap:0; counter-reset:step; margin-top:20px; overflow-x:auto}
+  .pipe.p4{grid-template-columns:repeat(4,1fr)}
   .pipe>div{position:relative; padding:16px 18px 16px 20px; border:1px solid var(--line); border-left:none; background:var(--panel); min-width:150px}
   .pipe>div:first-child{border-left:1px solid var(--line); border-radius:8px 0 0 8px}
   .pipe>div:last-child{border-radius:0 8px 8px 0}
-  .pipe b{display:block; font-family:ui-monospace,Menlo,monospace; font-size:13.5px; margin-bottom:4px}
+  .pipe b{display:flex; align-items:center; gap:7px; font-family:ui-monospace,Menlo,monospace; font-size:13.5px; margin-bottom:4px}
   .pipe b::before{counter-increment:step; content:counter(step) " "; color:var(--accent)}
+  .pipe b .lu{width:15px; height:15px; color:var(--accent)}
   .pipe span{font-size:13px; color:var(--muted); display:block; line-height:1.45}
+  .pipe span b{display:inline; font-family:inherit; font-size:inherit; color:var(--ink); margin:0}
+  .pipe span b::before{content:none}
   .pipe span code{font-size:11.5px; background:var(--code-bg); padding:1px 4px; border-radius:4px; overflow-wrap:anywhere}
   .pipe>div:not(:last-child)::after{content:"▸"; position:absolute; right:-7px; top:14px; color:var(--glyph); z-index:2; background:var(--panel); line-height:1}
 
-  /* grammar */
-  .gram{background:var(--code-bg); border:1px solid var(--line); border-radius:8px; padding:18px 20px; font-family:ui-monospace,Menlo,monospace; font-size:13.5px; line-height:2; overflow-x:auto; white-space:pre}
-  .g-strat{color:var(--tok-strat); font-weight:600}
-  .g-dim{color:var(--tok-dim)}
-  .g-val{color:var(--tok-val)}
-  .g-file{color:var(--tok-file)}
-  .legend{display:flex; flex-wrap:wrap; gap:18px; margin-top:12px; font-size:13px; color:var(--muted)}
-  .legend i{display:inline-block; width:10px; height:10px; border-radius:2px; margin-right:6px; vertical-align:baseline}
+  /* preset override figure */
+  .ov{display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:20px}
+  .ovcard{background:var(--panel); border:1px solid var(--line); border-radius:8px; padding:16px 18px}
+  .ovcard h3{margin:0 0 10px; font-family:ui-monospace,Menlo,monospace; font-size:14px}
+  .ovcard h3 em{font-style:normal; font-size:11px; color:var(--muted); font-family:system-ui; font-weight:400; margin-left:8px}
+  .ovrow{display:flex; justify-content:space-between; gap:12px; font-family:ui-monospace,Menlo,monospace; font-size:12.5px; padding:4px 8px; border-radius:5px; line-height:1.5}
+  .ovrow i{font-style:normal; color:var(--tok-dim)}
+  .ovrow s{text-decoration:line-through; color:var(--muted)}
+  .ovrow.hit{background:var(--amber-bg); border:1px solid var(--amber)}
+  .ovrow.hit b{color:var(--amber)}
+  .ovcmd{grid-column:1 / -1}
 
   /* strategy cards */
   .cards{display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:14px; margin-top:20px}
@@ -120,11 +150,24 @@
   .card h3{margin:0; font-family:ui-monospace,Menlo,monospace; font-size:16px; letter-spacing:-.01em}
   .card h3 em{font-style:normal; font-size:11px; color:var(--accent); border:1px solid var(--accent); border-radius:999px; padding:1px 8px; margin-left:8px; vertical-align:2px; font-family:system-ui}
   .card svg{flex:none}
-  .card .use{font-size:13.5px; color:var(--muted); line-height:1.5; min-height:3em}
+  .card .use{font-size:13.5px; color:var(--muted); line-height:1.55}
   .card .use b{color:var(--ink); font-weight:600}
-  .card .mech{font-size:13px; border-top:1px dashed var(--line); padding-top:8px; line-height:1.55}
-  .card .mech code{font-size:12px; background:var(--code-bg); padding:1px 5px; border-radius:4px}
   svg .n{fill:var(--glyph)} svg .n2{fill:var(--accent)} svg .e{stroke:var(--glyph); stroke-width:1.4} svg .e2{stroke:var(--accent); stroke-width:1.4}
+
+  /* glyph legend + decision strip */
+  .gleg{display:flex; flex-wrap:wrap; gap:16px; margin-top:16px; font-size:12.5px; color:var(--muted); align-items:center}
+  .gleg span{display:inline-flex; align-items:center; gap:6px}
+  .gleg i{display:inline-block; width:11px; height:11px; border-radius:50%; background:var(--glyph)}
+  .gleg i.c{background:var(--accent)}
+  .gleg i.s{width:14px; height:11px; border-radius:2px; background:none; border:1.4px dashed var(--accent)}
+  .gleg i.x{width:14px; height:11px; border-radius:2px; background:none; border:1.4px solid var(--glyph)}
+  .strip{display:flex; flex-wrap:wrap; gap:10px; margin-top:20px}
+  .strip a{display:flex; flex-direction:column; gap:3px; text-decoration:none; background:var(--panel); border:1px solid var(--line); border-radius:8px; padding:10px 14px; min-width:150px; flex:1}
+  .strip a:hover{border-color:var(--accent)}
+  .strip .q{font-size:12.5px; color:var(--muted); line-height:1.4}
+  .strip .a{font-family:ui-monospace,Menlo,monospace; font-size:13px; color:var(--accent); font-weight:600; display:flex; align-items:center; gap:6px}
+  .strip .a .lu{width:14px; height:14px}
+  .strip .a.solo{color:var(--amber)}
 
   /* tables */
   .tblwrap{overflow-x:auto; border:1px solid var(--line); border-radius:8px; margin-top:20px}
@@ -136,33 +179,42 @@
   td.dim{font-weight:600; font-family:ui-monospace,Menlo,monospace; font-size:13px; color:var(--tok-dim); white-space:nowrap}
   td .d{color:var(--muted)}
 
-  /* selection priority */
-  .prio{display:flex; flex-wrap:wrap; align-items:center; gap:10px; margin-top:20px; font-family:ui-monospace,Menlo,monospace; font-size:13.5px}
-  .prio span{background:var(--panel); border:1px solid var(--line); border-radius:8px; padding:9px 14px}
-  .prio span b{color:var(--accent); font-weight:600}
-  .prio i{color:var(--glyph); font-style:normal}
   .note{background:var(--amber-bg); border:1px solid var(--amber); border-radius:8px; padding:12px 16px; font-size:14px; margin-top:16px; max-width:none}
   .note b{color:var(--amber)}
 
-  /* rules */
+  /* grammar (inside details) */
+  .gram{background:var(--code-bg); border:1px solid var(--line); border-radius:8px; padding:18px 20px; font-family:ui-monospace,Menlo,monospace; font-size:13.5px; line-height:2; overflow-x:auto; white-space:pre; margin-top:10px}
+  .g-strat{color:var(--tok-strat); font-weight:600}
+  .g-dim{color:var(--tok-dim)}
+  .g-val{color:var(--tok-val)}
+  .g-file{color:var(--tok-file)}
+
+  /* rails */
   .rules{list-style:none; padding:0; margin:20px 0 0; display:grid; grid-template-columns:repeat(auto-fill,minmax(320px,1fr)); gap:12px}
   .rules li{background:var(--panel); border:1px solid var(--line); border-left:3px solid var(--amber); border-radius:6px; padding:12px 16px; font-size:14px; line-height:1.5}
-  .rules li b{display:block; font-family:ui-monospace,Menlo,monospace; font-size:13px; margin-bottom:3px}
-  .gp>div:nth-child(1) b{color:var(--amber)}
-  .gp>div:nth-child(3) b{color:var(--accent)}
+  .rules li b{display:flex; align-items:center; gap:7px; font-family:ui-monospace,Menlo,monospace; font-size:13px; margin-bottom:3px}
+  .rules li b .lu{width:15px; height:15px; color:var(--amber)}
+  .gp>div:nth-child(2) b{color:var(--amber)}
+  .gp>div:nth-child(3) b{color:var(--amber)}
   .gp>div:nth-child(4) b{color:var(--good)}
   .loopback{display:flex; gap:10px; margin-top:12px; font-size:13.5px; color:var(--muted); line-height:1.55; max-width:none}
-  .loopback .ic{color:var(--bad); font-weight:700; font-size:17px; line-height:1.2; flex:none}
+  .loopback .ic{color:var(--bad); flex:none; margin-top:1px}
+  .loopback .ic .lu{width:17px; height:17px}
   .loopback b{color:var(--ink)}
+
+  /* token role cards */
+  .card .mech{font-size:13px; border-top:1px dashed var(--line); padding-top:8px; line-height:1.55}
+  .card .mech code{font-size:12px; background:var(--code-bg); padding:1px 5px; border-radius:4px}
 
   /* token timeline */
   .tl{list-style:none;margin:22px 0 0;padding:0}
-  .tl li{position:relative;padding:0 0 22px 38px}
-  .tl li::before{content:"";position:absolute;left:11px;top:9px;bottom:-5px;width:2px;background:var(--line)}
+  .tl li{position:relative;padding:0 0 22px 44px}
+  .tl li::before{content:"";position:absolute;left:13px;top:14px;bottom:-8px;width:2px;background:var(--line)}
   .tl li:last-child::before{display:none}
-  .tl .dot{position:absolute;left:5px;top:4px;width:14px;height:14px;border-radius:50%;background:var(--panel);border:2.5px solid var(--glyph)}
-  .tl .dot.c{border-color:var(--accent)} .tl .dot.g{border-color:var(--amber)} .tl .dot.r{border-color:var(--good)}
-  .tl .hd{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .tl .dot{position:absolute;left:0;top:0;width:28px;height:28px;border-radius:50%;background:var(--panel);border:2px solid var(--glyph);display:flex;align-items:center;justify-content:center;color:var(--glyph)}
+  .tl .dot .lu{width:14px;height:14px}
+  .tl .dot.c{border-color:var(--accent);color:var(--accent)} .tl .dot.g{border-color:var(--amber);color:var(--amber)} .tl .dot.r{border-color:var(--good);color:var(--good)}
+  .tl .hd{display:flex;align-items:center;gap:10px;flex-wrap:wrap;min-height:28px}
   .tl .hd b{font-family:ui-monospace,Menlo,monospace;font-size:14px}
   .tl .who{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:1px 9px;font-weight:600}
   .tl .fx{margin-left:auto;font-family:ui-monospace,Menlo,monospace;font-size:11px;border-radius:999px;padding:2px 10px;border:1px solid;white-space:nowrap}
@@ -175,64 +227,178 @@
   .tl details .term{margin-top:8px;font-size:12.5px}
   @media (max-width:560px){ .tl .fx{margin-left:0} }
 
+  /* details / appendix */
+  details.disc{background:var(--panel); border:1px solid var(--line); border-radius:8px; padding:0; margin-top:14px}
+  details.disc summary{cursor:pointer; padding:13px 18px; font-family:ui-monospace,Menlo,monospace; font-size:13.5px; color:var(--accent); list-style:none; display:flex; align-items:center; gap:8px}
+  details.disc summary::before{content:"▸"; color:var(--glyph); transition:transform .12s ease}
+  details.disc[open] summary::before{transform:rotate(90deg)}
+  details.disc summary:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+  details.disc>div{padding:2px 18px 16px}
+  details.disc .tblwrap{margin-top:8px}
+  details.disc p{font-size:13.5px; color:var(--muted)}
+
   /* files */
-  .files{background:var(--code-bg); border:1px solid var(--line); border-radius:8px; padding:16px 20px; font-family:ui-monospace,Menlo,monospace; font-size:13px; line-height:1.9; overflow-x:auto; white-space:pre}
+  .files{background:var(--code-bg); border:1px solid var(--line); border-radius:8px; padding:16px 20px; font-family:ui-monospace,Menlo,monospace; font-size:13px; line-height:1.9; overflow-x:auto; white-space:pre; margin-top:8px}
   .files .d{color:var(--muted)}
   .files .hl{color:var(--accent); font-weight:600}
 
   footer{margin-top:72px; padding-top:20px; border-top:1px solid var(--line); font-size:13px; color:var(--muted); display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px}
-  @media (max-width:720px){ .pipe{grid-template-columns:1fr} .pipe>div{border-left:1px solid var(--line); border-top:none; border-radius:0} .pipe>div:first-child{border-top:1px solid var(--line); border-radius:8px 8px 0 0} .pipe>div:last-child{border-radius:0 0 8px 8px} .pipe>div:not(:last-child)::after{content:"▾"; right:14px; top:auto; bottom:-8px} }
+  @media (max-width:720px){
+    .pipe{grid-template-columns:1fr} .pipe.p4{grid-template-columns:1fr}
+    .pipe>div{border-left:1px solid var(--line); border-top:none; border-radius:0}
+    .pipe>div:first-child{border-top:1px solid var(--line); border-radius:8px 8px 0 0}
+    .pipe>div:last-child{border-radius:0 0 8px 8px}
+    .pipe>div:not(:last-child)::after{content:"▾"; right:14px; top:auto; bottom:-8px}
+    .ov{grid-template-columns:1fr}
+    .prow{flex-direction:column; align-items:flex-start}
+    .prow .arr{transform:rotate(90deg); margin-left:18px}
+  }
   @media (prefers-reduced-motion:no-preference){ .card{transition:border-color .15s ease} }
 </style>
 </head>
 <body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="lu-file-input" viewBox="0 0 24 24"><path d="M4 11V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.706.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-1"/><path d="M14 2v5a1 1 0 0 0 1 1h5"/><path d="M2 15h10"/><path d="m9 18 3-3-3-3"/></symbol>
+  <symbol id="lu-gauge" viewBox="0 0 24 24"><path d="m12 14 4-4"/><path d="M3.34 19a10 10 0 1 1 17.32 0"/></symbol>
+  <symbol id="lu-bot" viewBox="0 0 24 24"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></symbol>
+  <symbol id="lu-shield-check" viewBox="0 0 24 24"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></symbol>
+  <symbol id="lu-scroll-text" viewBox="0 0 24 24"><path d="M15 12h-5"/><path d="M15 8h-5"/><path d="M19 17V5a2 2 0 0 0-2-2H4"/><path d="M8 21h12a2 2 0 0 0 2-2v-1a1 1 0 0 0-1-1H11a1 1 0 0 0-1 1v1a2 2 0 1 1-4 0V5a2 2 0 1 0-4 0v2a1 1 0 0 0 1 1h3"/></symbol>
+  <symbol id="lu-clipboard-list" viewBox="0 0 24 24"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M12 11h4"/><path d="M12 16h4"/><path d="M8 11h.01"/><path d="M8 16h.01"/></symbol>
+  <symbol id="lu-clipboard-check" viewBox="0 0 24 24"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="m9 14 2 2 4-4"/></symbol>
+  <symbol id="lu-search-check" viewBox="0 0 24 24"><path d="m8 11 2 2 4-4"/><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></symbol>
+  <symbol id="lu-file-output" viewBox="0 0 24 24"><path d="M4.226 20.925A2 2 0 0 0 6 22h12a2 2 0 0 0 2-2V8a2.4 2.4 0 0 0-.706-1.706l-3.588-3.588A2.4 2.4 0 0 0 14 2H6a2 2 0 0 0-2 2v3.127"/><path d="M14 2v5a1 1 0 0 0 1 1h5"/><path d="m5 11-3 3"/><path d="m5 17-3-3h10"/></symbol>
+  <symbol id="lu-files" viewBox="0 0 24 24"><path d="M15 2h-4a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V8"/><path d="M16.706 2.706A2.4 2.4 0 0 0 15 2v5a1 1 0 0 0 1 1h5a2.4 2.4 0 0 0-.706-1.706z"/><path d="M5 7a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h8a2 2 0 0 0 1.732-1"/></symbol>
+  <symbol id="lu-iteration-ccw" viewBox="0 0 24 24"><path d="m16 14 4 4-4 4"/><path d="M20 10a8 8 0 1 0-8 8h8"/></symbol>
+  <symbol id="lu-sliders-horizontal" viewBox="0 0 24 24"><path d="M10 5H3"/><path d="M12 19H3"/><path d="M14 3v4"/><path d="M16 17v4"/><path d="M21 12h-9"/><path d="M21 19h-5"/><path d="M21 5h-7"/><path d="M8 10v4"/><path d="M8 12H3"/></symbol>
+  <symbol id="lu-coins" viewBox="0 0 24 24"><path d="M13.744 17.736a6 6 0 1 1-7.48-7.48"/><path d="M15 6h1v4"/><path d="m6.134 14.768.866-.5 2 3.464"/><circle cx="16" cy="8" r="6"/></symbol>
+  <symbol id="lu-git-branch" viewBox="0 0 24 24"><path d="M15 6a9 9 0 0 0-9 9V3"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/></symbol>
+  <symbol id="lu-copy-x" viewBox="0 0 24 24"><line x1="12" x2="18" y1="12" y2="18"/><line x1="12" x2="18" y1="18" y2="12"/><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></symbol>
+  <symbol id="lu-unplug" viewBox="0 0 24 24"><path d="m19 5 3-3"/><path d="m2 22 3-3"/><path d="M6.3 20.3a2.4 2.4 0 0 0 3.4 0L12 18l-6-6-2.3 2.3a2.4 2.4 0 0 0 0 3.4Z"/><path d="M7.5 13.5 10 11"/><path d="M10.5 16.5 13 14"/><path d="m12 6 6 6 2.3-2.3a2.4 2.4 0 0 0 0-3.4l-2.6-2.6a2.4 2.4 0 0 0-3.4 0Z"/></symbol>
+  <symbol id="lu-git-pull-request-draft" viewBox="0 0 24 24"><circle cx="18" cy="18" r="3"/><circle cx="6" cy="6" r="3"/><path d="M18 6V5"/><path d="M18 11v-1"/><line x1="6" x2="6" y1="9" y2="21"/></symbol>
+  <symbol id="lu-arrow-up-right" viewBox="0 0 24 24"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></symbol>
+  <symbol id="lu-file-lock" viewBox="0 0 24 24"><path d="M4 9.8V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.706.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2h-3"/><path d="M14 2v5a1 1 0 0 0 1 1h5"/><path d="M9 17v-2a2 2 0 0 0-4 0v2"/><rect width="8" height="5" x="3" y="17" rx="1"/></symbol>
+  <symbol id="lu-user" viewBox="0 0 24 24"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></symbol>
+  <symbol id="lu-split" viewBox="0 0 24 24"><path d="M16 3h5v5"/><path d="M8 3H3v5"/><path d="M12 22v-8.3a4 4 0 0 0-1.172-2.872L3 3"/><path d="m15 9 6-6"/></symbol>
+  <symbol id="lu-messages-square" viewBox="0 0 24 24"><path d="M16 10a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 14.286V4a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/><path d="M20 9a2 2 0 0 1 2 2v10.286a.71.71 0 0 1-1.212.502l-2.202-2.202A2 2 0 0 0 17.172 19H10a2 2 0 0 1-2-2v-1"/></symbol>
+  <symbol id="lu-repeat" viewBox="0 0 24 24"><path d="m17 2 4 4-4 4"/><path d="M3 11v-1a4 4 0 0 1 4-4h14"/><path d="m7 22-4-4 4-4"/><path d="M21 13v1a4 4 0 0 1-4 4H3"/></symbol>
+  <symbol id="lu-workflow" viewBox="0 0 24 24"><rect width="8" height="8" x="3" y="3" rx="2"/><path d="M7 11v4a2 2 0 0 0 2 2h4"/><rect width="8" height="8" x="13" y="13" rx="2"/></symbol>
+  <symbol id="lu-list-ordered" viewBox="0 0 24 24"><path d="M11 5h10"/><path d="M11 12h10"/><path d="M11 19h10"/><path d="M4 4h1v5"/><path d="M4 9h2"/><path d="M6.5 20H3.4c0-1 2.6-1.925 2.6-3.5a1.5 1.5 0 0 0-2.6-1.02"/></symbol>
+  <symbol id="lu-receipt" viewBox="0 0 24 24"><path d="M12 17V7"/><path d="M16 8h-6a2 2 0 0 0 0 4h4a2 2 0 0 1 0 4H8"/><path d="M4 3a1 1 0 0 1 1-1 1.3 1.3 0 0 1 .7.2l.933.6a1.3 1.3 0 0 0 1.4 0l.934-.6a1.3 1.3 0 0 1 1.4 0l.933.6a1.3 1.3 0 0 0 1.4 0l.933-.6a1.3 1.3 0 0 1 1.4 0l.934.6a1.3 1.3 0 0 0 1.4 0l.933-.6A1.3 1.3 0 0 1 19 2a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1 1.3 1.3 0 0 1-.7-.2l-.933-.6a1.3 1.3 0 0 0-1.4 0l-.934.6a1.3 1.3 0 0 1-1.4 0l-.933-.6a1.3 1.3 0 0 0-1.4 0l-.933.6a1.3 1.3 0 0 1-1.4 0l-.934-.6a1.3 1.3 0 0 0-1.4 0l-.933.6a1.3 1.3 0 0 1-.7.2 1 1 0 0 1-1-1z"/></symbol>
+</svg>
 <div class="wrap">
 <header>
-  <div class="eyebrow">Skill field manual · one entry point, nine strategies</div>
+  <div class="eyebrow">A Claude Code skill · one command, nine run shapes</div>
   <nav class="toplinks" aria-label="external links">
     <a href="https://github.com/gabros20/orchestrate" target="_blank" rel="noopener">GitHub</a>
     <a href="https://github.com/gabros20/orchestrate#install" target="_blank" rel="noopener">Install</a>
     <a href="/llms.txt">llms.txt</a>
   </nav>
   <h1><span class="sl">/</span>orchestrate</h1>
-  <p class="lede">Strategy-selectable subagent orchestration. <b>You coordinate; subagents work.</b>
-  Pick a strategy yourself, or let a triage pass measure the task and pick one for you — every run
-  is gated, budgeted, ledgered, and resumable.</p>
+  <p class="lede">You hand one agent a big plan and watch it degrade — the context fills up,
+  quality drops, you babysit. <b>orchestrate</b> turns that plan into a controlled run:
+  one command, many fresh agents, every result checked before it counts.</p>
+  <div class="term" style="margin-top:22px"><span class="c"># that's the whole start</span>
+<span class="p">/orchestrate</span> plan.md</div>
   <nav aria-label="page sections">
-    <a href="#run">how a run works</a><a href="#quickstart">presets</a><a href="#cmd">the command</a><a href="#strat">9 strategies</a>
-    <a href="#dims">dimensions</a><a href="#pick">selection</a><a href="#models">model tiers</a><a href="#tokens">token economy</a>
-    <a href="#gates">gates &amp; rails</a><a href="#alias">aliases</a><a href="#files">files</a>
+    <a href="#idea">the idea</a><a href="#strat">choose a strategy</a><a href="#gates">safety</a>
+    <a href="#tokens">cost</a><a href="#start">start</a>
   </nav>
 </header>
 
+<section id="idea">
+  <h2><svg class="lu" aria-hidden="true"><use href="#lu-files"/></svg>The idea</h2>
+  <p>Everything in orchestrate follows one idea: <b>coordination and work are different jobs</b>,
+  and they should never share a context window.</p>
+  <p>A <b>controller</b> plans the run, assigns the work, and checks the results — it never writes
+  code itself. Each task goes to a <b>subagent</b>: a fresh worker that starts empty, does one
+  scoped job, and is thrown away.</p>
+  <p>The two never talk through chat. The controller writes a <b>brief</b> file; the worker reads
+  it, works, and writes a <b>report</b> file back. The files outlive the worker — so a run
+  survives crashes, compaction, and restarts, because its state lives on disk instead of in
+  anyone's head.</p>
+  <div class="poster" role="img" aria-label="Diagram: a controller exchanges brief and report files with disposable workers; the files and ledger remain after workers are discarded.">
+    <div class="prow">
+      <span class="pbox ctl"><span class="t"><svg class="lu" aria-hidden="true"><use href="#lu-user"/></svg>controller</span><small>coordinates, never implements</small></span>
+      <span class="arr">▸</span>
+      <span class="pbox file"><span class="t"><svg class="lu" aria-hidden="true"><use href="#lu-clipboard-list"/></svg>task-1-brief.md</span></span>
+      <span class="arr">▸</span>
+      <span class="pbox gone"><span class="t"><svg class="lu" aria-hidden="true"><use href="#lu-bot"/></svg>worker 1</span><small>context discarded</small></span>
+      <span class="arr">▸</span>
+      <span class="pbox file"><span class="t"><svg class="lu" aria-hidden="true"><use href="#lu-file-output"/></svg>task-1-report.md</span><small class="ok">spec ✓ quality ✓</small></span>
+    </div>
+    <div class="prow">
+      <span class="pbox ctl"><span class="t"><svg class="lu" aria-hidden="true"><use href="#lu-user"/></svg>controller</span><small>same one — it never left</small></span>
+      <span class="arr">▸</span>
+      <span class="pbox file"><span class="t"><svg class="lu" aria-hidden="true"><use href="#lu-clipboard-list"/></svg>task-2-brief.md</span></span>
+      <span class="arr">▸</span>
+      <span class="pbox"><span class="t"><svg class="lu" aria-hidden="true"><use href="#lu-bot"/></svg>worker 2</span><small>fresh — empty context</small></span>
+      <span class="arr">▸</span>
+      <span class="pbox file" style="opacity:.55"><span class="t"><svg class="lu" aria-hidden="true"><use href="#lu-file-output"/></svg>task-2-report.md</span><small>writing…</small></span>
+    </div>
+    <div class="pledger"><svg class="lu" aria-hidden="true" style="vertical-align:-3px;color:var(--accent)"><use href="#lu-scroll-text"/></svg> <b>progress.md</b>   <span class="ok">✓ task 1 — spec ✓ quality ✓</span>   · task 2 in flight</div>
+  </div>
+  <p class="pcap"><b>Worker 1 is already gone.</b> Its brief, its report, and its ledger line
+  remain — that is the whole trick.</p>
+</section>
+
 <section id="run">
   <h2>How a run works</h2>
-  <p>Same spine in every strategy. The interface between agents is always an <b>artifact on disk</b> — briefs, reports, diffs, the ledger — never the conversation.</p>
+  <p>Every strategy shares the same five-step spine.</p>
   <div class="pipe">
-    <div><b>invoke</b><span>a plan file or a task, plus any args you want to force</span></div>
-    <div><b>triage</b><span>measures independence, size, verifiability → picks strategy + says why</span></div>
-    <div><b>dispatch</b><span>fresh subagents per unit, brief-check-gated briefs, explicit model each</span></div>
-    <div><b>gate</b><span>spec review → quality review; fix → re-review until clean</span></div>
-    <div><b>ledger</b><span><code>progress.md</code> — one line per gated unit; resume trusts this + git</span></div>
+    <div><b><svg class="lu" aria-hidden="true"><use href="#lu-file-input"/></svg>invoke</b><span>You point it at a plan file, or just describe the task. Every flag is optional.</span></div>
+    <div><b><svg class="lu" aria-hidden="true"><use href="#lu-gauge"/></svg>triage</b><span><b>Triage</b> measures the task — size, independence, whether success is checkable — then picks a run shape and says why.</span></div>
+    <div><b><svg class="lu" aria-hidden="true"><use href="#lu-bot"/></svg>dispatch</b><span>The controller writes a brief and sends a fresh subagent to do exactly that task, on an explicitly chosen model.</span></div>
+    <div><b><svg class="lu" aria-hidden="true"><use href="#lu-shield-check"/></svg>gate</b><span><b>Gates</b> review each result — first against the brief, then for quality. Failures loop back until clean.</span></div>
+    <div><b><svg class="lu" aria-hidden="true"><use href="#lu-scroll-text"/></svg>ledger</b><span>Each finished task becomes one line in the <b>ledger</b>, <code>progress.md</code>. A resumed run trusts the ledger, not memory.</span></div>
   </div>
 </section>
 
-<section id="quickstart">
-  <h2>Get in fast — presets</h2>
-  <p>Copy, paste, swap the plan file. Full alias definitions are in <a href="#alias">built-in aliases</a> below.</p>
-  <div class="term"><span class="p">/orchestrate</span> plan.md <span class="c">alias=red-team</span>      <span class="c"># debate the plan, triple-lens review</span>
-<span class="p">/orchestrate</span> plan.md <span class="c">alias=codex-grind</span>   <span class="c"># cheap bulk implementation, Claude reviews</span>
-<span class="p">/orchestrate</span> plan.md <span class="c">alias=swarm</span>         <span class="c"># fast independent fan-out, minimal ceremony</span>
-<span class="p">/orchestrate</span> plan.md <span class="c">alias=afk</span>           <span class="c"># walk-away grinding with hard rails</span>
-<span class="p">/orchestrate</span> plan.md <span class="c">alias=architect</span>     <span class="c"># big-model thinking, small-model doing</span>
-<span class="p">/orchestrate</span> plan.md <span class="c">strategy=team workers=3</span>                    <span class="c"># expert panel</span>
-<span class="p">/orchestrate</span> plan.md <span class="c">strategy=adversarial</span>                       <span class="c"># plan review</span>
-<span class="p">/orchestrate</span> plan.md <span class="c">strategy=hierarchical review=consensus:3</span>    <span class="c"># research + verified claims</span></div>
-</section>
-
-<section id="cmd">
-  <h2>The command</h2>
-  <div class="gram">/orchestrate <span class="g-file">[plan-file | task description]</span>
+<section id="knobs">
+  <h2><svg class="lu" aria-hidden="true"><use href="#lu-sliders-horizontal"/></svg>One preset, eight knobs</h2>
+  <p>A <b>strategy</b> is a preset, not a product. orchestrate has eight <b>dimensions</b> — knobs
+  like how work splits, who reviews it, and which engine runs it. Each of the nine strategies is
+  just a named preset over those knobs. Learn one command and you've learned all nine.</p>
+  <p>Any knob you set yourself overrides its preset value. That's the whole override model:</p>
+  <div class="ov">
+    <div class="term ovcmd"><span class="p">/orchestrate</span> plan.md strategy=staged <span style="color:var(--amber);font-weight:600">engine=codex</span>   <span class="c"># one preset, one override</span></div>
+    <div class="ovcard">
+      <h3>staged<em>the preset…</em></h3>
+      <div class="ovrow"><i>topology</i><b>staged</b></div>
+      <div class="ovrow"><i>planning</i><b>plan-first</b></div>
+      <div class="ovrow"><i>review</i><b>dual</b></div>
+      <div class="ovrow"><i>engine</i><b>claude</b></div>
+      <div class="ovrow"><i>isolation</i><b>off</b></div>
+      <div class="ovrow"><i>trigger</i><b>once</b></div>
+    </div>
+    <div class="ovcard">
+      <h3>staged + your override<em>…after your one flag</em></h3>
+      <div class="ovrow"><i>topology</i><b>staged</b></div>
+      <div class="ovrow"><i>planning</i><b>plan-first</b></div>
+      <div class="ovrow"><i>review</i><b>dual</b></div>
+      <div class="ovrow hit"><i>engine</i><span><s>claude</s> <b>codex</b></span></div>
+      <div class="ovrow"><i>isolation</i><b>off</b></div>
+      <div class="ovrow"><i>trigger</i><b>once</b></div>
+    </div>
+  </div>
+  <p style="margin-top:16px">That one line means: Codex implements every task, Claude still reviews
+  every result. Strategies compose the same way — <code class="mono">strategy=loop
+  topology=parallel</code> makes each loop cycle fan out.</p>
+  <p>Eight knobs exist; you'll only ever touch two or three:</p>
+  <div class="tblwrap"><table>
+    <tr><th>knob</th><th>what it controls</th><th>default</th></tr>
+    <tr><td class="dim">strategy</td><td>the run shape — one of the nine below</td><td><code>auto</code> → triage picks</td></tr>
+    <tr><td class="dim">review</td><td>which gates run on each result</td><td><code>dual</code> — spec, then quality</td></tr>
+    <tr><td class="dim">engine</td><td>who executes — <code>claude</code>, <code>codex</code>, <code>grok</code>, or <code>mixed</code></td><td><code>claude</code></td></tr>
+    <tr><td class="dim">models</td><td>which model tier does which job</td><td>tier map (appendix)</td></tr>
+    <tr><td class="dim">isolation</td><td>whether workers get their own git worktree</td><td><code>worktree</code> when &gt;1 writer</td></tr>
+    <tr><td class="dim">trigger</td><td>run once, on a goal, on an interval, on a schedule</td><td><code>once</code></td></tr>
+    <tr><td class="dim">workers</td><td>how many run at once</td><td>3–5</td></tr>
+    <tr><td class="dim">budget</td><td>hard caps — cycles, agents, tokens, open PRs</td><td>per strategy</td></tr>
+  </table></div>
+  <details class="disc">
+    <summary>the full command grammar</summary>
+    <div>
+      <div class="gram">/orchestrate <span class="g-file">[plan-file | task description]</span>
     <span class="g-dim">strategy=</span><span class="g-strat">auto|staged|parallel|hierarchical|team|workflow|loop|advisor|adversarial|xcli</span>
     <span class="g-dim">review=</span><span class="g-val">dual|spec|quality|panel:N|consensus:N|off</span>
     <span class="g-dim">engine=</span><span class="g-val">claude|codex|grok|mixed</span>
@@ -240,140 +406,111 @@
     <span class="g-dim">isolation=</span><span class="g-val">worktree|branch|off</span>   <span class="g-dim">workers=</span><span class="g-val">N</span>
     <span class="g-dim">trigger=</span><span class="g-val">once|goal:"tests green"|interval:5m|schedule:"0 6 * * *"</span>
     <span class="g-dim">budget=</span><span class="g-val">cycles|agents|tokens</span>   <span class="g-dim">alias=</span><span class="g-val">saved-preset</span></div>
-  <div class="legend">
-    <span><i style="background:var(--tok-strat)"></i>strategy — the topology preset</span>
-    <span><i style="background:var(--tok-dim)"></i>dimension — a knob, overrides the preset</span>
-    <span><i style="background:var(--tok-val)"></i>value</span>
-    <span><i style="background:var(--tok-file)"></i>your input</span>
-  </div>
-  <div class="term" style="margin-top:14px"><span class="c"># everything optional — bare invocation triages and explains its pick</span>
-<span class="p">/orchestrate</span> docs/feature-plan.md
-<span class="p">/orchestrate</span> docs/feature-plan.md strategy=parallel workers=4
-<span class="p">/orchestrate</span> "migrate all components to Tailwind" strategy=staged engine=codex
-<span class="p">/orchestrate</span> "keep fixing until suite passes" strategy=loop trigger=goal:"pytest green" budget=cycles:15</div>
+      <p>Full reference: <a href="https://github.com/gabros20/orchestrate/blob/main/docs/usage.md">docs/usage.md</a> — every dimension, every value, selection precedence.</p>
+    </div>
+  </details>
 </section>
 
 <section id="strat">
-  <h2>The nine strategies</h2>
-  <p>A strategy is a <b>preset over dimensions</b> — force one with <code class="mono">strategy=</code>, then override any knob. Glyphs: <svg width="16" height="10" viewBox="0 0 16 10" aria-hidden="true"><circle class="n2" cx="4" cy="5" r="3"/></svg> = controller / strong model, <svg width="16" height="10" viewBox="0 0 16 10" aria-hidden="true"><circle class="n" cx="4" cy="5" r="3"/></svg> = worker.</p>
+  <h2>Choose a strategy</h2>
+  <p>Find yours by the shape of your task — or pass nothing and let triage pick.</p>
+  <div class="strip" aria-label="strategy decision strip">
+    <a href="#start"><span class="q">Under ~50K tokens of coupled work?</span><span class="a solo"><svg class="lu" aria-hidden="true"><use href="#lu-user"/></svg>don't orchestrate</span></a>
+    <a href="#c-parallel"><span class="q">Independent tasks, no shared files?</span><span class="a"><svg class="lu" aria-hidden="true"><use href="#lu-split"/></svg>parallel</span></a>
+    <a href="#c-team"><span class="q">Workers need to debate?</span><span class="a"><svg class="lu" aria-hidden="true"><use href="#lu-messages-square"/></svg>team · adversarial</span></a>
+    <a href="#c-loop"><span class="q">Grinds toward a checkable goal?</span><span class="a"><svg class="lu" aria-hidden="true"><use href="#lu-repeat"/></svg>loop</span></a>
+    <a href="#c-workflow"><span class="q">20+ similar items?</span><span class="a"><svg class="lu" aria-hidden="true"><use href="#lu-workflow"/></svg>workflow</span></a>
+    <a href="#c-staged"><span class="q">A plan, quality on every task?</span><span class="a"><svg class="lu" aria-hidden="true"><use href="#lu-list-ordered"/></svg>staged — the default</span></a>
+  </div>
+  <div class="gleg" aria-label="glyph legend">
+    <span><i class="c"></i>controller / strong model</span>
+    <span><i></i>worker</span>
+    <span><i class="s"></i>script</span>
+    <span><i class="x"></i>external CLI</span>
+  </div>
   <div class="cards">
 
-    <div class="card"><div class="top"><h3>staged<em>default</em></h3>
+    <div class="card" id="c-staged"><div class="top"><h3>staged<em>default</em></h3>
       <svg width="88" height="40" viewBox="0 0 88 40" aria-label="sequential chain"><circle class="n2" cx="8" cy="20" r="5"/><line class="e" x1="14" y1="20" x2="28" y2="20"/><circle class="n" cx="34" cy="20" r="5"/><line class="e" x1="40" y1="20" x2="54" y2="20"/><circle class="n" cx="60" cy="20" r="5"/><line class="e" x1="66" y1="20" x2="80" y2="20"/><circle class="n" cx="84" cy="20" r="4" opacity=".4"/></svg></div>
-      <div class="use"><b>Use when:</b> you have a plan with mostly-independent tasks and want quality per task, sequentially.</div>
-      <div class="mech">Fresh implementer per task → spec review → quality review → ledger line. Brief/report files, recorded-BASE diffs, fix-waves, resume from <code>progress.md</code>.</div></div>
+      <div class="use"><b>Use it when</b> you have a plan of mostly-independent tasks and want quality on every one. <b>It works by</b> sending a fresh implementer per task and reviewing each result twice before it counts.</div></div>
 
-    <div class="card"><div class="top"><h3>parallel</h3>
+    <div class="card" id="c-parallel"><div class="top"><h3>parallel</h3>
       <svg width="88" height="40" viewBox="0 0 88 40" aria-label="fan-out"><circle class="n2" cx="10" cy="20" r="5"/><line class="e" x1="15" y1="17" x2="42" y2="7"/><line class="e" x1="16" y1="20" x2="42" y2="20"/><line class="e" x1="15" y1="23" x2="42" y2="33"/><circle class="n" cx="48" cy="7" r="5"/><circle class="n" cx="48" cy="20" r="5"/><circle class="n" cx="48" cy="33" r="5"/><line class="e2" x1="53" y1="7" x2="76" y2="18"/><line class="e2" x1="53" y1="20" x2="76" y2="20"/><line class="e2" x1="53" y1="33" x2="76" y2="22"/><circle class="n2" cx="80" cy="20" r="5"/></svg></div>
-      <div class="use"><b>Use when:</b> tasks are independent, share no files, and wall-clock matters.</div>
-      <div class="mech">3–5 workers in <b>git worktrees</b>, file-ownership task cards with explicit <b>merge gates</b>, an integrator merges in dependency order. Cleanup is mandatory.</div></div>
+      <div class="use"><b>Use it when</b> tasks are independent, share no files, and wall-clock time matters. <b>It works by</b> running 3–5 workers at once in isolated git worktrees, then merging in dependency order.</div></div>
 
     <div class="card"><div class="top"><h3>hierarchical</h3>
       <svg width="88" height="40" viewBox="0 0 88 40" aria-label="tree"><circle class="n2" cx="10" cy="20" r="5"/><line class="e" x1="15" y1="17" x2="38" y2="9"/><line class="e" x1="15" y1="23" x2="38" y2="31"/><circle class="n2" cx="44" cy="9" r="4"/><circle class="n2" cx="44" cy="31" r="4"/><line class="e" x1="48" y1="7" x2="70" y2="4"/><line class="e" x1="48" y1="11" x2="70" y2="14"/><line class="e" x1="48" y1="29" x2="70" y2="26"/><line class="e" x1="48" y1="33" x2="70" y2="36"/><circle class="n" cx="74" cy="4" r="3.5"/><circle class="n" cx="74" cy="14" r="3.5"/><circle class="n" cx="74" cy="26" r="3.5"/><circle class="n" cx="74" cy="36" r="3.5"/></svg></div>
-      <div class="use"><b>Use when:</b> work spans domains that each need real thinking plus their own workers; your context must stay lean.</div>
-      <div class="mech">Sub-orchestrators think per-domain (3–7 partitions, peek-before-deep) and return conclusions only. Wide &amp; shallow beats deep — runtimes cap nesting.</div></div>
+      <div class="use"><b>Use it when</b> the work is too broad for one context and each domain needs real thinking. <b>It works by</b> giving every domain its own sub-orchestrator, which returns conclusions instead of transcripts.</div></div>
 
-    <div class="card"><div class="top"><h3>team</h3>
+    <div class="card" id="c-team"><div class="top"><h3>team</h3>
       <svg width="88" height="40" viewBox="0 0 88 40" aria-label="mesh"><circle class="n2" cx="14" cy="10" r="5"/><circle class="n" cx="64" cy="8" r="5"/><circle class="n" cx="40" cy="32" r="5"/><circle class="n" cx="76" cy="30" r="5"/><line class="e" x1="19" y1="10" x2="59" y2="8"/><line class="e" x1="17" y1="14" x2="37" y2="28"/><line class="e" x1="62" y1="12" x2="44" y2="29"/><line class="e" x1="68" y1="11" x2="73" y2="26"/><line class="e" x1="45" y1="31" x2="71" y2="30"/></svg></div>
-      <div class="use"><b>Use when:</b> workers must talk to each other — debates, competing hypotheses, cross-layer features.</div>
-      <div class="mech">Agent Teams: shared task list + peer messaging. Preset compositions (review / debug / fullstack / security…), plan-approval gates, direct &gt; broadcast. Experimental.</div></div>
+      <div class="use"><b>Use it when</b> workers must talk to each other — debates, competing hypotheses, cross-layer features. <b>It works by</b> spawning named teammates who share a task list and message each other directly. Experimental.</div></div>
 
-    <div class="card"><div class="top"><h3>workflow</h3>
+    <div class="card" id="c-workflow"><div class="top"><h3>workflow</h3>
       <svg width="88" height="40" viewBox="0 0 88 40" aria-label="scripted fleet"><rect x="4" y="12" width="16" height="16" rx="3" fill="none" class="e2" stroke-dasharray="3 2"/><line class="e" x1="21" y1="20" x2="32" y2="20"/><circle class="n" cx="38" cy="8" r="3.5"/><circle class="n" cx="38" cy="20" r="3.5"/><circle class="n" cx="38" cy="32" r="3.5"/><circle class="n" cx="52" cy="8" r="3.5"/><circle class="n" cx="52" cy="20" r="3.5"/><circle class="n" cx="52" cy="32" r="3.5"/><circle class="n" cx="66" cy="8" r="3.5"/><circle class="n" cx="66" cy="20" r="3.5"/><circle class="n" cx="66" cy="32" r="3.5"/><line class="e2" x1="70" y1="20" x2="80" y2="20"/><circle class="n2" cx="83" cy="20" r="4"/></svg></div>
-      <div class="use"><b>Use when:</b> 20+ homogeneous items or verify-every-finding — a script should hold the plan, not you.</div>
-      <div class="mech">Dynamic workflow scripts: pipelines, adversarial verify stages, resume with cached results. Pilot on a slice first; explicit agent budgets; save good runs as <code>/commands</code>.</div></div>
+      <div class="use"><b>Use it when</b> you have 20+ similar items and a script should hold the plan instead of you. <b>It works by</b> fanning agents out from a deterministic script that verifies every finding and resumes with cached results.</div></div>
 
-    <div class="card"><div class="top"><h3>loop</h3>
+    <div class="card" id="c-loop"><div class="top"><h3>loop</h3>
       <svg width="88" height="40" viewBox="0 0 88 40" aria-label="cycle"><circle cx="44" cy="20" r="13" fill="none" class="e"/><circle class="n2" cx="44" cy="7" r="4.5"/><circle class="n" cx="57" cy="26" r="4.5"/><circle class="n" cx="31" cy="26" r="4.5"/><path d="M62 12 l6 -2 l-2 6" fill="none" class="e"/></svg></div>
-      <div class="use"><b>Use when:</b> grind-until-green or recurring-on-trigger, with a verifiable stop condition.</div>
-      <div class="mech">Loop contract (Goal / Boundaries / SOP / State / Logs) + verifier + stop condition. Triggers: <code>/goal</code>, Ralph stop-hook, <code>/loop</code>, <code>/schedule</code>. Evolve pass improves the loop itself.</div></div>
+      <div class="use"><b>Use it when</b> work grinds toward a checkable goal — tests green, a metric hit. <b>It works by</b> running gated cycles against a stop condition, with hard caps and a kill switch.</div></div>
 
     <div class="card"><div class="top"><h3>advisor</h3>
       <svg width="88" height="40" viewBox="0 0 88 40" aria-label="advisor consult"><circle class="n" cx="20" cy="20" r="6"/><path d="M14 26 a9 9 0 1 0 0 -12" fill="none" class="e"/><line class="e2" x1="28" y1="18" x2="60" y2="12" stroke-dasharray="3 3"/><line class="e2" x1="60" y1="16" x2="28" y2="22" stroke-dasharray="3 3"/><rect x="60" y="6" width="22" height="20" rx="4" fill="none" class="e2"/><circle class="n2" cx="71" cy="16" r="5"/></svg></div>
-      <div class="use"><b>Use when:</b> budget-pressed — the strong model should only do judgment, not burn execution tokens.</div>
-      <div class="mech">Cheap executor runs every turn; strongest model consulted ~once per task (≈92% of top quality at ≈63% cost) — or it writes one leveraged <code>plan.md</code> and leaves the room.</div></div>
+      <div class="use"><b>Use it when</b> budget is tight and most of the task is mechanical. <b>It works by</b> letting a cheap model do every turn while the strongest model answers only the few questions that need real judgment.</div></div>
 
     <div class="card"><div class="top"><h3>adversarial</h3>
       <svg width="88" height="40" viewBox="0 0 88 40" aria-label="debate"><circle class="n2" cx="16" cy="14" r="6"/><circle class="n" cx="60" cy="14" r="6"/><path d="M24 11 h28 m0 0 l-4 -3 m4 3 l-4 3" fill="none" class="e"/><path d="M52 18 h-28 m0 0 l4 -3 m-4 3 l4 3" fill="none" class="e"/><line class="e2" x1="38" y1="24" x2="38" y2="32"/><circle class="n" cx="38" cy="35" r="3.5"/></svg></div>
-      <div class="use"><b>Use when:</b> a wrong plan costs far more than arguing about it — architecture, migrations, security.</div>
-      <div class="mech">Interview → planner drafts, a different-lineage counter <b>refutes</b>, ≤5 rounds to consensus → cheap execution → premium close. Survivor disagreements become pinned open questions.</div></div>
+      <div class="use"><b>Use it when</b> a wrong plan costs far more than arguing about it — architecture, migrations, security. <b>It works by</b> having a different-lineage model attack the plan until consensus, before any code exists.</div></div>
 
     <div class="card"><div class="top"><h3>xcli</h3>
       <svg width="88" height="40" viewBox="0 0 88 40" aria-label="external engines"><circle class="n2" cx="12" cy="20" r="5"/><line class="e" x1="18" y1="17" x2="34" y2="9"/><line class="e" x1="18" y1="20" x2="34" y2="20"/><line class="e" x1="18" y1="23" x2="34" y2="31"/><rect x="36" y="3" width="20" height="12" rx="2" fill="none" class="e"/><rect x="36" y="14" width="20" height="12" rx="2" fill="none" class="e2"/><rect x="36" y="25" width="20" height="12" rx="2" fill="none" class="e"/><text x="40" y="12" font-size="7" fill="var(--muted)" font-family="monospace">cdx</text><text x="40" y="23" font-size="7" fill="var(--accent)" font-family="monospace">cld</text><text x="40" y="34" font-size="7" fill="var(--muted)" font-family="monospace">grk</text></svg></div>
-      <div class="use"><b>Use when:</b> a task fits another CLI's specialty, or you want a different-lineage second opinion / separate quota.</div>
-      <div class="mech">Verified recipes: <code>codex exec</code> (schema output, sandbox tiers), <code>grok -p</code>, headless <code>claude -p --bare</code>. One task per launch, worktree each, review their diffs yourself.</div></div>
+      <div class="use"><b>Use it when</b> a task fits another coding CLI, or you want a second opinion from a different model family. <b>It works by</b> routing tasks to codex or grok as workers or reviewers — one task per launch, and their diffs get reviewed too.</div></div>
   </div>
-  <div class="note"><b>Compose freely:</b> <span class="mono">strategy=staged engine=codex</span> — Codex implements, Claude reviews · <span class="mono">strategy=loop topology=parallel</span> — each cycle fans out · <span class="mono">strategy=parallel review=panel:3</span> — three review lenses per worker.</div>
 </section>
 
-<section id="dims">
-  <h2>Dimensions — the knobs</h2>
-  <p>Every strategy is just a preset over these. Any arg you pass overrides the preset; resolved values are recorded in <code class="mono">.orchestrate/run.md</code>.</p>
-  <div class="tblwrap"><table>
-    <tr><th>knob</th><th>values</th><th>default</th></tr>
-    <tr><td class="dim">strategy</td><td>the nine above, or <code>auto</code></td><td><code>auto</code> → triage</td></tr>
-    <tr><td class="dim">review</td><td><code>dual</code> (spec→quality) · <code>spec</code> · <code>quality</code> · <code>panel:N</code> (N lenses) · <code>consensus:N</code> (N voters) · <code>off</code></td><td><code>dual</code></td></tr>
-    <tr><td class="dim">engine</td><td><code>claude</code> · <code>codex</code> · <code>grok</code> · <code>mixed</code> <span class="d">(route per task class)</span></td><td><code>claude</code></td></tr>
-    <tr><td class="dim">models</td><td>tier map — <code>advisor:</code> <code>orchestrator:</code> <code>reasoner:</code> <code>worker:</code> <code>reviewer:</code> <code>peer:</code></td><td>tier table below</td></tr>
-    <tr><td class="dim">isolation</td><td><code>worktree</code> · <code>branch</code> · <code>off</code></td><td><code>worktree</code> when &gt;1 writer</td></tr>
-    <tr><td class="dim">trigger</td><td><code>once</code> · <code>goal:"…"</code> · <code>interval:5m</code> · <code>schedule:"cron"</code></td><td><code>once</code></td></tr>
-    <tr><td class="dim">workers</td><td>fan-out width</td><td>3–5</td></tr>
-    <tr><td class="dim">budget</td><td>max <code>cycles</code> / <code>agents</code> / <code>tokens</code> / open-PR cap</td><td>per strategy</td></tr>
-  </table></div>
-</section>
-
-<section id="pick">
-  <h2>How the strategy gets picked</h2>
-  <div class="prio">
-    <span><b>strategy=</b> you force it</span><i>▸</i>
-    <span><b>alias=</b> your saved preset</span><i>▸</i>
-    <span><b>triage</b> measures &amp; picks, states why</span><i>▸</i>
-    <span><b>ask</b> only if signals conflict</span>
+<section id="gates">
+  <h2><svg class="lu" aria-hidden="true"><use href="#lu-shield-check"/></svg>Gated by default</h2>
+  <p>Nothing lands because an agent says it's done. Every result passes two gates, in a fixed
+  order, and reviewers verify by reading the code — never the worker's own report.</p>
+  <div class="pipe p4 gp">
+    <div><b><svg class="lu" aria-hidden="true"><use href="#lu-bot"/></svg>implement</b><span>A fresh worker builds exactly what its brief asks.</span></div>
+    <div><b><svg class="lu" aria-hidden="true"><use href="#lu-clipboard-check"/></svg>spec gate</b><span>"Did they build what was asked?" Nothing missing, nothing extra.</span></div>
+    <div><b><svg class="lu" aria-hidden="true"><use href="#lu-search-check"/></svg>quality gate</b><span>"Is it well-built?" Runs only after spec passes — never before.</span></div>
+    <div><b><svg class="lu" aria-hidden="true"><use href="#lu-scroll-text"/></svg>ledger</b><span>The task becomes one ledger line; the run can always resume from here.</span></div>
   </div>
-  <p style="margin-top:18px">Triage measures the task's <b>shape</b>: does a plan exist · task count · independence (file-list overlap) · estimated context tokens · verifiable stop condition · recurring or one-shot · blast radius. Two rules can veto orchestration entirely:</p>
-  <ul style="max-width:68ch">
-    <li><b>&lt; 50K tokens of coupled work → <code class="mono">solo</code>.</b> Just do it; orchestration overhead would exceed its return.</li>
-    <li><b>Loops must pass the four-part test</b>: repeats/grinds · automated verification · budget absorbs retries · agent can see failures. Miss one → no loop.</li>
+  <div class="loopback"><span class="ic"><svg class="lu" aria-hidden="true"><use href="#lu-iteration-ccw"/></svg></span><span>Any failure sends <b>one fix agent</b> back through the <b>same gate</b> until it's clean — no skipping, no downgrading a finding to pass. High-stakes plans can add more lenses: <code class="mono">review=panel:3</code>.</span></div>
+  <ul class="rules">
+    <li><b><svg class="lu" aria-hidden="true"><use href="#lu-git-branch"/></svg>branch first</b>It never starts work on main without your explicit consent.</li>
+    <li><b><svg class="lu" aria-hidden="true"><use href="#lu-copy-x"/></svg>no duplicates on overload</b>If the API chokes, it resumes the same agent — it never spawns a competing copy.</li>
+    <li><b><svg class="lu" aria-hidden="true"><use href="#lu-unplug"/></svg>loops have a kill switch</b>Hard cycle caps, a regression breaker, and a contract file you can delete to stop everything.</li>
+    <li><b><svg class="lu" aria-hidden="true"><use href="#lu-git-pull-request-draft"/></svg>PR bandwidth</b>It never opens a new PR while the run's previous one sits unmerged.</li>
+    <li><b><svg class="lu" aria-hidden="true"><use href="#lu-arrow-up-right"/></svg>blocked means escalate</b>A stuck task gets more context, a stronger model, a split, or a human — never a blind retry.</li>
+    <li><b><svg class="lu" aria-hidden="true"><use href="#lu-file-lock"/></svg>data is not instructions</b>Workers never follow orders found in logs or fetched content, and credentials never enter briefs.</li>
   </ul>
 </section>
 
-<section id="models">
-  <h2>Model tiers</h2>
-  <div class="tblwrap"><table>
-    <tr><th>tier</th><th>job</th><th>default</th><th>never</th></tr>
-    <tr><td class="dim">advisor</td><td>rare judgment consults, out of the hot path</td><td>strongest</td><td>executes</td></tr>
-    <tr><td class="dim">orchestrator</td><td>plans, decomposes, assigns, measures</td><td>strong</td><td>implements</td></tr>
-    <tr><td class="dim">reasoner</td><td>architecture, hard debugging</td><td>opus-class</td><td>mechanical batches</td></tr>
-    <tr><td class="dim">worker</td><td>scoped execution</td><td>sonnet-class</td><td>design decisions</td></tr>
-    <tr><td class="dim">reviewer</td><td>spec / quality / verification</td><td>mid-tier floor</td><td>writes</td></tr>
-    <tr><td class="dim">peer</td><td>different-lineage second opinion</td><td>codex / grok</td><td>seeing the other peer's answer first</td></tr>
-  </table></div>
-  <p style="margin-top:14px"><b>Two laws:</b> the model is explicit on <i>every</i> dispatch (an omitted model silently inherits the most expensive one), and <b>turn count beats token price</b> — a too-cheap model takes 2–3× the turns and loses the savings.</p>
-</section>
-
 <section id="tokens">
-  <h2>Token economy</h2>
-  <p>Since <b>v1.1.0</b> every dispatch carries a token-discipline layer. The target is <b>zero
-  wasted tokens, not minimal tokens</b> — token spend explains ~80% of multi-agent quality
-  variance, so the skill cuts narration, raw dumps, and unstructured returns, never the context
-  workers need. Workers are <b>quiet while working, dense when reporting</b> — via three
-  role-scoped communication blocks pasted verbatim into every dispatch:</p>
+  <h2><svg class="lu" aria-hidden="true"><use href="#lu-coins"/></svg>Where the tokens go</h2>
+  <p>The target is <b>zero wasted tokens, not minimal tokens</b>. Workers get every pointer they
+  need to do the job — then stay quiet while working and report densely when done. Noisy command
+  output is redirected to files, so dumps never enter anyone's context.</p>
+  <p>Every dispatch carries a short contract matched to its role:</p>
   <div class="cards">
     <div class="card"><div class="top"><h3>WORKER<em>&approx;300 tok</em></h3></div>
-      <div class="use"><b>Who:</b> implementers, sub-orchestrators, integrators, loop executors, xcli workers.</div>
-      <div class="mech">Silence-default while working — no tool-call narration, no restating the brief. Structured blockers (<code>BLOCKED — what / evidence / tried / need</code>), noisy output redirected to <code>.orchestrate/raw/</code>, literals quoted verbatim. Safety messages are never silenced.</div></div>
+      <div class="use"><b>Who:</b> implementers, integrators, loop executors.</div>
+      <div class="mech">Orient first — reading to understand is work, not waste. Then silence: no narration, no restating the brief. Blockers come back structured, and safety messages are never silenced.</div></div>
     <div class="card"><div class="top"><h3>REVIEWER<em>&approx;140 tok</em></h3></div>
-      <div class="use"><b>Who:</b> spec, quality, panel, and consensus reviewers.</div>
-      <div class="mech"><b>Never self-filters</b> — every finding reported with severity + confidence (suppression measurably drops recall). Full findings go to a findings <b>file</b>; inline is verdict + counts, so caps can never truncate them. Filtering is the controller's job.</div></div>
+      <div class="use"><b>Who:</b> spec, quality, and panel reviewers.</div>
+      <div class="mech"><b>Never self-filters.</b> Every finding goes to a findings file with severity and confidence; inline is just the verdict and counts. Deciding what matters is the controller's job.</div></div>
     <div class="card"><div class="top"><h3>MINIMAL<em>&approx;19 tok</em></h3></div>
-      <div class="use"><b>Who:</b> advisors, triage assessors, verifiers, debate prompts, workflow agents.</div>
-      <div class="mech">One line: no preamble, return only the schema. A 300-token contract on a 4-line return would be net-negative — blocks are <b>role-scoped</b> for exactly that reason.</div></div>
+      <div class="use"><b>Who:</b> advisors, verifiers, one-line judges.</div>
+      <div class="mech">One line: return only the answer in the asked shape. A 300-token contract on a 4-line return would cost more than it saves.</div></div>
   </div>
-  <p style="margin-top:22px"><b>The life of a dispatch</b> — where tokens get spent, saved, and where quality is guarded. Dot color = actor: <span class="mono" style="color:var(--accent)">controller</span> · <span class="mono" style="color:var(--amber)">gate</span> · <span class="mono" style="color:var(--glyph)">worker</span> · <span class="mono" style="color:var(--good)">reviewer</span>.</p>
+  <p style="margin-top:22px"><b>The life of a dispatch</b> — where tokens get spent, saved, and where quality is guarded:</p>
   <ol class="tl">
-    <li><span class="dot c"></span>
-      <div class="hd"><b>compose the brief</b><span class="who">controller</span><span class="fx qual">input quality ↑</span></div>
-      <span class="desc"><b>Prime with pointers, not payloads</b>: objective, scope with the must-NOT-change list, <code>read: path — why @ sha</code> pointers instead of pasted files, verbatim constraints, a verification command, report contract, stop conditions. Inline only what's semantically complete, stable, and cheaper than rediscovery.</span>
+    <li><span class="dot c"><svg class="lu" aria-hidden="true"><use href="#lu-clipboard-list"/></svg></span>
+      <div class="hd"><b>brief</b><span class="who">controller</span><span class="fx qual">input quality ↑</span></div>
+      <span class="desc"><b>Pointers, not payloads</b>: the objective, the scope, <code>read:</code> pointers to the right files, a verification command, and a stop condition — instead of pasted file contents.</span>
       <details><summary>example brief ▸</summary><div class="term"><span class="c"># .orchestrate/task-3-brief.md</span>
 <span class="p">Objective</span>     extract the rate-limit middleware; done = suite green, public API unchanged
 <span class="p">Scope</span>         in: src/middleware · out: auth flow · must NOT change: response shape
@@ -382,51 +519,33 @@
 <span class="p">Verification</span>  pnpm test middleware
 <span class="p">Report</span>        .orchestrate/task-3-report.md · inline &lt;15 lines
 <span class="p">Stop</span>          BLOCKED if the storage backend is ambiguous — don't guess</div></details></li>
-    <li><span class="dot g"></span>
+    <li><span class="dot g"><svg class="lu" aria-hidden="true"><use href="#lu-shield-check"/></svg></span>
       <div class="hd"><b>brief-check</b><span class="who">gate</span><span class="fx save">saves a worker turn</span></div>
-      <span class="desc"><code>scripts/brief-check</code> fails dead pointers, missing sections, and a missing report path <b>before</b> dispatch — a clarifying round-trip after dispatch costs a full worker turn. Underpriming is the expensive failure, not overpriming.</span></li>
-    <li><span class="dot c"></span>
-      <div class="hd"><b>dispatch</b><span class="who">controller</span><span class="fx spend">spends ≈285 tok</span></div>
-      <span class="desc">The role's communication block rides along <b>verbatim and byte-stable</b> (cache-friendly); the model is explicit. That ≈285-token spend buys back hundreds-to-thousands of narration tokens per worker turn.</span></li>
-    <li><span class="dot"></span>
+      <span class="desc">A script fails dead pointers and missing sections <b>before</b> dispatch — a clarifying round-trip afterward costs a full worker turn.</span></li>
+    <li><span class="dot"><svg class="lu" aria-hidden="true"><use href="#lu-bot"/></svg></span>
       <div class="hd"><b>work</b><span class="who">worker</span><span class="fx save">−narration −dumps</span></div>
-      <span class="desc"><b>Orients first</b> — tree, manifests, one neighboring module for patterns, via the repo's probed <code>toolbox.md</code> recipes (reading to understand is work, not waste). Then silence-default: no tool-call narration, no restating the brief. Noisy commands <b>redirect to <code>.orchestrate/raw/</code> at execution time</b> — the dump never enters context. Trivial local choices: pick-and-note; anything touching security, compatibility, or public behavior escalates.</span></li>
-    <li><span class="dot"></span>
+      <span class="desc">The worker orients, works silently, and redirects noisy output to <code>.orchestrate/raw/</code> at execution time — the dump never enters context.</span></li>
+    <li><span class="dot"><svg class="lu" aria-hidden="true"><use href="#lu-file-output"/></svg></span>
       <div class="hd"><b>report</b><span class="who">worker</span><span class="fx save">compounds every turn</span></div>
-      <span class="desc">Dense, schema'd, capped — the return becomes <b>controller input re-read on every later turn</b>, so every saved token compounds. Code, commands, and exact errors stay verbatim; uncertainty stated, only rhetorical hedging cut. Blockers are structured: <code>BLOCKED — what / evidence / tried / need</code>.</span></li>
-    <li><span class="dot r"></span>
-      <div class="hd"><b>review</b><span class="who">reviewer</span><span class="fx qual">recall guard</span></div>
-      <span class="desc"><b>Never self-filters</b> — every finding with severity + confidence goes to a findings <b>file</b> (inline caps can't truncate); inline is verdict + counts. Filtering is the controller's job, from reports — it inspects the diff only when a gate is ambiguous.</span></li>
-    <li><span class="dot c"></span>
-      <div class="hd"><b>ledger</b><span class="who">controller</span><span class="fx save">cheap resume</span></div>
-      <span class="desc">One line per gated unit in <code>progress.md</code>. On resume or compaction the ledger + <code>git log</code> are the truth — no transcript re-reading, no re-dispatched completed work.</span></li>
+      <span class="desc">Dense and structured — the report becomes controller input that is re-read on every later turn, so every saved token compounds. Code and exact errors stay verbatim.</span></li>
+    <li><span class="dot r"><svg class="lu" aria-hidden="true"><use href="#lu-scroll-text"/></svg></span>
+      <div class="hd"><b>gate &amp; ledger</b><span class="who">reviewer · controller</span><span class="fx qual">recall guard</span></div>
+      <span class="desc">Findings land in a file that caps can't truncate; the task lands as one ledger line. Resume reads the ledger and <code>git log</code> — never the transcript.</span></li>
   </ol>
   <div class="note"><b>Honest numbers:</b> expect 10–25% session-level savings, not the 65–75% output-only headlines. A/B on your provider's billing page before believing anyone — including this page.</div>
 </section>
 
-<section id="gates">
-  <h2>Gates &amp; safety rails</h2>
-  <div class="pipe gp">
-    <div><b>plan-veto</b><span>a reviewer can REJECT the plan before any code exists — cheaper than rejecting code</span></div>
-    <div><b>execute</b><span>fresh implementer per task, brief-check-gated brief, explicit model</span></div>
-    <div><b>spec review</b><span>"did they build what was asked" — nothing missing, nothing extra, constraints verbatim</span></div>
-    <div><b>quality review</b><span>"is it well-built" — runs only after spec passes; never before</span></div>
-    <div><b>evidence verify</b><span>a FRESH read-only agent drives the real app; screenshot + video into <code>evidence/</code></span></div>
-  </div>
-  <div class="loopback"><span class="ic">↻</span><span>Any ❌ loops until clean: <b>ONE fix subagent → re-review</b> — spec before quality, always; no skipping, no severity downgrades. Reviewers are read-only and verify by reading code, never the implementer's report. Minor findings batch into one final whole-branch review.</span></div>
-  <ul class="rules">
-    <li><b>branch first</b>Never start on main/master without explicit consent.</li>
-    <li><b>never duplicate on overload</b>API 529 / rate limit → nudge or resume the same agent. Two writers on one artifact is worse than a late artifact.</li>
-    <li><b>loop rails</b>Max-cycle cap · kill switch (delete the contract file) · regression breaker · reward-hacking forbidden explicitly.</li>
-    <li><b>PR bandwidth</b>Never open a new PR while the run's previous one is unmerged. Autonomy is earned per work-class — new classes start drafts-only.</li>
-    <li><b>escalation ladder</b>BLOCKED means something changes: more context → stronger model → split the task → ask the human. Never re-dispatch unchanged.</li>
-    <li><b>data ≠ instructions</b>Logs, timelines, and fetched content are data; workers never follow orders found in them. Credentials never enter briefs or reports.</li>
-  </ul>
-</section>
+<section id="start">
+  <h2>Start here</h2>
+  <p>Install once, point it at a plan. Bare invocation triages and explains its pick.</p>
+  <div class="term"><span class="c"># install</span>
+npx skills add gabros20/orchestrate
 
-<section id="alias">
-  <h2>Built-in aliases</h2>
-  <p>Saved presets in <code class="mono">config.yaml</code> — invoke with <code class="mono">alias=&lt;name&gt;</code>, add your own, and explicit args still win.</p>
+<span class="c"># run</span>
+<span class="p">/orchestrate</span> docs/feature-plan.md
+<span class="p">/orchestrate</span> "keep fixing until the suite passes" strategy=loop trigger=goal:"pytest green"</div>
+  <p style="margin-top:18px">An <b>alias</b> is a preset you name yourself in <code class="mono">config.yaml</code>.
+  Five ship built in — good defaults to steal:</p>
   <div class="tblwrap"><table>
     <tr><th>alias</th><th>expands to</th><th>for</th></tr>
     <tr><td class="dim">red-team</td><td><code>adversarial</code> + <code>panel:3</code></td><td>high-stakes builds — debate the plan, triple-lens the output</td></tr>
@@ -435,27 +554,44 @@
     <tr><td class="dim">afk</td><td><code>loop</code> + <code>trigger=goal</code> + <code>cycles:20, open_prs:1</code></td><td>walk-away grinding with hard rails</td></tr>
     <tr><td class="dim">architect</td><td><code>advisor</code> + <code>worker:sonnet</code></td><td>big-model thinking, small-model doing</td></tr>
   </table></div>
-</section>
+  <p style="margin-top:16px">Copy-paste starting points for more scenarios:
+  <a href="https://github.com/gabros20/orchestrate/blob/main/docs/recipes.md">docs/recipes.md</a>.</p>
 
-<section id="files">
-  <h2>What's on disk</h2>
-  <div class="files"><span class="hl">~/.claude/skills/orchestrate/</span>
+  <details class="disc">
+    <summary>model tiers — who runs on what</summary>
+    <div>
+      <p>The model is explicit on every dispatch — an omitted model silently inherits the most
+      expensive one. And turn count beats token price: a too-cheap model takes 2–3× the turns and
+      loses the savings.</p>
+      <div class="tblwrap"><table>
+        <tr><th>tier</th><th>job</th><th>default</th><th>never</th></tr>
+        <tr><td class="dim">advisor</td><td>rare judgment consults, out of the hot path</td><td>strongest</td><td>executes</td></tr>
+        <tr><td class="dim">orchestrator</td><td>plans, decomposes, assigns, measures</td><td>strong</td><td>implements</td></tr>
+        <tr><td class="dim">reasoner</td><td>architecture, hard debugging</td><td>opus-class</td><td>mechanical batches</td></tr>
+        <tr><td class="dim">worker</td><td>scoped execution</td><td>sonnet-class</td><td>design decisions</td></tr>
+        <tr><td class="dim">reviewer</td><td>spec / quality / verification</td><td>mid-tier floor</td><td>writes</td></tr>
+        <tr><td class="dim">peer</td><td>different-lineage second opinion</td><td>codex / grok</td><td>seeing the other peer's answer first</td></tr>
+      </table></div>
+    </div>
+  </details>
+  <details class="disc">
+    <summary>what appears on disk</summary>
+    <div>
+      <div class="files"><span class="hl">~/.claude/skills/orchestrate/</span>
 ├─ SKILL.md                    <span class="d">the router — grammar, catalog, universal rules</span>
 ├─ config.yaml                 <span class="d">your saved aliases</span>
 ├─ scripts/                    <span class="d">workspace · task-brief · review-package · brief-check · toolbox</span>
-└─ references/
-   ├─ triage.md                <span class="d">the auto-selection procedure</span>
-   ├─ strategies/*.md          <span class="d">one file per strategy — read only the one selected</span>
-   ├─ shared/*.md              <span class="d">contracts · review-gates · model-routing · isolation · monitoring · safety-rails · handoff · token-economy</span>
-   └─ prompts/*.md             <span class="d">10 dispatch templates (implementer, reviewers, verifier, …)</span>
+└─ references/                 <span class="d">strategies, shared contracts, dispatch templates</span>
 
 <span class="hl">&lt;your repo&gt;/.orchestrate/</span>     <span class="d">per-run workspace — self-ignoring, invisible to git</span>
 ├─ run.md                      <span class="d">resolved dimensions + budget (the audit trail)</span>
 ├─ task-N-brief.md / -report.md<span class="d">  per-task handoffs</span>
-├─ review-&lt;b&gt;..&lt;h&gt;.diff        <span class="d">review packages + reviewer findings files</span>
 ├─ raw/                        <span class="d">redirected command output — dumps never enter context</span>
 ├─ toolbox.md                  <span class="d">probed orientation recipes — read, don't re-probe</span>
 └─ progress.md                 <span class="d">THE LEDGER — resume trusts this + git log, not memory</span></div>
+      <p>Layout details: <a href="https://github.com/gabros20/orchestrate/blob/main/docs/usage.md">docs/usage.md</a>.</p>
+    </div>
+  </details>
 </section>
 
 <footer>
