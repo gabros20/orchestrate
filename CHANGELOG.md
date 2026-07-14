@@ -12,6 +12,31 @@ tagged in git as `v<version>`. Every release PR updates **both** plus this file.
 
 ## [Unreleased]
 
+## [1.2.1] — 2026-07-14
+
+Audit fixes — a full walk of the skill package (post-v1.2.0 sanity check) confirmed the design
+holds and surfaced three nits, all addressed here.
+
+### Fixed
+- `scripts/brief-check`: the report-path check now scans only the brief's Report section. Since
+  v1.2.0 mandates `read: .orchestrate/toolbox.md` in every brief, the old whole-file grep matched
+  that pointer first and the check passed vacuously — a brief with no report path went undetected.
+- WORKER block: orientation sentence reworded role-agnostic ("Orient before acting — read the
+  state your task depends on (for code edits: …)"), so integrator/evolve dispatches are no longer
+  told to read neighboring modules their roles don't touch. Byte-identity across token-economy.md
+  and all four WORKER templates preserved — no per-role variants introduced.
+- Honest numbers re-measured after the rewording: WORKER ≈300, REVIEWER ≈140, MINIMAL ≈19
+  (was 285/139/18); the stale "~150 tokens of contract" example in the blocks intro corrected to
+  ~300; site + guide block-cost badges updated to match.
+
+### Added
+- `scripts/check-sync` (repo root — maintenance tooling, NOT shipped with the skill): mechanizes
+  the release-time checks — block byte-identity per the dispatch coverage matrix, stated block
+  costs vs measured (words×1.33, ±15), and presence of deliberately-replicated invariants
+  (fix-wave rule, escalation ladder, overload rule, HEAD~1 warning, 80%-variance stat,
+  reward-hacking ban) in every home. Its registry doubles as the sync map for prose the skill
+  intentionally restates across files.
+
 ## [1.2.0] — 2026-07-13
 
 Worker orientation licensed and tooled — a fresh subagent is EXPECTED to fill its context
@@ -117,7 +142,8 @@ external gpt-5.6-sol advisor): `docs/designs/v1.1.0-token-optimization.md`.
 - Docs (`docs/`), visual guide (`site/` → orchestrate-skill.vercel.app), skills.sh-standard
   install (`install.sh`, `npx skills add gabros20/orchestrate`).
 
-[Unreleased]: https://github.com/gabros20/orchestrate/compare/v1.2.0...HEAD
+[Unreleased]: https://github.com/gabros20/orchestrate/compare/v1.2.1...HEAD
+[1.2.1]: https://github.com/gabros20/orchestrate/compare/v1.2.0...v1.2.1
 [1.2.0]: https://github.com/gabros20/orchestrate/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/gabros20/orchestrate/compare/v1.0.2...v1.1.0
 [1.0.2]: https://github.com/gabros20/orchestrate/compare/v1.0.1...v1.0.2

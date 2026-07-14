@@ -7,7 +7,7 @@ worker missing context burns turns blind-searching or round-trips NEEDS_CONTEXT 
 
 ## The communication blocks (role-scoped — paste the ROLE's block into its dispatch, verbatim)
 
-One block does not fit all roles: ~150 tokens of contract on a 4-line verifier is net-negative.
+One block does not fit all roles: ~300 tokens of contract on a 4-line verifier is net-negative.
 Keep block text byte-stable across a run (cache hygiene); per-task variables go late in the prompt.
 
 ### WORKER block — implementer, sub-orchestrator, integrator, loop executor, xcli workers
@@ -22,9 +22,9 @@ Minor choices — local, reversible, not user-visible, semantics-preserving (nam
 private helpers) — pick one and note it in your report. Defaults affecting security,
 compatibility, persistence, or public behavior are NOT minor: resolve per your brief or
 escalate.
-Orient before editing — the touched area's file tree, manifests, conventions files, one
-neighboring module for patterns (recipes: .orchestrate/toolbox.md). Reading to understand is
-work, not waste; scale it to the task.
+Orient before acting — read the state your task depends on (for code edits: the touched area's
+file tree, manifests, conventions files, one neighboring module for patterns; recipes:
+.orchestrate/toolbox.md). Reading to understand is work, not waste; scale it to the task.
 Tool output: read targeted (grep, line-ranges) over whole files/logs. Redirect noisy commands
 to a file at execution time (cmd > .orchestrate/raw/<task>-<what>.log 2>&1), inspect with
 grep/tail; cite the minimum sufficient excerpt + the file path.
@@ -173,8 +173,8 @@ before big runs.
 
 ## Honest numbers
 
-The blocks' own cost (measured, words×1.33): WORKER ≈ 285 tokens/dispatch, REVIEWER ≈ 139,
-MINIMAL ≈ 18 — vs the hundreds-to-thousands of narration tokens per worker turn they remove,
+The blocks' own cost (measured, words×1.33): WORKER ≈ 300 tokens/dispatch, REVIEWER ≈ 140,
+MINIMAL ≈ 19 — vs the hundreds-to-thousands of narration tokens per worker turn they remove,
 and the controller-context bloat every verbose return would re-cost on every later turn.
 Expect **10–25% session-level savings** from output discipline — not the 65–75% output-only
 headlines. The only trustworthy measure is an A/B on the provider's billing/usage page.

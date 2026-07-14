@@ -37,13 +37,20 @@ if [ "$unpinned" -gt 0 ] && [ "$(git worktree list 2>/dev/null | wc -l)" -gt 1 ]
   echo "brief-check: warning: $unpinned unpinned pointer(s) with >1 worktree active — pin with '@ <sha>'" >&2
 fi
 
-# Report path's directory must exist (look for a .orchestrate/... .md mention)
-report_path="$(grep -oE '\.orchestrate/[A-Za-z0-9._/-]+\.md' "$brief" | head -1 || true)"
+# Report contract must name a .orchestrate/... .md path and its directory must exist.
+# Scoped to the Report section — a pointer elsewhere (e.g. read: .orchestrate/toolbox.md)
+# must not satisfy this check.
+report_path="$(awk '
+  { l = tolower($0) }
+  on && (l ~ /^#+[ \t]/ || l ~ /^\*\*[a-z]/) { on = 0 }
+  !on && (l ~ /^#+[ \t].*report/ || l ~ /^\*\*report/) { on = 1 }
+  on { print }
+' "$brief" | grep -oE '\.orchestrate/[A-Za-z0-9._/-]+\.md' | head -1 || true)"
 if [ -n "$report_path" ]; then
   dir="$repo_root/$(dirname "$report_path")"
   [ -d "$dir" ] || err "report directory missing: $dir (run scripts/workspace first)"
 else
-  err "no report path found (expected a .orchestrate/<...>.md mention in the report contract)"
+  err "report contract names no .orchestrate/<...>.md path (the report section must state where to write)"
 fi
 
 exit "$fail"

@@ -359,15 +359,15 @@
   workers need. Workers are <b>quiet while working, dense when reporting</b> — via three
   role-scoped communication blocks pasted verbatim into every dispatch:</p>
   <div class="cards">
-    <div class="card"><div class="top"><h3>WORKER<em>&approx;285 tok</em></h3></div>
+    <div class="card"><div class="top"><h3>WORKER<em>&approx;300 tok</em></h3></div>
       <div class="use"><b>Who:</b> implementers, sub-orchestrators, integrators, loop executors, xcli workers.</div>
       <div class="mech">Silence-default while working — no tool-call narration, no restating the brief. Structured blockers (<code>BLOCKED — what / evidence / tried / need</code>), noisy output redirected to <code>.orchestrate/raw/</code>, literals quoted verbatim. Safety messages are never silenced.</div></div>
-    <div class="card"><div class="top"><h3>REVIEWER<em>&approx;139 tok</em></h3></div>
+    <div class="card"><div class="top"><h3>REVIEWER<em>&approx;140 tok</em></h3></div>
       <div class="use"><b>Who:</b> spec, quality, panel, and consensus reviewers.</div>
       <div class="mech"><b>Never self-filters</b> — every finding reported with severity + confidence (suppression measurably drops recall). Full findings go to a findings <b>file</b>; inline is verdict + counts, so caps can never truncate them. Filtering is the controller's job.</div></div>
-    <div class="card"><div class="top"><h3>MINIMAL<em>&approx;18 tok</em></h3></div>
+    <div class="card"><div class="top"><h3>MINIMAL<em>&approx;19 tok</em></h3></div>
       <div class="use"><b>Who:</b> advisors, triage assessors, verifiers, debate prompts, workflow agents.</div>
-      <div class="mech">One line: no preamble, return only the schema. A 285-token contract on a 4-line return would be net-negative — blocks are <b>role-scoped</b> for exactly that reason.</div></div>
+      <div class="mech">One line: no preamble, return only the schema. A 300-token contract on a 4-line return would be net-negative — blocks are <b>role-scoped</b> for exactly that reason.</div></div>
   </div>
   <p style="margin-top:22px"><b>The life of a dispatch</b> — where tokens get spent, saved, and where quality is guarded. Dot color = actor: <span class="mono" style="color:var(--accent)">controller</span> · <span class="mono" style="color:var(--amber)">gate</span> · <span class="mono" style="color:var(--glyph)">worker</span> · <span class="mono" style="color:var(--good)">reviewer</span>.</p>
   <ol class="tl">
