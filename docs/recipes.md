@@ -11,10 +11,10 @@ overrides auto-triage. For what each dimension value means, see
 
 Five built-in presets, each a named bundle of dimensions, defined in `config.yaml`:
 
-### `fortress` — careful build
+### `red-team` — careful build
 
 ```
-/orchestrate plan.md alias=fortress
+/orchestrate plan.md alias=red-team
 ```
 Expands to `strategy=adversarial review=panel:3 models={planner:strongest,worker:sonnet}`.
 **What happens**: the plan gets attacked by a different-lineage counter-model before any code
@@ -35,10 +35,10 @@ exec` call (see [strategies.md#xcli](strategies.md#xcli)) while spec/quality rev
 **Reach for it when**: you want Codex's throughput on implementation but don't want to give up an
 independent-lineage review of its output.
 
-### `blitz` — fast independent fan-out
+### `swarm` — fast independent fan-out
 
 ```
-/orchestrate plan.md alias=blitz
+/orchestrate plan.md alias=swarm
 ```
 Expands to `strategy=parallel workers=4 review=spec isolation=worktree`.
 **What happens**: the plan is partitioned into 4 worker cards, each isolated in its own git
@@ -46,10 +46,10 @@ worktree, reviewed for spec compliance only (no quality pass), then integrated.
 **Reach for it when**: tasks are genuinely independent, don't touch shared files, and speed matters
 more than a full review — minimal ceremony by design.
 
-### `overnight` — walk-away grind with hard rails
+### `afk` — walk-away grind with hard rails
 
 ```
-/orchestrate "<goal description>" alias=overnight
+/orchestrate "<goal description>" alias=afk
 ```
 Expands to `strategy=loop trigger=goal budget={cycles:20,open_prs:1} review=dual`.
 **What happens**: a Ralph/goal loop runs cycle after cycle against a verifiable stop condition, capped
@@ -59,10 +59,10 @@ you want to walk away and come back to either a finished result or an honest sto
 recorded — see [strategies.md#loop](strategies.md#loop) for the mandatory rails this alias is
 built on.
 
-### `penny-wise` — big-model thinking, small-model doing
+### `architect` — big-model thinking, small-model doing
 
 ```
-/orchestrate "<task>" alias=penny-wise
+/orchestrate "<task>" alias=architect
 ```
 Expands to `strategy=advisor models={advisor:strongest,worker:sonnet}`.
 **What happens**: a cheap worker does all the execution; the strongest available model is consulted

@@ -5,7 +5,7 @@
 
 aliases:
   # Careful build: adversarial plan, staged execution, panel review
-  fortress:
+  red-team:
     strategy: adversarial
     review: panel:3
     models: { planner: strongest, worker: sonnet }
@@ -18,20 +18,20 @@ aliases:
     models: { reviewer: sonnet }
 
   # Fast independent fan-out, minimal ceremony
-  blitz:
+  swarm:
     strategy: parallel
     workers: 4
     review: spec
     isolation: worktree
 
-  # Overnight grind with hard rails
-  overnight:
+  # Walk-away (AFK) grind with hard rails
+  afk:
     strategy: loop
     trigger: goal
     budget: { cycles: 20, open_prs: 1 }
     review: dual
 
   # Big-model thinking, small-model doing
-  penny-wise:
+  architect:
     strategy: advisor
     models: { advisor: strongest, worker: sonnet }

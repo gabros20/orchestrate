@@ -57,14 +57,14 @@ dimensions directly.
 
 | Alias | Expands to | Use when |
 |---|---|---|
-| `fortress` | `strategy=adversarial review=panel:3 models={planner:strongest,worker:sonnet}` | High-stakes plan — harden it by debate, then execute under a 3-reviewer panel |
+| `red-team` | `strategy=adversarial review=panel:3 models={planner:strongest,worker:sonnet}` | High-stakes plan — harden it by debate, then execute under a 3-reviewer panel |
 | `codex-grind` | `strategy=staged engine=codex review=dual models={reviewer:sonnet}` | Cheap bulk implementation, Claude reviews Codex's output |
-| `blitz` | `strategy=parallel workers=4 review=spec isolation=worktree` | Independent tasks, no shared files, minimal ceremony |
-| `overnight` | `strategy=loop trigger=goal budget={cycles:20,open_prs:1} review=dual` | Walk-away grind with hard rails and a stop condition |
-| `penny-wise` | `strategy=advisor models={advisor:strongest,worker:sonnet}` | Big-model thinking, small-model doing — minimize expensive-model calls |
+| `swarm` | `strategy=parallel workers=4 review=spec isolation=worktree` | Independent tasks, no shared files, minimal ceremony |
+| `afk` | `strategy=loop trigger=goal budget={cycles:20,open_prs:1} review=dual` | Walk-away grind with hard rails and a stop condition |
+| `architect` | `strategy=advisor models={advisor:strongest,worker:sonnet}` | Big-model thinking, small-model doing — minimize expensive-model calls |
 
 ```
-/orchestrate plan.md alias=fortress
+/orchestrate plan.md alias=red-team
 ```
 
 ### Common recipes

@@ -14,6 +14,16 @@ every PR).
 
 ## [Unreleased]
 
+## [1.3.0] — 2026-07-14
+
+### Changed
+- Built-in aliases renamed to community-recognizable AI-engineering terms (`config.yaml`, README,
+  recipes, site): `fortress` → **`red-team`** (adversarial plan + panel review), `blitz` →
+  **`swarm`** (parallel fan-out), `overnight` → **`afk`** (unattended goal loop), `penny-wise` →
+  **`architect`** (aider-style strong-model-plans / cheap-model-executes). `codex-grind` unchanged.
+  **Breaking for saved invocations of the old names** — aliases are user-editable config, so this
+  ships as MINOR this early; re-add old names locally in `config.yaml` if you need them.
+
 ### Added
 - CI: `scripts/check-sync` now runs on every PR and push to main
   (`.github/workflows/check-sync.yml`) — the release gate is enforced, not remembered.
@@ -155,7 +165,8 @@ external gpt-5.6-sol advisor): `docs/designs/v1.1.0-token-optimization.md`.
 - Docs (`docs/`), visual guide (`site/` → orchestrate-skill.vercel.app), skills.sh-standard
   install (`install.sh`, `npx skills add gabros20/orchestrate`).
 
-[Unreleased]: https://github.com/gabros20/orchestrate/compare/v1.2.1...HEAD
+[Unreleased]: https://github.com/gabros20/orchestrate/compare/v1.3.0...HEAD
+[1.3.0]: https://github.com/gabros20/orchestrate/compare/v1.2.1...v1.3.0
 [1.2.1]: https://github.com/gabros20/orchestrate/compare/v1.2.0...v1.2.1
 [1.2.0]: https://github.com/gabros20/orchestrate/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/gabros20/orchestrate/compare/v1.0.2...v1.1.0

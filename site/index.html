@@ -220,11 +220,11 @@
 <section id="quickstart">
   <h2>Get in fast — presets</h2>
   <p>Copy, paste, swap the plan file. Full alias definitions are in <a href="#alias">built-in aliases</a> below.</p>
-  <div class="term"><span class="p">/orchestrate</span> plan.md <span class="c">alias=fortress</span>      <span class="c"># debate the plan, triple-lens review</span>
+  <div class="term"><span class="p">/orchestrate</span> plan.md <span class="c">alias=red-team</span>      <span class="c"># debate the plan, triple-lens review</span>
 <span class="p">/orchestrate</span> plan.md <span class="c">alias=codex-grind</span>   <span class="c"># cheap bulk implementation, Claude reviews</span>
-<span class="p">/orchestrate</span> plan.md <span class="c">alias=blitz</span>         <span class="c"># fast independent fan-out, minimal ceremony</span>
-<span class="p">/orchestrate</span> plan.md <span class="c">alias=overnight</span>     <span class="c"># walk-away grinding with hard rails</span>
-<span class="p">/orchestrate</span> plan.md <span class="c">alias=penny-wise</span>    <span class="c"># big-model thinking, small-model doing</span>
+<span class="p">/orchestrate</span> plan.md <span class="c">alias=swarm</span>         <span class="c"># fast independent fan-out, minimal ceremony</span>
+<span class="p">/orchestrate</span> plan.md <span class="c">alias=afk</span>           <span class="c"># walk-away grinding with hard rails</span>
+<span class="p">/orchestrate</span> plan.md <span class="c">alias=architect</span>     <span class="c"># big-model thinking, small-model doing</span>
 <span class="p">/orchestrate</span> plan.md <span class="c">strategy=team workers=3</span>                    <span class="c"># expert panel</span>
 <span class="p">/orchestrate</span> plan.md <span class="c">strategy=adversarial</span>                       <span class="c"># plan review</span>
 <span class="p">/orchestrate</span> plan.md <span class="c">strategy=hierarchical review=consensus:3</span>    <span class="c"># research + verified claims</span></div>
@@ -429,11 +429,11 @@
   <p>Saved presets in <code class="mono">config.yaml</code> — invoke with <code class="mono">alias=&lt;name&gt;</code>, add your own, and explicit args still win.</p>
   <div class="tblwrap"><table>
     <tr><th>alias</th><th>expands to</th><th>for</th></tr>
-    <tr><td class="dim">fortress</td><td><code>adversarial</code> + <code>panel:3</code></td><td>high-stakes builds — debate the plan, triple-lens the output</td></tr>
+    <tr><td class="dim">red-team</td><td><code>adversarial</code> + <code>panel:3</code></td><td>high-stakes builds — debate the plan, triple-lens the output</td></tr>
     <tr><td class="dim">codex-grind</td><td><code>staged</code> + <code>engine=codex</code></td><td>cheap bulk implementation, Claude reviews every task</td></tr>
-    <tr><td class="dim">blitz</td><td><code>parallel</code> + <code>workers=4</code> + <code>review=spec</code></td><td>fast independent fan-out, minimal ceremony</td></tr>
-    <tr><td class="dim">overnight</td><td><code>loop</code> + <code>trigger=goal</code> + <code>cycles:20, open_prs:1</code></td><td>walk-away grinding with hard rails</td></tr>
-    <tr><td class="dim">penny-wise</td><td><code>advisor</code> + <code>worker:sonnet</code></td><td>big-model thinking, small-model doing</td></tr>
+    <tr><td class="dim">swarm</td><td><code>parallel</code> + <code>workers=4</code> + <code>review=spec</code></td><td>fast independent fan-out, minimal ceremony</td></tr>
+    <tr><td class="dim">afk</td><td><code>loop</code> + <code>trigger=goal</code> + <code>cycles:20, open_prs:1</code></td><td>walk-away grinding with hard rails</td></tr>
+    <tr><td class="dim">architect</td><td><code>advisor</code> + <code>worker:sonnet</code></td><td>big-model thinking, small-model doing</td></tr>
   </table></div>
 </section>
 
