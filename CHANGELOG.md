@@ -8,9 +8,15 @@ breaks, **MINOR** = new strategies/dimensions/aliases or new reference material 
 behavior, **PATCH** = fixes, doc corrections, prompt tuning with unchanged behavior.
 
 The skill's current version lives in `skills/orchestrate/SKILL.md` frontmatter (`version:`) and is
-tagged in git as `v<version>`. Every release PR updates **both** plus this file.
+tagged in git as `v<version>`. Every release PR updates **both** plus this file, and must pass
+`scripts/check-sync` (block byte-identity, honest numbers, replicated invariants — CI-enforced on
+every PR).
 
 ## [Unreleased]
+
+### Added
+- CI: `scripts/check-sync` now runs on every PR and push to main
+  (`.github/workflows/check-sync.yml`) — the release gate is enforced, not remembered.
 
 ## [1.2.1] — 2026-07-14
 

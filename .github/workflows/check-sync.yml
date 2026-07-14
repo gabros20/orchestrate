@@ -1,0 +1,14 @@
+name: check-sync
+# Release gate, enforced not trusted: every PR (and main) must keep the communication
+# blocks byte-identical, the honest numbers measured, and the replicated invariants
+# present in every home. The check itself lives in scripts/check-sync.
+on:
+  pull_request:
+  push:
+    branches: [main]
+jobs:
+  check-sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: ./scripts/check-sync
