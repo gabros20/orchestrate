@@ -2,3 +2,9 @@
 node_modules/
 .vercel
 .env*
+
+# dev-time installs of third-party AI skills (reinstall: npx skills add remotion-dev/skills)
+.agents/
+skills-lock.json
+.claude/skills/mediabunny
+.claude/skills/remotion-*

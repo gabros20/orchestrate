@@ -52,3 +52,14 @@ Found an issue with Remotion? [File an issue here](https://github.com/remotion-d
 ## License
 
 Note that for some entities a company license is needed. [Read the terms here](https://github.com/remotion-dev/remotion/blob/main/LICENSE.md).
+
+## Re-rendering with AI assistance
+
+The Remotion AI skills used to build this are not vendored (they would pollute the
+installable skill layout). Reinstall them locally when needed:
+
+```bash
+npx skills add remotion-dev/skills
+```
+
+They land in `.agents/skills/` (gitignored).
