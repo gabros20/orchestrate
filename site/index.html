@@ -169,13 +169,22 @@
   .gleg i.c{background:var(--accent)}
   .gleg i.s{width:14px; height:11px; border-radius:2px; background:none; border:1.4px dashed var(--accent)}
   .gleg i.x{width:14px; height:11px; border-radius:2px; background:none; border:1.4px solid var(--glyph)}
-  .strip{display:flex; flex-wrap:wrap; gap:10px; margin-top:20px}
-  .strip a{display:flex; flex-direction:column; gap:3px; text-decoration:none; background:var(--panel); border:1px solid var(--line); border-radius:8px; padding:10px 14px; min-width:150px; flex:1}
-  .strip a:hover{border-color:var(--accent)}
-  .strip .q{font-size:12.5px; color:var(--muted); line-height:1.4}
-  .strip .a{font-family:ui-monospace,Menlo,monospace; font-size:13px; color:var(--accent); font-weight:600; display:flex; align-items:center; gap:6px}
-  .strip .a .lu{width:14px; height:14px}
+  .strip{display:grid; grid-template-columns:1fr 1fr; margin-top:20px; background:var(--panel); border:1px solid var(--line); border-radius:8px; overflow:hidden}
+  .strip a{display:flex; align-items:center; justify-content:space-between; gap:16px; text-decoration:none; padding:13px 16px; border-bottom:1px solid var(--line)}
+  .strip a:nth-child(odd){border-right:1px solid var(--line)}
+  .strip a:nth-last-child(-n+2){border-bottom:none}
+  .strip a:hover{background:var(--code-bg)}
+  .strip .q{font-size:13px; color:var(--muted); line-height:1.45; flex:1}
+  .strip .a{font-family:ui-monospace,Menlo,monospace; font-size:13px; color:var(--accent); font-weight:600; display:inline-flex; align-items:center; gap:6px; white-space:nowrap; flex:none}
+  .strip .a .lu{width:14px; height:14px; flex:none}
   .strip .a.solo{color:var(--amber)}
+  @media (max-width:720px){
+    .strip{grid-template-columns:1fr}
+    .strip a{flex-wrap:wrap; row-gap:4px}
+    .strip a:nth-child(odd){border-right:none}
+    .strip a:nth-last-child(-n+2){border-bottom:1px solid var(--line)}
+    .strip a:last-child{border-bottom:none}
+  }
 
   /* tables */
   .tblwrap{overflow-x:auto; border:1px solid var(--line); border-radius:8px; margin-top:20px}
