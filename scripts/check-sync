@@ -1,0 +1,87 @@
+#!/usr/bin/env bash
+# check-sync — maintenance guard for deliberately-replicated skill text (repo-side
+# tooling; NOT shipped with the skill). Run from anywhere in the repo before a release.
+#
+# 1. Communication blocks: the fenced WORKER/REVIEWER/MINIMAL blocks in
+#    references/shared/token-economy.md must appear BYTE-IDENTICAL in every prompt
+#    template the dispatch coverage matrix assigns them to.
+# 2. Honest numbers: the stated block costs must match the measured words×1.33.
+# 3. Replicated invariants: rules intentionally restated across files (progressive
+#    disclosure — a reader may load only one file) are presence-checked in every home.
+#    THIS REGISTRY IS THE SYNC MAP: editing one of these rules means editing every
+#    listed home, then updating the pattern here if the wording changed.
+set -uo pipefail
+
+root="$(cd "$(dirname "$0")/.." && pwd)"
+skill="$root/skills/orchestrate"
+te="$skill/references/shared/token-economy.md"
+prompts="$skill/references/prompts"
+
+fail=0
+err() { echo "check-sync: FAIL: $1" >&2; fail=1; }
+note() { echo "check-sync: $1"; }
+
+# --- extract a fenced block that follows a heading ---------------------------------
+fence_after() { # fence_after <heading-regex> <file>
+  awk -v hdr="$1" '
+    $0 ~ hdr { want=1; next }
+    want && /^```/ { if (infence) exit; infence=1; next }
+    infence { print }
+  ' "$2"
+}
+
+worker="$(fence_after '^### WORKER block' "$te")"
+reviewer="$(fence_after '^### REVIEWER block' "$te")"
+minimal="$(fence_after '^### MINIMAL line' "$te")"
+[ -n "$worker" ]   || err "could not extract WORKER block from token-economy.md"
+[ -n "$reviewer" ] || err "could not extract REVIEWER block from token-economy.md"
+[ -n "$minimal" ]  || err "could not extract MINIMAL line from token-economy.md"
+
+# --- 1. byte-identity per the dispatch coverage matrix -----------------------------
+contains() { # contains <needle-var-name> <file>
+  local needle="${!1}" hay
+  hay="$(cat "$2")"
+  case "$hay" in *"$needle"*) return 0 ;; *) return 1 ;; esac
+}
+
+for f in implementer integrator sub-orchestrator evolve; do
+  contains worker "$prompts/$f.md" || err "WORKER block not byte-identical in prompts/$f.md"
+done
+for f in spec-reviewer quality-reviewer; do
+  contains reviewer "$prompts/$f.md" || err "REVIEWER block not byte-identical in prompts/$f.md"
+done
+for f in advisor triage-assessor verifier planner-debate; do
+  contains minimal "$prompts/$f.md" || err "MINIMAL line not byte-identical in prompts/$f.md"
+done
+
+# --- 2. honest numbers vs measured (words×1.33, tolerance ±15) ---------------------
+measure() { printf '%s' "${!1}" | wc -w | awk '{ printf "%d", $1 * 1.33 + 0.5 }'; }
+stated() { grep -oE "$1 ≈ [0-9]+" "$te" | head -1 | grep -oE '[0-9]+'; }
+for pair in "WORKER worker" "REVIEWER reviewer" "MINIMAL minimal"; do
+  name="${pair%% *}"; var="${pair##* }"
+  m="$(measure "$var")"; s="$(stated "$name")"
+  if [ -z "$s" ]; then err "honest-numbers line states no cost for $name"; continue; fi
+  d=$(( m > s ? m - s : s - m ))
+  [ "$d" -le 15 ] || err "$name block: honest numbers say ≈$s tok, measured ≈$m — update the stated cost"
+  note "$name measured ≈$m tok (stated ≈$s)"
+done
+
+# --- 3. replicated invariants: pattern|home,home,... (paths relative to skill/) ----
+registry='
+HEAD~1|references/strategies/staged.md,references/prompts/quality-reviewer.md,scripts/review-package
+fix subagent|references/strategies/staged.md,references/shared/review-gates.md,references/prompts/quality-reviewer.md
+re-dispatch unchanged|references/shared/contracts.md,references/strategies/staged.md
+spawn a duplicate|SKILL.md,references/shared/safety-rails.md,references/strategies/parallel.md
+~80% of multi-agent quality|references/shared/token-economy.md,references/shared/model-routing.md,references/strategies/hierarchical.md
+eward-hacking|references/shared/safety-rails.md,references/strategies/loop.md
+'
+while IFS='|' read -r pattern homes; do
+  [ -n "$pattern" ] || continue
+  IFS=',' read -ra files <<< "$homes"
+  for rel in "${files[@]}"; do
+    grep -qiF -- "$pattern" "$skill/$rel" || err "invariant \"$pattern\" missing from $rel"
+  done
+done <<< "$registry"
+
+if [ "$fail" -eq 0 ]; then note "OK — blocks byte-identical, numbers honest, invariants present"; fi
+exit "$fail"

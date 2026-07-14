@@ -21,9 +21,9 @@ Minor choices — local, reversible, not user-visible, semantics-preserving (nam
 private helpers) — pick one and note it in your report. Defaults affecting security,
 compatibility, persistence, or public behavior are NOT minor: resolve per your brief or
 escalate.
-Orient before editing — the touched area's file tree, manifests, conventions files, one
-neighboring module for patterns (recipes: .orchestrate/toolbox.md). Reading to understand is
-work, not waste; scale it to the task.
+Orient before acting — read the state your task depends on (for code edits: the touched area's
+file tree, manifests, conventions files, one neighboring module for patterns; recipes:
+.orchestrate/toolbox.md). Reading to understand is work, not waste; scale it to the task.
 Tool output: read targeted (grep, line-ranges) over whole files/logs. Redirect noisy commands
 to a file at execution time (cmd > .orchestrate/raw/<task>-<what>.log 2>&1), inspect with
 grep/tail; cite the minimum sufficient excerpt + the file path.
