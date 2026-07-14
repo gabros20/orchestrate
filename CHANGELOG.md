@@ -18,6 +18,9 @@ every PR).
 - Hero "runs on" line upgraded from plain wrapped text (dangling `·` separators at narrow widths)
   to a chip row: small-caps RUNS ON label + hairline mono chips per host, Claude Code accented as
   the reference; flex-wrap keeps every width tidy.
+- Hero row disambiguation: the host chips lost their border (filled `--code-bg` tokens, same
+  language as inline code — data, not buttons) and the section-nav pills gained a `#` anchor
+  prefix, so metadata tags and in-page links no longer look like the same component.
 
 ## [1.4.0] — 2026-07-14
 

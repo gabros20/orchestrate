@@ -83,7 +83,7 @@
   .lede{font-size:19px; color:var(--muted); max-width:60ch; margin:0}
   .hosts{display:flex; flex-wrap:wrap; align-items:center; gap:7px; margin:16px 0 0}
   .hosts .hl{font-family:"Avenir Next Condensed","Arial Narrow",system-ui,sans-serif; text-transform:uppercase; letter-spacing:.14em; font-weight:600; font-size:11px; color:var(--muted); margin-right:2px}
-  .hosts span:not(.hl){font-family:ui-monospace,Menlo,monospace; font-size:11.5px; color:var(--muted); background:var(--panel); border:1px solid var(--line); border-radius:6px; padding:3px 9px; white-space:nowrap}
+  .hosts span:not(.hl){font-family:ui-monospace,Menlo,monospace; font-size:11.5px; color:var(--muted); background:var(--code-bg); border-radius:5px; padding:3px 8px; white-space:nowrap}
   .hosts span.ref{color:var(--accent); font-weight:600}
   .lede b{color:var(--ink)}
   p{max-width:68ch}
@@ -96,6 +96,8 @@
   nav{display:flex; flex-wrap:wrap; gap:8px; margin-top:26px}
   nav a{font-family:ui-monospace,Menlo,monospace; font-size:12.5px; text-decoration:none; color:var(--muted); border:1px solid var(--line); border-radius:999px; padding:4px 12px; background:var(--panel)}
   nav a:hover,nav a:focus-visible{color:var(--accent); border-color:var(--accent); outline:none}
+  .secnav a::before{content:"#"; color:var(--glyph); margin-right:5px}
+  .secnav a:hover::before,.secnav a:focus-visible::before{color:var(--accent)}
 
   header{padding-top:64px}
   .term{background:var(--code-bg); border:1px solid var(--line); border-radius:8px; padding:14px 18px; font-family:ui-monospace,Menlo,monospace; font-size:13.5px; line-height:1.7; overflow-x:auto; white-space:pre}
@@ -320,7 +322,7 @@
   <div class="term" style="margin-top:22px"><span class="c"># that's the whole start</span>
 <span class="p">/orchestrate</span> plan.md</div>
   <p class="hosts"><span class="hl">runs on</span><span class="ref">Claude Code</span><span>Codex</span><span>Cursor</span><span>Antigravity</span><span>opencode</span><span>Grok Build</span><span>Hermes</span></p>
-  <nav aria-label="page sections">
+  <nav class="secnav" aria-label="page sections">
     <a href="#idea">the idea</a><a href="#strat">choose a strategy</a><a href="#gates">safety</a>
     <a href="#tokens">cost</a><a href="#start">start</a>
   </nav>
