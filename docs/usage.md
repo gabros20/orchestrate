@@ -11,7 +11,7 @@ strategy runs. This is the reference doc — for what each strategy actually *do
 /orchestrate [plan-file | task description]
     [strategy=auto|staged|parallel|hierarchical|team|workflow|loop|advisor|adversarial|xcli]
     [review=dual|spec|quality|panel:N|consensus:N|off]
-    [engine=claude|codex|grok|mixed]
+    [engine=claude|codex|grok|cursor|agy|opencode|hermes|mixed]
     [models=orchestrator:opus,worker:sonnet,advisor:<strongest>,...]
     [isolation=worktree|branch|off]
     [trigger=once|goal:"<stop condition>"|interval:<t>|schedule:"<cron>"]
@@ -23,7 +23,7 @@ strategy runs. This is the reference doc — for what each strategy actually *do
 | `[plan-file \| task description]` | positional, first arg | Either a path to a plan/PRD/issue-list file, or a free-text task description. Determines what gets briefed to the first subagent and what triage reads. |
 | `strategy=` | one of 9 names, or `auto` | Forces the orchestration strategy. `auto` (or omitting it) runs the triage procedure. |
 | `review=` | `dual`, `spec`, `quality`, `panel:N`, `consensus:N`, `off` | Overrides the output-review gate a strategy would otherwise use (see [Dimensions → review](#review)). |
-| `engine=` | `claude`, `codex`, `grok`, `mixed` | Which CLI executes dispatched work. `mixed` routes different roles to different engines (e.g. planner on Claude, counter on Codex). |
+| `engine=` | `claude`, `codex`, `grok`, `cursor`, `agy`, `opencode`, `hermes`, `mixed` | Which CLI executes dispatched work. `mixed` routes different roles to different engines (e.g. planner on Claude, counter on Codex). |
 | `models=` | comma-separated `tier:model` pairs | Overrides the tier→model map for this run (e.g. `models=orchestrator:opus,worker:sonnet`). Unlisted tiers keep their default from `shared/model-routing.md`. |
 | `isolation=` | `worktree`, `branch`, `off` | Physical write isolation for concurrent writers. |
 | `trigger=` | `once`, `goal:"<condition>"`, `interval:<t>`, `schedule:"<cron>"` | What starts/repeats the run. |
@@ -89,7 +89,7 @@ directly; a custom combination of dimensions is just as valid as picking a named
 | `topology` | `solo` · `staged` · `parallel` · `hierarchical` · `team` · `workflow` · `loop` | from strategy |
 | `planning` | `none` · `plan-first` · `interview` · `adversarial` | `plan-first` |
 | `review` | `off` · `spec` · `quality` · `dual` · `panel:N` · `consensus:N` | `dual` |
-| `engine` | `claude` · `codex` · `grok` · `mixed` | `claude` |
+| `engine` | `claude` · `codex` · `grok` · `cursor` · `agy` · `opencode` · `hermes` · `mixed` | `claude` |
 | `models` | tier map (`advisor`/`orchestrator`/`reasoner`/`worker`/`reviewer`/`peer`) | see [Model tiers](#model-tiers) |
 | `isolation` | `none` · `worktree` · `branch` | `worktree` when more than one writer |
 | `trigger` | `once` · `goal` · `interval` · `schedule` | `once` |
@@ -134,9 +134,13 @@ majority rules; verifiers must be prompted to actively refute, or the vote is de
 Which CLI actually executes dispatched work. `claude` (default) — in-session Claude Code subagents.
 `codex` — dispatch becomes `codex exec` calls; useful for cross-model review (Codex implements,
 Claude reviews) or as an honest different-lineage peer. `grok` — dispatch becomes `grok -p` calls;
-fast second opinions or search-adjacent tasks. `mixed` — different roles in the same strategy route
-to different engines (e.g. `adversarial` with `planner=claude, counter=codex`). See
-[strategies.md#xcli](strategies.md#xcli) for the mechanics and per-CLI flags.
+fast second opinions or search-adjacent tasks. `cursor` / `agy` / `opencode` / `hermes` — dispatch
+becomes `cursor-agent -p` / `agy -p` / `opencode run` / `hermes -z` calls; alternate workers when
+quotas, sandboxing, or lineage diversity matter (agy is the Gemini lineage — the third vote in a
+cross-lineage panel). `mixed` — different roles in the same strategy route to different engines
+(e.g. `adversarial` with `planner=claude, counter=codex`). See [strategies.md#xcli](strategies.md#xcli)
+for the mechanics and per-CLI flags, and the skill's `references/shared/hosts.md` for what each
+engine can and can't do (e.g. per-process-only model pinning on agy/hermes).
 
 ### `models`
 

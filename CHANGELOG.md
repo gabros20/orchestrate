@@ -45,8 +45,15 @@ every PR).
   matrix; docs/installation.md covers every host's paths, quirks, and engine table.
 - `scripts/check-sync`: host-layer invariants (hosts.md present, team/workflow availability notes
   present, SKILL.md ≤120 lines, hosts.md ≤200 lines).
+- docs/usage.md + docs/strategies.md: `engine` values widened everywhere; four new per-engine
+  mechanics bullets in the xcli section; division-of-labor heuristic extended.
 
 ### Site & visual guide
+- The site now states multi-agent support: hero eyebrow generalized to "An agent skill", a muted
+  mono "runs on Claude Code · Codex · Cursor · Antigravity · opencode · Grok Build · Hermes" line
+  under the hero terminal, and a "supported agents — who runs what" disclosure in Start here (host
+  / native subagents / model pin / worth-knowing table + the team/workflow availability note),
+  matching the page's existing panel/table language. llms.txt updated to match.
 - Strategy decision strip restructured: six free-wrapping mini-cards became one bordered panel —
   a 2×3 grid of aligned "question → strategy" rows with internal hairlines (single column <720px).
 - The five-step run pipe and four-step gate pipe (cramped joined cells + floating ▸ arrows)

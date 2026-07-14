@@ -304,12 +304,16 @@ single strong-model plan review would already catch.
 
 ## xcli
 
-`engine=codex|grok|mixed` — usually layered as a dimension on another strategy rather than run
-standalone (e.g. `strategy=staged engine=codex`, `strategy=adversarial counter=codex`).
+`engine=codex|grok|cursor|agy|opencode|hermes|mixed` — usually layered as a dimension on another
+strategy rather than run standalone (e.g. `strategy=staged engine=codex`, `strategy=adversarial
+counter=codex`).
 
 **Use when** you want a genuinely different model lineage — cross-validation, a separate
 subscription quota, or a CLI's own sandbox (Codex) — at the cost of serialization overhead and zero
 shared context (the prompt has to carry everything; the external CLI sees nothing of your session).
+xcli is also the **portability floor** when orchestrate runs on a non-Claude host: headless engines
+recover parallel fan-out and model pinning as background processes (the skill's
+`references/shared/hosts.md`).
 
 **How it runs**: one task per launch (split big jobs); one git worktree per concurrent run, never two
 engines in the same tree, with `.env*` copied in. Runs take minutes with no timeout, so background
@@ -340,6 +344,19 @@ drift):
   '{"worker":{...}}' "task"`. `--bare` disables auto-discovery for scripts/CI (auth via env);
   `--json-schema` validates output. A background fleet is monitored via `claude agents --json`,
   `claude logs <id>`, and `claude attach <id>` to step into a blocked one.
+- **Cursor** (`cursor-agent -p "task" --model <id> --output-format json`) — headless GOTCHA: in
+  `-p` mode its ask-user tool auto-receives "skipped by user", so a headless Cursor worker silently
+  skips its own clarification gates; anything human-gated needs ACP (`cursor-agent acp`, JSON-RPC
+  over stdio) or an interactive session. Native `--worktree <name>`.
+- **Antigravity CLI** (`agy -p "task" --cwd <path>`) — the one vendor-documented headless form; the
+  rest of the flag surface (output format, approvals, CI auth) is under-documented, so probe
+  `agy --help` before scripting. Subagents inherit the parent model — pin models per process.
+- **opencode** (`opencode run "task" --model <provider/model>`) — in-session delegation is
+  synchronous; for N-way parallelism run N processes in separate worktrees or drive
+  `opencode serve` + its SDK.
+- **Hermes** (`hermes -z "task"`) — clean stdout one-shot. Its internal per-task model override is
+  silently ignored (open upstream bugs) — pin per process with `--model`. Also ships an
+  OpenAI-compatible API server + JSONL batch runner.
 
 **Failure handling**: review the diff yourself (or via your normal review gate) before accepting —
 external engines don't inherit your review discipline. A rate limit hit gets reported to the user,
@@ -348,5 +365,7 @@ never retried in a loop against a subscription quota. Auth is always the user's
 
 **Composition overrides**: the division-of-labor heuristic — Claude for reasoning/architecture/
 review, Codex (GPT lineage) for heavy implementation and an honest peer counter, Grok for a fast
-second opinion or search-adjacent tasks. For cross-validation, send the same review to two engines,
+second opinion or search-adjacent tasks, Cursor/agy/opencode/Hermes as alternate workers when
+quotas, sandboxing, or lineage diversity matter (agy = Gemini lineage — the third vote in a
+cross-lineage panel). For cross-validation, send the same review to two engines,
 dedup the findings, and keep the union (conflicting severity → the higher one wins).

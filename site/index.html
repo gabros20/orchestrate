@@ -81,6 +81,8 @@
   h2 .lu{color:var(--accent); width:20px; height:20px}
   section{margin-top:64px}
   .lede{font-size:19px; color:var(--muted); max-width:60ch; margin:0}
+  .hosts{margin-top:12px; font-family:ui-monospace,Menlo,monospace; font-size:12.5px; color:var(--muted); letter-spacing:.01em}
+  .hosts b{color:var(--accent); font-weight:600}
   .lede b{color:var(--ink)}
   p{max-width:68ch}
   a{color:var(--accent)}
@@ -303,7 +305,7 @@
 </svg>
 <div class="wrap">
 <header>
-  <div class="eyebrow">A Claude Code skill · one command, nine run shapes</div>
+  <div class="eyebrow">An agent skill · one command, nine run shapes</div>
   <nav class="toplinks" aria-label="external links">
     <a href="https://github.com/gabros20/orchestrate" target="_blank" rel="noopener">GitHub</a>
     <a href="https://github.com/gabros20/orchestrate#install" target="_blank" rel="noopener">Install</a>
@@ -315,6 +317,7 @@
   one command, many fresh agents, every result checked before it counts.</p>
   <div class="term" style="margin-top:22px"><span class="c"># that's the whole start</span>
 <span class="p">/orchestrate</span> plan.md</div>
+  <p class="hosts">runs on <b>Claude Code</b> · Codex · Cursor · Antigravity · opencode · Grok Build · Hermes</p>
   <nav aria-label="page sections">
     <a href="#idea">the idea</a><a href="#strat">choose a strategy</a><a href="#gates">safety</a>
     <a href="#tokens">cost</a><a href="#start">start</a>
@@ -561,10 +564,28 @@ npx skills add gabros20/orchestrate
 <span class="c"># run</span>
 <span class="p">/orchestrate</span> docs/feature-plan.md
 <span class="p">/orchestrate</span> "keep fixing until the suite passes" strategy=loop trigger=goal:"pytest green"</div>
-  <p style="margin-top:14px">Runs on any <a href="https://agentskills.io">Agent&nbsp;Skills</a> host —
-  <b>Claude Code</b> (reference) plus Codex, Cursor, Antigravity, opencode, Grok&nbsp;Build, and Hermes.
-  The skill detects its host at kickoff, binds what's native, and degrades honestly where a
-  primitive is missing (<code class="mono">shared/hosts.md</code>).</p>
+  <p style="margin-top:14px">The same install runs on any <a href="https://agentskills.io">Agent&nbsp;Skills</a>
+  host — <b>Claude Code</b> is the reference; on the others the skill detects its host at kickoff,
+  binds what's native, and degrades honestly where a primitive is missing.</p>
+  <details class="disc">
+    <summary>supported agents — who runs what</summary>
+    <div>
+      <div class="tblwrap"><table>
+        <tr><th>host</th><th>native subagents</th><th>model pin</th><th>worth knowing</th></tr>
+        <tr><td class="dim">Claude Code</td><td>deep, parallel, background</td><td>✓</td><td>the reference — every primitive native</td></tr>
+        <tr><td class="dim">Codex CLI</td><td>6 threads, depth 1</td><td>✓</td><td>no background shells; installs to <code>~/.agents/skills</code></td></tr>
+        <tr><td class="dim">Cursor CLI</td><td>parallel + background</td><td>✓</td><td>headless ask-user is broken — human gates need ACP</td></tr>
+        <tr><td class="dim">Antigravity</td><td>async, depth 10, messaging</td><td>—</td><td>subagents inherit the parent's model</td></tr>
+        <tr><td class="dim">opencode</td><td>synchronous only</td><td>✓</td><td>parallel via <code>opencode serve</code> or external processes</td></tr>
+        <tr><td class="dim">Grok Build</td><td>8 parallel, auto-worktree</td><td>—</td><td>reads <code>.claude/</code> wholesale; skills load at session start</td></tr>
+        <tr><td class="dim">Hermes</td><td>3 concurrent, flat</td><td>—</td><td>invoke <code>/orchestrate</code> explicitly — no auto-trigger</td></tr>
+      </table></div>
+      <p style="margin-top:12px"><code class="mono">team</code> needs Claude Code or Antigravity and
+      <code class="mono">workflow</code> needs Claude Code; every other strategy runs everywhere —
+      worst case as headless-CLI fan-out. Full bindings and quirks:
+      <a href="https://github.com/gabros20/orchestrate/blob/main/skills/orchestrate/references/shared/hosts.md">shared/hosts.md</a>.</p>
+    </div>
+  </details>
   <p style="margin-top:18px">An <b>alias</b> is a preset you name yourself in <code class="mono">config.yaml</code>.
   Five ship built in — good defaults to steal:</p>
   <div class="tblwrap"><table>
