@@ -1,32 +1,51 @@
 #!/usr/bin/env bash
-# Install the orchestrate skill into your agent's user-level skills directory.
-# Usage: ./install.sh [claude|codex|cursor|antigravity|opencode|grok|hermes|agents|all]
-# (default: claude)
-#
-# `agents` = the cross-agent standard path ~/.agents/skills — Codex reads it natively,
-# and Cursor, opencode, Copilot, Amp (and others) read it too. `all` = claude + agents,
-# which covers most hosts without littering every vendor dir. Prefer
-# `npx skills add gabros20/orchestrate` when you have Node — it maps 70+ agents itself.
+# Install one runtime skill without exposing repository-only docs, evals, or release files.
 set -euo pipefail
+
 here="$(cd "$(dirname "$0")" && pwd)"
 target="${1:-claude}"
+skill_name="orchestrate"
+source_dir="$here/skills/$skill_name"
+
+[ -f "$source_dir/SKILL.md" ] || { echo "install: missing $source_dir/SKILL.md" >&2; exit 1; }
+
 install_to() {
-  dest="$1/orchestrate"
-  mkdir -p "$(dirname "$dest")"
-  rm -rf "$dest"
-  cp -R "$here/skills/orchestrate" "$dest"
+  parent="$1"
+  dest="$parent/$skill_name"
+  staging="$parent/.${skill_name}.install.$$"
+  backup="$parent/.${skill_name}.backup.$$"
+
+  mkdir -p "$parent"
+  trap 'rm -rf "$staging" "$backup"' RETURN
+  cp -R "$source_dir" "$staging"
+
+  if [ -e "$dest" ]; then
+    mv "$dest" "$backup"
+  fi
+  if mv "$staging" "$dest"; then
+    rm -rf "$backup"
+  else
+    [ ! -e "$backup" ] || mv "$backup" "$dest"
+    echo "install: failed; previous installation restored" >&2
+    return 1
+  fi
   echo "installed → $dest"
 }
+
 case "$target" in
-  claude)       install_to "$HOME/.claude/skills" ;;
-  codex|agents) install_to "$HOME/.agents/skills" ;;
-  cursor)       install_to "$HOME/.cursor/skills" ;;
-  antigravity)  install_to "$HOME/.gemini/config/skills"            # Antigravity IDE
-                install_to "$HOME/.gemini/antigravity-cli/skills" ;; # Antigravity CLI (agy)
-  opencode)     install_to "$HOME/.config/opencode/skills" ;;
-  grok)         install_to "$HOME/.grok/skills" ;;
-  hermes)       install_to "$HOME/.hermes/skills" ;;
-  all)          install_to "$HOME/.claude/skills"; install_to "$HOME/.agents/skills" ;;
-  *) echo "usage: ./install.sh [claude|codex|cursor|antigravity|opencode|grok|hermes|agents|all]" >&2; exit 1 ;;
+  claude)      install_to "$HOME/.claude/skills" ;;
+  codex)       install_to "${CODEX_HOME:-$HOME/.codex}/skills" ;;
+  agents)      install_to "$HOME/.agents/skills" ;;
+  cursor)      install_to "$HOME/.cursor/skills" ;;
+  antigravity) install_to "$HOME/.gemini/config/skills"
+               install_to "$HOME/.gemini/antigravity-cli/skills" ;;
+  opencode)    install_to "$HOME/.config/opencode/skills" ;;
+  grok)        install_to "$HOME/.grok/skills" ;;
+  hermes)      install_to "$HOME/.hermes/skills" ;;
+  all)         install_to "$HOME/.claude/skills"
+               install_to "${CODEX_HOME:-$HOME/.codex}/skills"
+               install_to "$HOME/.agents/skills" ;;
+  *) echo "usage: ./install.sh [claude|codex|agents|cursor|antigravity|opencode|grok|hermes|all]" >&2; exit 1 ;;
 esac
-echo "Invoke with /orchestrate (or your host's skill invocation) — see README for the control surface."
+
+echo "Codex explicit invocation: \$$skill_name. Other clients may use slash commands, @mentions, a skill tool, or natural language."

@@ -11,7 +11,7 @@ via the x-relay CLI (serialized, rate-limit-respecting), four parallel research 
 docs, external-CLI docs, web state-of-the-art, skills-registry mining), a GitHub-mining subagent
 for raw source, plus /find-skills registry sweeps. Three subagents died on a 529 overload and were
 recovered by nudging the SAME agents to retry (never duplicating) — the incident that hardened the
-overload rule in `shared/safety-rails.md`.
+overload rule in `shared-safety-rails.md`.
 
 ---
 

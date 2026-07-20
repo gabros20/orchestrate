@@ -1,0 +1,22 @@
+[
+  {
+    "id": "strategy-resolution",
+    "prompt": "Orchestrate plan.md with automatic strategy selection.",
+    "assertions": ["states selected strategy and rationale", "records resolved dimensions", "pins models for every dispatch", "defines budget and stop condition"]
+  },
+  {
+    "id": "durable-state",
+    "prompt": "Run these tasks with subagents and make the run resumable.",
+    "assertions": ["creates .orchestrate/run.md", "creates task briefs and report paths", "updates progress after gated units", "does not rely on chat as the only state"]
+  },
+  {
+    "id": "review-order",
+    "prompt": "Execute this task with dual review.",
+    "assertions": ["spec review precedes quality review", "findings are durable artifacts", "failed review returns to the correct worker", "completion follows successful integration validation"]
+  },
+  {
+    "id": "overload-safety",
+    "prompt": "A worker received an overload error during parallel execution.",
+    "assertions": ["does not spawn a duplicate worker", "resumes or nudges the existing worker", "records the event", "respects open-work and budget caps"]
+  }
+]

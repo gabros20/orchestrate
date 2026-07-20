@@ -11,27 +11,27 @@ dispatches, and gates the subagent work through it. `/orchestrate` auto-triages 
 forced: it measures task shape (plan present, task count, file-overlap independence, context size,
 verifiable stop condition) and states why it picked what it picked. Claude Code is the reference
 host; the skill is plain Agent Skills format (agentskills.io) with a host-adapter layer
-(references/shared/hosts.md), so it runs on Codex, Cursor, Antigravity, opencode, Grok Build, and
+(references/shared-hosts.md), so it runs on Codex, Cursor, Antigravity, opencode, Grok Build, and
 Hermes too — detecting its host at kickoff and degrading honestly where a primitive is missing.
 
 ## Install
 
-- npm/skills.sh: `npx skills add gabros20/orchestrate@orchestrate -g`
-- Clone + installer (per-host targets: claude | codex | cursor | antigravity | opencode | grok | hermes | agents | all): `git clone https://github.com/gabros20/orchestrate && cd orchestrate && ./install.sh claude`
-- Manual copy: `cp -R skills/orchestrate ~/.claude/skills/orchestrate`
+- npm/skills.sh: `npx skills add gabros20/orchestrate-skill -g`
+- Clone + installer: `git clone https://github.com/gabros20/orchestrate-skill.git && cd orchestrate-skill && ./install.sh codex`
+- Codex runtime destination: `${CODEX_HOME:-$HOME/.codex}/skills/orchestrate`
 
 ## Docs
 
-- [README.md](https://raw.githubusercontent.com/gabros20/orchestrate/main/README.md): overview, install, composition presets, saved aliases, repo map.
-- [skills/orchestrate/SKILL.md](https://raw.githubusercontent.com/gabros20/orchestrate/main/skills/orchestrate/SKILL.md): the router — command grammar, strategy catalog, universal rules.
-- [docs/installation.md](https://raw.githubusercontent.com/gabros20/orchestrate/main/docs/installation.md): step-by-step install for Claude Code, Codex, and manual setups.
-- [docs/usage.md](https://raw.githubusercontent.com/gabros20/orchestrate/main/docs/usage.md): invoking `/orchestrate`, dimensions, resuming runs.
-- [docs/strategies.md](https://raw.githubusercontent.com/gabros20/orchestrate/main/docs/strategies.md): all nine strategies in depth — when to use each, their mechanics.
-- [docs/recipes.md](https://raw.githubusercontent.com/gabros20/orchestrate/main/docs/recipes.md): composed dimension recipes and saved aliases.
-- [docs/research/foundations.md](https://raw.githubusercontent.com/gabros20/orchestrate/main/docs/research/foundations.md): the evidence and sources behind the design choices.
-- [docs/research/token-optimization.md](https://raw.githubusercontent.com/gabros20/orchestrate/main/docs/research/token-optimization.md): research record on token/context/cost optimization for multi-agent orchestration.
+- [README.md](https://raw.githubusercontent.com/gabros20/orchestrate-skill/main/README.md): overview, install, composition presets, saved aliases, repo map.
+- [skills/orchestrate/SKILL.md](https://raw.githubusercontent.com/gabros20/orchestrate-skill/main/skills/orchestrate/SKILL.md): the router — command grammar, strategy catalog, universal rules.
+- [docs/installation.md](https://raw.githubusercontent.com/gabros20/orchestrate-skill/main/docs/installation.md): step-by-step install and verification.
+- [docs/usage.md](https://raw.githubusercontent.com/gabros20/orchestrate-skill/main/docs/usage.md): invocation grammar, dimensions, and resuming runs.
+- [docs/strategies.md](https://raw.githubusercontent.com/gabros20/orchestrate-skill/main/docs/strategies.md): all nine strategies in depth — when to use each, their mechanics.
+- [docs/recipes.md](https://raw.githubusercontent.com/gabros20/orchestrate-skill/main/docs/recipes.md): composed dimension recipes and saved aliases.
+- [docs/research/foundations.md](https://raw.githubusercontent.com/gabros20/orchestrate-skill/main/docs/research/foundations.md): the evidence and sources behind the design choices.
+- [docs/research/token-optimization.md](https://raw.githubusercontent.com/gabros20/orchestrate-skill/main/docs/research/token-optimization.md): research record on token/context/cost optimization for multi-agent orchestration.
 
 ## Optional
 
-- [docs/designs/v1.0.0-initial-architecture.md](https://raw.githubusercontent.com/gabros20/orchestrate/main/docs/designs/v1.0.0-initial-architecture.md): implementation design shipped in v1.0.0 — why the skill is shaped the way it is.
+- [docs/designs/v1.0.0-initial-architecture.md](https://raw.githubusercontent.com/gabros20/orchestrate-skill/main/docs/designs/v1.0.0-initial-architecture.md): implementation design shipped in v1.0.0 — why the skill is shaped the way it is.
 - [Visual guide](https://orchestrate-skill.vercel.app): every strategy, dimension, and alias on one page.

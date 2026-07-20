@@ -6,14 +6,14 @@ one answers your question.
 
 | Doc | Type | Answers |
 |---|---|---|
-| [installation.md](installation.md) | How-to | How do I get `/orchestrate` running in Claude Code (or Codex)? |
+| [installation.md](installation.md) | How-to | How do I install and verify `orchestrate` in my coding client? |
 | [usage.md](usage.md) | Reference | What does every flag, dimension, and workspace file actually do? |
 | [strategies.md](strategies.md) | Reference / explanation | What does each of the 9 strategies do, and when do I reach for it? |
 | [recipes.md](recipes.md) | How-to | What's the exact command for `<scenario>`? |
 
 ## Reading order
 
-1. **[installation.md](installation.md)** — install it, confirm `/orchestrate` responds.
+1. **[installation.md](installation.md)** — install it, confirm the client-native invocation responds.
 2. **[usage.md](usage.md)** — the invocation grammar, the 8 dimensions, and how selection
    (`strategy=` > `alias=` > triage) works. Read this once, fully; everything else builds on it.
 3. **[strategies.md](strategies.md)** — one strategy at a time, as you need it. Skip straight to
@@ -46,8 +46,12 @@ Two folders separate *what we learned* from *what we shipped*:
     and tooled (the graded ritual + `scripts/toolbox`).
 
 Lifecycle: research lands in `research/` → when acted on, an implementation design lands in
-`designs/` as `v<next-version>-<topic>.md` → the release bumps `version:` in SKILL.md, adds a
-CHANGELOG entry, passes `scripts/check-sync` (CI-enforced on every PR), and tags `v<version>`.
+`designs/` as `v<next-version>-<topic>.md` → the release bumps the version in
+`.codex-plugin/plugin.json`, adds a CHANGELOG entry, passes `scripts/check-sync` (CI-enforced on
+every PR), and tags `v<version>`. Runtime `SKILL.md` stays free of release metadata.
 
 Read these if you want to know *why* something works the way it does, or if you're extending the
 skill yourself.
+
+Maintainers should read [AGENTS.md](../AGENTS.md) for orchestration-specific invariants and
+[CONTRIBUTING.md](../CONTRIBUTING.md) for validation and release steps.

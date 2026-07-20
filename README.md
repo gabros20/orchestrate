@@ -1,171 +1,187 @@
-# /orchestrate
+# Orchestrate
 
-**One entry point, nine subagent-orchestration strategies, for any agent that reads SKILL.md.**
-
-`/orchestrate` turns "run this plan with subagents" into a controlled process instead of an
-improvised one. You point it at a plan or a task; it picks (or you force) a strategy —
-sequential staged cycles, parallel worktree fan-out, hierarchical sub-orchestrator fleets, agent
-teams, deterministic workflows, goal/Ralph loops, advisor/executor cost splits, adversarial
-planning, or external CLIs (Codex/Grok/Cursor/Antigravity/opencode/Hermes) as workers — then
-coordinates, dispatches, and gates subagent work through it. Claude Code is the reference host;
-the skill is plain [Agent Skills](https://agentskills.io) format with a built-in host-adapter
-layer, so it runs on any agent that reads `SKILL.md` (see [Supported agents](#supported-agents)).
+Select and run bounded multi-agent execution strategies with durable artifacts, explicit model
+routing, typed review gates, and safe recovery. Point `orchestrate` at a plan or multi-step task;
+it chooses a strategy—or follows one you force—and coordinates the workers without absorbing their
+implementation into the controller context.
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-**Visual guide:** [orchestrate.vercel.app](https://orchestrate-skill.vercel.app) — every strategy, dimension,
-and alias on one page.
+**Visual guide:** [orchestrate-skill.vercel.app](https://orchestrate-skill.vercel.app)
 
-## Install
+## Boundary
 
-**skills.sh ecosystem:**
-```bash
-npx skills add gabros20/orchestrate@orchestrate -g
-```
+`orchestrate` owns **how work is assigned and coordinated across agents**. It does not decide which
+product, design, engineering, marketing, sales, or operations work a digital product requires. A
+lifecycle composer such as `digital-product` owns that dependency graph and may optionally request
+multi-agent execution; neither skill depends on the other.
 
-**Clone + installer** (per-host targets):
-```bash
-git clone https://github.com/gabros20/orchestrate && cd orchestrate
-./install.sh claude   # or: codex | cursor | antigravity | opencode | grok | hermes | agents | all
-```
-`agents` installs to `~/.agents/skills` — the cross-agent standard path that Codex, Cursor,
-opencode, Copilot, and Amp all read; `all` = claude + agents.
+Do not orchestrate small, tightly coupled work that one agent can complete efficiently in one
+context.
 
-**Manual:**
-```bash
-cp -R skills/orchestrate ~/.claude/skills/orchestrate   # or your host's skills dir
-```
-
-## Supported agents
-
-| Host | Skills | Native subagents | Model pin per dispatch | Quirks that matter |
-|---|---|---|---|---|
-| **Claude Code** | ✅ reference | ✅ deep, background, teams | ✅ | none — every primitive native |
-| **Codex CLI** | ✅ `~/.agents/skills` | ✅ 6 threads, depth 1 | ✅ | no background shells (`nohup`+poll); `codex exec` needs `</dev/null` |
-| **Cursor CLI** | ✅ (2.4+, reads `.claude/skills` too) | ✅ parallel + background, depth 1 | ✅ | headless ask-user is broken — human gates need ACP or interactive |
-| **Antigravity** (`agy`/IDE) | ✅ | ✅ async, depth 10, messaging | ❌ inherits parent | `agy -p` flags under-documented; IDE/CLI use different global skill dirs |
-| **opencode** | ✅ (reads `.claude`/`.agents` too) | ⚠️ synchronous only | ✅ | parallel fan-out via `opencode serve`+SDK or external processes |
-| **Grok Build** | ✅ (reads `.claude/` wholesale) | ✅ 8 parallel, auto-worktree | ❌ | skills load at session start; approvals all-or-nothing |
-| **Hermes** | ✅ explicit `/orchestrate` only | ⚠️ 3 concurrent, flat | ❌ (upstream bug) | no auto-trigger; user-level skills dir only |
-
-The skill detects its host at kickoff and binds six abstract primitives (dispatch / parallel /
-message / ask-user / worktree / loop) natively where possible, degrading honestly where not —
-`team` needs Claude Code or Antigravity, `workflow` needs Claude Code, everything else runs
-everywhere (worst case as headless-CLI fan-out). Full matrix + bindings:
-[`references/shared/hosts.md`](skills/orchestrate/references/shared/hosts.md).
-
-## Quick start
-
-Bare invocation — triage reads the plan, picks a strategy, tells you why, and proceeds:
-```
-/orchestrate plan.md
-```
-
-Force a strategy and tune it with dimensions:
-```
-/orchestrate plan.md strategy=parallel workers=4
-/orchestrate "audit every service for the new auth flow" strategy=workflow
-/orchestrate plan.md strategy=loop trigger=goal:"tests green" budget=cycles:15
-```
-
-## Composition presets & recipes
-
-A strategy is a **preset over dimensions** (`review`, `engine`, `models`, `isolation`, `trigger`,
-`budget`) — everything below is one invocation, no code. Start with a saved alias, or compose
-dimensions directly.
-
-### Saved aliases (`config.yaml`)
-
-| Alias | Expands to | Use when |
-|---|---|---|
-| `red-team` | `strategy=adversarial review=panel:3 models={planner:strongest,worker:sonnet}` | High-stakes plan — harden it by debate, then execute under a 3-reviewer panel |
-| `codex-grind` | `strategy=staged engine=codex review=dual models={reviewer:sonnet}` | Cheap bulk implementation, Claude reviews Codex's output |
-| `swarm` | `strategy=parallel workers=4 review=spec isolation=worktree` | Independent tasks, no shared files, minimal ceremony |
-| `afk` | `strategy=loop trigger=goal budget={cycles:20,open_prs:1} review=dual` | Walk-away grind with hard rails and a stop condition |
-| `architect` | `strategy=advisor models={advisor:strongest,worker:sonnet}` | Big-model thinking, small-model doing — minimize expensive-model calls |
-
-```
-/orchestrate plan.md alias=red-team
-```
-
-### Common recipes
-
-| Goal | Command |
-|---|---|
-| Panel of experts on a question | `/orchestrate "should we adopt X?" strategy=team workers=3` |
-| Review a plan adversarially | `/orchestrate plan.md strategy=adversarial` |
-| Multi-lens review of anything | add `review=panel:3` to any strategy |
-| Research + evaluated claims | `/orchestrate "research X" strategy=hierarchical review=consensus:3` |
-| Mass migration/audit | `/orchestrate plan.md strategy=workflow` (pilot a slice first) |
-| Cheap bulk with cross-model review | `/orchestrate plan.md strategy=staged engine=codex` |
-| Walk-away grind | `/orchestrate plan.md strategy=loop trigger=goal:"tests green" budget=cycles:15` |
-
-Explicit `strategy=`/dimension flags always override an alias; `alias=` always overrides auto-triage.
-
-## The 9 strategies
+## Strategies
 
 | Strategy | Use when |
 |---|---|
-| **staged** *(default)* | A plan with mostly-independent tasks — fresh implementer per task, dual review gate |
-| **parallel** | Independent tasks, no shared files — N workers at once in worktrees |
-| **hierarchical** | Work too broad for one context — sub-orchestrators think per-domain, workers execute |
-| **team** | Workers must talk to each other — debate, competing hypotheses, cross-layer coordination |
-| **workflow** | 10–1000 agents, deterministic fan-out/verify — a script holds the plan, not the model |
-| **loop** | Recurring or grind-until-done work with a verifiable stop condition |
-| **advisor** | Cost split — cheap executor runs, expensive model consulted rarely (or plans up front) |
-| **adversarial** | High-stakes plan worth hardening by debate before cheap execution |
-| **xcli** | Route work to external CLIs (Codex/Grok/Cursor/agy/opencode/Hermes) as workers, peers, or second opinions |
+| **staged** *(default)* | Mostly independent tasks need fresh implementation and ordered dual review |
+| **parallel** | Independent tasks can run concurrently in isolated worktrees |
+| **hierarchical** | Several domains need their own sub-orchestrators and workers |
+| **team** | Workers must message, debate, or coordinate across layers |
+| **workflow** | Large repeated fan-out should be held by a deterministic script |
+| **loop** | Work repeats until a verifiable goal or scheduled condition is met |
+| **advisor** | Expensive reasoning should be separated from cheaper execution |
+| **adversarial** | A high-stakes plan needs independent challenge before execution |
+| **xcli** | External coding CLIs act as workers, peers, or second opinions |
 
-Strategies compose: `strategy=staged engine=codex` (Codex implements, Claude reviews) ·
-`strategy=loop topology=parallel` (each cycle fans out) · `strategy=parallel review=panel:3`.
+Strategies are presets over `topology`, `planning`, `review`, `engine`, `models`, `isolation`,
+`trigger`, and `budget`. Explicit dimension overrides win over the selected preset.
 
-## Dimensions
+## Install
 
-Every strategy is a preset over these; you can override any of them on top of a strategy or alias.
+With skills.sh:
 
-| Dimension | Values | Default |
-|---|---|---|
-| `topology` | solo · staged · parallel · hierarchical · team · workflow · loop | from strategy |
-| `planning` | none · plan-first · interview · adversarial | plan-first |
-| `review` | off · spec · quality · dual · panel:N · consensus:N | dual |
-| `engine` | claude · codex · grok · cursor · agy · opencode · hermes · mixed | claude |
-| `models` | tier map (advisor/orchestrator/reasoner/worker/reviewer/peer) | see model-routing |
-| `isolation` | none · worktree · branch | worktree when >1 writer |
-| `trigger` | once · goal · interval · schedule | once |
-| `budget` | max cycles / agents / tokens / open-PR cap | per strategy |
-
-## How it stays safe
-
-- **Branch-first** — never starts on `main`/`master` without consent.
-- **Typed review gates** — enforced, not trusted; fixed order (spec, then quality).
-- **Ledger before memory** — progress is appended to `.orchestrate/progress.md`; on resume, the
-  ledger and `git log` win over recollection.
-- **Loop rails** — hard cycle caps, a kill switch, and an open-PR bandwidth cap.
-- **No duplicate agents on overload** — an API overload resumes/nudges the same agent, never
-  forks a second one doing the same work.
-- **Controller never implements** — the invoking agent coordinates and gates; every unit of work
-  runs in a fresh subagent context.
-
-## Repo map
-
-```
-skills/orchestrate/   the skill: SKILL.md (router), config.yaml (aliases), references/, scripts/
-docs/                 research/ (research records), designs/ (versioned implementation designs)
-site/                 the visual guide, deploys to orchestrate-skill.vercel.app
-install.sh            installer (claude | codex | cursor | antigravity | opencode | grok | hermes | agents | all)
+```bash
+npx skills add gabros20/orchestrate-skill -g
 ```
 
-More docs: [docs/research/](docs/research/) · [docs/designs/](docs/designs/) ·
-[docs/installation.md](docs/installation.md) · [docs/usage.md](docs/usage.md) ·
-[docs/strategies.md](docs/strategies.md) · [docs/recipes.md](docs/recipes.md)
+Or clone and install for a specific client:
+
+```bash
+git clone https://github.com/gabros20/orchestrate-skill.git
+cd orchestrate-skill
+./install.sh codex
+```
+
+| Target | Destination |
+|---|---|
+| `codex` | `${CODEX_HOME:-$HOME/.codex}/skills/orchestrate` |
+| `agents` | `~/.agents/skills/orchestrate` |
+| `claude` | `~/.claude/skills/orchestrate` |
+| `cursor` | `~/.cursor/skills/orchestrate` |
+| `antigravity` | Gemini IDE and Antigravity CLI skill paths |
+| `opencode` | `~/.config/opencode/skills/orchestrate` |
+| `grok` | `~/.grok/skills/orchestrate` |
+| `hermes` | `~/.hermes/skills/orchestrate` |
+| `all` | Claude, Codex, and the cross-agent path |
+
+The installer stages a complete runtime copy before replacement and restores the prior
+installation if replacement fails.
+
+## Use
+
+Codex explicit invocation uses `$orchestrate`:
+
+```text
+Use $orchestrate to execute plan.md with automatic strategy selection.
+Use $orchestrate to run plan.md strategy=parallel workers=4.
+Use $orchestrate to audit every service strategy=workflow.
+Use $orchestrate to keep iterating until tests pass strategy=loop budget=cycles:10.
+```
+
+Documentation uses `/orchestrate` as shorthand. Other clients may expose a slash command,
+`@orchestrate`, a skill tool, or natural-language activation.
+
+Selection priority is:
+
+```text
+explicit strategy > saved alias > auto-triage > ask on genuine conflict
+```
+
+Saved aliases live in `skills/orchestrate/config.yaml`; explicit dimensions always override an
+alias.
+
+## Supported hosts
+
+Claude Code is the reference host. The skill resolves six abstract primitives—dispatch, parallel,
+message, ask-user, worktree, and loop—through the current client's native tools where possible,
+then an external CLI, then a named solo degradation.
+
+| Host | Native subagents | Model pinning | Important constraint |
+|---|---|---|---|
+| Claude Code | Deep, background, teams | Yes | Reference implementation |
+| Codex | Parallel agents | Yes | Bind to the current Codex agent tools and limits |
+| Cursor | Parallel/background | Yes | Headless ask-user support varies |
+| Antigravity | Async agents and messaging | Inherits parent | IDE and CLI paths differ |
+| opencode | Synchronous in-session | Agent-file model | External processes recover fan-out |
+| Grok Build | Parallel, auto-worktree | Host-dependent | Skills load at session start |
+| Hermes | Small flat pool | Host-dependent | Explicit activation may be required |
+
+The runtime [host adapter](skills/orchestrate/references/shared-hosts.md) instructs the controller to
+verify current tools and CLI flags rather than trust a static matrix.
+
+## Safety and quality model
+
+- **Controller does not silently implement** failed worker tasks.
+- **Artifacts on disk are the interface** under `.orchestrate/`.
+- **Every dispatch pins a model** rather than inheriting an accidental default.
+- **Dual review is ordered**: spec review, then quality review.
+- **Ledger before memory**: durable progress wins over recollection after resume or compaction.
+- **No duplicate workers on overload**: resume or nudge the existing worker.
+- **Branch and loop rails stay active**: explicit consent, cycle caps, kill switch, and open-work cap.
+
+## Runtime resources
+
+```text
+skills/orchestrate/SKILL.md       activation, routing, workflow, and completion
+skills/orchestrate/config.yaml    saved strategy/dimension aliases
+skills/orchestrate/references/    29 flat strategy, shared, and prompt references
+skills/orchestrate/scripts/       workspace, brief, review-package, and toolbox helpers
+```
+
+All references are directly linked from `SKILL.md`; no required route depends on directory
+discovery or a second-hop index.
+
+## Repository map
+
+```text
+.codex-plugin/plugin.json  Codex plugin and release metadata
+AGENTS.md / CLAUDE.md      repository and client-specific maintainer guidance
+skills/orchestrate/        portable runtime skill and client metadata
+evals/                     activation, traversal, output, and compression fixtures
+docs/                      installation, usage, strategies, recipes, research, and designs
+site/                      optional visual guide
+remotion/                  visual-guide animation source
+scripts/                   baseline and orchestration-specific release gates
+```
+
+## Validate
+
+```bash
+scripts/check-sync
+scripts/count-skill-tokens
+```
+
+The baseline gate validates packaging, flat direct routing, reference headers and contents lists,
+plugin/client metadata, runtime scripts, evaluation fixtures, and version alignment. The specialized
+gate then checks byte-identical role communication blocks, honest token-cost statements, replicated
+invariants, and host-layer limits.
+
+## Documentation
+
+- [Installation](docs/installation.md)
+- [Usage](docs/usage.md)
+- [Strategies](docs/strategies.md)
+- [Recipes](docs/recipes.md)
+- [Evaluation fixtures](evals/README.md)
+
+## Versioning and releases
+
+Each release synchronizes `.codex-plugin/plugin.json`, the newest `CHANGELOG.md` release, git tag
+`v<version>`, and the matching GitHub Release. Runtime `SKILL.md` intentionally carries no version
+or repository metadata.
+
+## Contributing
+
+See [AGENTS.md](AGENTS.md) for repository invariants and [CONTRIBUTING.md](CONTRIBUTING.md) for the
+change and release workflow. The repository is independently versioned and remains usable without
+`digital-product` or any sibling skill checkout.
 
 ## Requirements
 
-- Any [Agent Skills](https://agentskills.io) host — [Claude Code](https://claude.com/product/claude-code)
-  is the reference; Codex, Cursor, Antigravity, opencode, Grok Build, and Hermes are supported
-  via the host-adapter layer (see [Supported agents](#supported-agents)).
-- `git`, for worktree/branch isolation.
-- Optional: any of the other CLIs installed and on `PATH` for `engine=xcli` workers.
+- An Agent Skills-compatible client with either native subagents or access to a supported external
+  coding CLI.
+- `git` for branch/worktree isolation.
+- Any selected external engine installed, authenticated, and verified with its current `--help`.
 
 ## License
 

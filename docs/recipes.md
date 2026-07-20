@@ -7,6 +7,9 @@ overrides auto-triage. For what each dimension value means, see
 [usage.md#dimensions](usage.md#dimensions); for how each strategy actually runs, see
 [strategies.md](strategies.md).
 
+The examples use `/orchestrate` as shorthand. Use `$orchestrate` in Codex or the invocation form
+provided by your client.
+
 ## Saved aliases
 
 Five built-in presets, each a named bundle of dimensions, defined in `config.yaml`:

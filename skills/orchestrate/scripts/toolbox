@@ -21,6 +21,7 @@ else
 fi
 
 if have ast-grep; then
+  # shellcheck disable=SC2016 # ast-grep metavariables must remain literal.
   outline='ast-grep run -p "function $F($$$) { $$$ }" <file>    # structural; swap pattern per language'
 elif have ctags; then
   outline='ctags -x --sort=no <file> | head -40'
@@ -67,7 +68,7 @@ pkg manager:  $pkgmgr
 conventions:  $conventions
 installed:    $extras
 
-Read this file INSTEAD of probing for tools. Orientation ritual: shared/token-economy.md.
+Read this file INSTEAD of probing for tools. Orientation ritual: shared-token-economy.md.
 EOF
 
 printf '%s\n' "$out"

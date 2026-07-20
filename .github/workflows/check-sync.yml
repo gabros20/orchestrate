@@ -1,7 +1,6 @@
 name: check-sync
-# Release gate, enforced not trusted: every PR (and main) must keep the communication
-# blocks byte-identical, the honest numbers measured, and the replicated invariants
-# present in every home. The check itself lives in scripts/check-sync.
+# Release gate: run the universal skill-pack contract, then preserve orchestrate's byte-identical
+# communication blocks, measured token claims, replicated invariants, and host adapter.
 on:
   pull_request:
   push:

@@ -222,7 +222,7 @@ the previous one is unmerged), and ratchet gating (cheap checks between cycles, 
 at cycle boundaries). A no-op cycle is a successful run, not a wasted one.
 
 **Composition overrides**: `topology=parallel` inside a loop fans out each cycle. Every N runs,
-dispatch the evolve pass (`prompts/evolve.md`) — it reads recent logs and costs and pulls four
+dispatch the evolve pass (`prompt-evolve.md`) — it reads recent logs and costs and pulls four
 levers: fix contract drift, distill state (keep durable lessons, condense logs to a milestone spine,
 never drop open items), lift repeated *deterministic* work into a script pre-stage, or improve the
 metrics surface. A bilevel outer loop (evolve watching the inner loop's search patterns) is the
@@ -313,7 +313,7 @@ subscription quota, or a CLI's own sandbox (Codex) — at the cost of serializat
 shared context (the prompt has to carry everything; the external CLI sees nothing of your session).
 xcli is also the **portability floor** when orchestrate runs on a non-Claude host: headless engines
 recover parallel fan-out and model pinning as background processes (the skill's
-`references/shared/hosts.md`).
+`references/shared-hosts.md`).
 
 **How it runs**: one task per launch (split big jobs); one git worktree per concurrent run, never two
 engines in the same tree, with `.env*` copied in. Runs take minutes with no timeout, so background

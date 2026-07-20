@@ -1,0 +1,14 @@
+[
+  {
+    "id": "staged-plan",
+    "prompt": "Execute a four-task implementation plan with fresh workers and dual review.",
+    "variants": ["no-skill", "v1.4.0", "v1.5.0"],
+    "preserve": ["correct strategy", "typed review order", "durable artifacts", "model pinning", "safety rails"]
+  },
+  {
+    "id": "solo-boundary",
+    "prompt": "Fix this one typo and its snapshot.",
+    "variants": ["no-skill", "v1.4.0", "v1.5.0"],
+    "preserve": ["correct non-activation", "no unnecessary agent fan-out"]
+  }
+]

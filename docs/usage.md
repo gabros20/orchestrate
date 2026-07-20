@@ -7,6 +7,9 @@ strategy runs. This is the reference doc — for what each strategy actually *do
 
 ## Invocation grammar
 
+Codex invokes the skill as `$orchestrate`; slash-command clients may expose `/orchestrate`.
+The grammar below uses the slash form as host-neutral documentation shorthand.
+
 ```
 /orchestrate [plan-file | task description]
     [strategy=auto|staged|parallel|hierarchical|team|workflow|loop|advisor|adversarial|xcli]
@@ -24,7 +27,7 @@ strategy runs. This is the reference doc — for what each strategy actually *do
 | `strategy=` | one of 9 names, or `auto` | Forces the orchestration strategy. `auto` (or omitting it) runs the triage procedure. |
 | `review=` | `dual`, `spec`, `quality`, `panel:N`, `consensus:N`, `off` | Overrides the output-review gate a strategy would otherwise use (see [Dimensions → review](#review)). |
 | `engine=` | `claude`, `codex`, `grok`, `cursor`, `agy`, `opencode`, `hermes`, `mixed` | Which CLI executes dispatched work. `mixed` routes different roles to different engines (e.g. planner on Claude, counter on Codex). |
-| `models=` | comma-separated `tier:model` pairs | Overrides the tier→model map for this run (e.g. `models=orchestrator:opus,worker:sonnet`). Unlisted tiers keep their default from `shared/model-routing.md`. |
+| `models=` | comma-separated `tier:model` pairs | Overrides the tier→model map for this run (e.g. `models=orchestrator:opus,worker:sonnet`). Unlisted tiers keep their default from `shared-model-routing.md`. |
 | `isolation=` | `worktree`, `branch`, `off` | Physical write isolation for concurrent writers. |
 | `trigger=` | `once`, `goal:"<condition>"`, `interval:<t>`, `schedule:"<cron>"` | What starts/repeats the run. |
 | `workers=N` | integer | Worker count for topologies that fan out (`parallel`, `team`). |
@@ -139,7 +142,7 @@ becomes `cursor-agent -p` / `agy -p` / `opencode run` / `hermes -z` calls; alter
 quotas, sandboxing, or lineage diversity matter (agy is the Gemini lineage — the third vote in a
 cross-lineage panel). `mixed` — different roles in the same strategy route to different engines
 (e.g. `adversarial` with `planner=claude, counter=codex`). See [strategies.md#xcli](strategies.md#xcli)
-for the mechanics and per-CLI flags, and the skill's `references/shared/hosts.md` for what each
+for the mechanics and per-CLI flags, and the skill's `references/shared-hosts.md` for what each
 engine can and can't do (e.g. per-process-only model pinning on agy/hermes).
 
 ### `models`
@@ -225,7 +228,7 @@ itself is gone (e.g. a `git clean -fdx`), reconstruct state from `git log` alone
 ## Model tiers
 
 `models=` maps six tiers, each with a default and a hard "never" — set in
-`references/shared/model-routing.md`:
+`references/shared-model-routing.md`:
 
 | Tier | Job | Default | Never |
 |---|---|---|---|
@@ -273,7 +276,7 @@ task — reach for that shape under budget pressure rather than downgrading the 
 ## Token economy
 
 v1.1.0 bakes a token-discipline layer into every strategy
-(`references/shared/token-economy.md` is the full reference). The principles:
+(`references/shared-token-economy.md` is the full reference). The principles:
 
 - **Cut waste, not information.** Token spend explains ~80% of multi-agent quality variance —
   the goal is zero *wasted* tokens, never starving workers of context. Underpriming (a worker
@@ -297,7 +300,7 @@ v1.1.0 bakes a token-discipline layer into every strategy
 
 ## Safety rails
 
-Apply regardless of strategy, from `references/shared/safety-rails.md`:
+Apply regardless of strategy, from `references/shared-safety-rails.md`:
 
 - **Git & blast radius** — never start implementation on `main`/`master` without explicit consent;
   anything outward-facing (push, PR to a shared repo, sends, deploys, CMS/prod mutations) needs a

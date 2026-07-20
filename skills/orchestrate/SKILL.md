@@ -1,112 +1,156 @@
 ---
 name: orchestrate
-version: 1.4.0
-description: Strategy-selectable subagent orchestration. Use when executing an implementation plan or any multi-step task with subagents — sequential staged cycles, parallel worktree fan-out, hierarchical sub-orchestrator fleets, agent teams, dynamic workflows, goal/Ralph loops, advisor/executor cost splits, adversarial planning, or external CLI engines (codex/grok/cursor/agy/opencode/hermes) as workers. Runs on any Agent-Skills host — Claude Code (reference), Codex, Cursor, Antigravity, opencode, Grok, Hermes. Triggers - /orchestrate, "orchestrate this", "run this plan with subagents", "fan out agents", "goal loop", "agent swarm". The user can force a strategy with strategy=<name>; otherwise a triage pass picks one and says why.
-license: MIT
-metadata:
-  source: https://github.com/gabros20/orchestrate
-  guide: https://orchestrate-skill.vercel.app
+description: >-
+  Coordinate multi-agent work by selecting and running a bounded orchestration strategy. Use for
+  implementation plans or multi-step tasks needing staged reviews, parallel worktrees, hierarchical
+  fleets, agent teams, workflows, goal loops, advisor/executor splits, adversarial
+  planning, or external coding CLIs. Triggers include "orchestrate this", "run this plan with
+  subagents", "fan out agents", "goal loop", and "agent swarm". Do not use for small coupled tasks
+  one agent can complete efficiently or for choosing a digital-product lifecycle; orchestrate only
+  coordinates agents and execution.
 ---
 
 # Orchestrate
 
-**Version 1.4.0** — if asked which version of orchestrate is installed, answer from this line.
-(History: `CHANGELOG.md` in the source repo, github.com/gabros20/orchestrate.)
+## Mission and boundary
 
-One entry point, nine orchestration strategies. **A strategy is a preset over dimensions**; every
-rule reads the dimensions, not the strategy name. You (the invoking agent) are the **controller**:
-you coordinate, dispatch, and gate — you do not implement.
+Coordinate, dispatch, review, and gate multi-agent work through one of nine strategy presets. The
+invoking agent is the controller: it resolves the execution topology and maintains durable state;
+subagents perform the implementation or investigation.
+
+`orchestrate` owns **how work is assigned across agents**. It does not decide which product-lifecycle
+domains are required, replace a domain skill, or own product progress. A lifecycle composer such as
+`digital-product` may request orchestration, but neither capability depends on the other.
 
 ## Invocation grammar
 
+Use the explicit form supported by the client: `$orchestrate` in Codex, `/orchestrate` in
+slash-command clients, or the host's equivalent. Documentation uses `/orchestrate` as shorthand.
+
+```text
+<plan-file | task description>
+  [strategy=auto|staged|parallel|hierarchical|team|workflow|loop|advisor|adversarial|xcli]
+  [review=dual|spec|quality|panel:N|consensus:N|off]
+  [engine=claude|codex|grok|cursor|agy|opencode|hermes|mixed]
+  [models=orchestrator:<tier>,worker:<tier>,advisor:<tier>,reviewer:<tier>]
+  [isolation=worktree|branch|off]
+  [trigger=once|goal:"<stop condition>"|interval:<t>|schedule:"<cron>"]
+  [workers=N] [budget=<cycles|agents|tokens>] [alias=<saved-preset>]
 ```
-/orchestrate [plan-file | task description]
-    [strategy=auto|staged|parallel|hierarchical|team|workflow|loop|advisor|adversarial|xcli]
-    [review=dual|spec|quality|panel:N|consensus:N|off]
-    [engine=claude|codex|grok|mixed]
-    [models=orchestrator:opus,worker:sonnet,advisor:<strongest>,...]
-    [isolation=worktree|branch|off]
-    [trigger=once|goal:"<stop condition>"|interval:<t>|schedule:"<cron>"]
-    [workers=N] [budget=<cycles|agents|tokens>] [alias=<saved-preset>]
-```
 
-Selection priority: **explicit `strategy=` > `alias=` (config.yaml) > auto-triage > ask**.
-Bare invocation → run the triage in `references/triage.md`, state the pick + one-line why, proceed.
-Ask (AskUserQuestion on Claude Code; your host's ask-user primitive per `references/shared/hosts.md`)
-only when triage signals genuinely conflict.
+Selection priority: explicit `strategy=` > `alias=` from [config.yaml](config.yaml) >
+[auto-triage](references/triage.md) > ask. Ask only when triage signals genuinely conflict.
 
-## Host (which agent is running this)
+## Route before acting
 
-Orchestrate runs on any Agent-Skills host; strategy files are written in Claude Code terms (the
-reference host). **On Claude Code every primitive is native — skip this section.** On any other
-host: detect yours from your own toolset, record it in `.orchestrate/run.md`, and bind each
-primitive (dispatch/parallel/message/ask-user/worktree/loop) via `references/shared/hosts.md` —
-native binding first, headless-CLI shell-out (`strategies/xcli.md`) second, solo-with-a-warning
-last. `team` needs Claude Code or Antigravity; `workflow` needs Claude Code — triage degrades
-them elsewhere. Degradation is stated, never silent.
+1. Reject orchestration when the coordination cost exceeds the expected benefit.
+2. Resolve the host and its available primitives before choosing a strategy.
+3. Select one strategy and record all resolved dimensions in `.orchestrate/run.md`.
+4. Read the selected strategy plus only the supporting routes its roles and gates require.
+5. Never preload the entire reference library.
 
-## Dimensions (the knobs every strategy is a preset over)
+### Strategy route
+
+| Strategy | Use when | Read | Contribution |
+|---|---|---|---|
+| **staged** *(default)* | Mostly independent plan tasks need fresh implementation and ordered dual review | [Staged](references/strategy-staged.md) | Sequential task cycle, fix-wave rules, and merge gate |
+| **parallel** | Tasks share no files and can run concurrently in isolated worktrees | [Parallel](references/strategy-parallel.md) | Partition, fan-out, integration, and overload behavior |
+| **hierarchical** | Work is too broad for one context and needs domain sub-orchestrators | [Hierarchical](references/strategy-hierarchical.md) | Domain decomposition and delegated controller hierarchy |
+| **team** | Workers must message, debate, or coordinate across layers | [Team](references/strategy-team.md) | Shared-context team protocol and host degradation |
+| **workflow** | Large deterministic fan-out should be held by a script rather than model memory | [Workflow](references/strategy-workflow.md) | Pilot, budget, batch, verify, and aggregation procedure |
+| **loop** | Work repeats until a verifiable goal or scheduled condition is met | [Loop](references/strategy-loop.md) | Bounded cycle, stop condition, kill switch, and evolution pass |
+| **advisor** | Expensive reasoning should be separated from cheaper execution | [Advisor](references/strategy-advisor.md) | Consultation cadence and advisor/executor contract |
+| **adversarial** | A high-stakes plan deserves independent challenge before execution | [Adversarial](references/strategy-adversarial.md) | Debate roles, synthesis, and hardened plan |
+| **xcli** | External coding CLIs act as workers, peers, or second opinions | [External CLIs](references/strategy-xcli.md) | Verified CLI invocation, isolation, monitoring, and result capture |
+
+Strategies compose through dimension overrides: `strategy=staged engine=codex`,
+`strategy=loop topology=parallel`, or `strategy=parallel review=panel:3`.
+
+### Shared route
+
+| Condition | Read | Contribution |
+|---|---|---|
+| Any non-reference host or uncertain primitive | [Hosts](references/shared-hosts.md) | Host detection, primitive binding, and honest degradation |
+| Every dispatched task | [Contracts](references/shared-contracts.md) | Brief, status, report, findings, and workspace schemas |
+| Any review-enabled run | [Review gates](references/shared-review-gates.md) | Ordered spec/quality gates and panel behavior |
+| Any role or engine selection | [Model routing](references/shared-model-routing.md) | Explicit model tiers, cost posture, and drift verification |
+| More than one writer | [Isolation](references/shared-isolation.md) | Worktree/branch rules and integration ownership |
+| Background, long-running, or external work | [Monitoring](references/shared-monitoring.md) | Polling, liveness, timeout, and recovery rules |
+| Every run | [Safety rails](references/shared-safety-rails.md) | Main-branch, overload, loop, budget, and reward-hacking guards |
+| Resume, compaction, or controller transfer | [Handoff](references/shared-handoff.md) | Durable state and clean controller handoff |
+| Every dispatch and returned report | [Token economy](references/shared-token-economy.md) | Role-scoped communication blocks and priming anatomy |
+
+### Prompt route
+
+| Role | Read | Contribution |
+|---|---|---|
+| Implementation worker | [Implementer](references/prompt-implementer.md) | Executable task brief and dense report contract |
+| Spec reviewer | [Spec reviewer](references/prompt-spec-reviewer.md) | Requirement-compliance review prompt |
+| Quality reviewer | [Quality reviewer](references/prompt-quality-reviewer.md) | Maintainability and correctness review prompt |
+| Integration owner | [Integrator](references/prompt-integrator.md) | Cross-worktree merge and conflict-resolution prompt |
+| Domain sub-orchestrator | [Sub-orchestrator](references/prompt-sub-orchestrator.md) | Delegated planning, dispatch, and summary contract |
+| Advisor | [Advisor prompt](references/prompt-advisor.md) | Bounded consultation prompt |
+| Triage assessor | [Triage assessor](references/prompt-triage-assessor.md) | Independent strategy-assessment prompt |
+| Verification-only worker | [Verifier](references/prompt-verifier.md) | Minimal objective verification prompt |
+| Adversarial planner | [Planner debate](references/prompt-planner-debate.md) | Independent proposal and challenge prompt |
+| Loop evolution pass | [Evolve](references/prompt-evolve.md) | Periodic pattern extraction and process-improvement prompt |
+
+## Dimensions
 
 | Dimension | Values | Default |
 |---|---|---|
-| `topology` | solo · staged · parallel · hierarchical · team · workflow · loop | from strategy |
+| `topology` | solo · staged · parallel · hierarchical · team · workflow · loop | selected strategy |
 | `planning` | none · plan-first · interview · adversarial | plan-first |
-| `review` | off · spec · quality · dual (spec→quality, ordered) · panel:N · consensus:N | dual |
-| `engine` | claude · codex · grok · cursor · agy · opencode · hermes · mixed | claude |
-| `models` | tier map (advisor/orchestrator/reasoner/worker/reviewer/peer) | `shared/model-routing.md` |
-| `isolation` | none · worktree · branch | worktree when >1 writer |
+| `review` | off · spec · quality · dual · panel:N · consensus:N | dual |
+| `engine` | claude · codex · grok · cursor · agy · opencode · hermes · mixed | host-appropriate |
+| `models` | advisor · orchestrator · reasoner · worker · reviewer · peer tier map | model routing |
+| `isolation` | none · worktree · branch | worktree for multiple writers |
 | `trigger` | once · goal · interval · schedule | once |
-| `budget` | max cycles / agents / tokens / open-PR cap | per strategy |
+| `budget` | max cycles · agents · tokens · open PRs | selected strategy |
 
-Record resolved dimensions in `.orchestrate/run.md` at kickoff (auditable, resumable).
+## Universal rules
 
-## Strategy catalog
+1. **The controller coordinates; subagents work.** Do not silently implement a failed task in the
+   controller. Fix the brief, model, context, or worker and re-dispatch deliberately.
+2. **Artifacts on disk are the interface.** Keep briefs, reports, findings, raw logs, and ledgers in
+   `.orchestrate/`; do not rely on chat memory.
+3. **Pin a model on every dispatch.** An omitted model may inherit an unintended expensive default.
+4. **Enforce typed gates.** When dual review is enabled, spec review precedes quality review.
+5. **Ledger before memory.** Append progress after every gated unit; on resume, trust the ledger and
+   repository state over recollection.
+6. **Keep safety rails active.** Never begin on main/master without consent; cap loops and open work;
+   on overload resume or nudge the existing agent rather than spawn a duplicate.
+7. **Prime with pointers, work silent, report dense.** Preserve required safety and coordination
+   messages while eliminating routine narration and raw output dumps.
+8. **Do not orchestrate small coupled work.** If one agent can complete the task efficiently within
+   one coherent context, use solo execution and optionally one reviewer.
 
-| Strategy | Use when | Read |
-|---|---|---|
-| **staged** *(default)* | A plan with mostly-independent tasks; quality via per-task fresh implementer + dual review | `references/strategies/staged.md` |
-| **parallel** | Independent tasks, no shared files; N workers at once in worktrees | `references/strategies/parallel.md` |
-| **hierarchical** | Work too broad for one context; sub-orchestrators think per-domain, workers execute | `references/strategies/hierarchical.md` |
-| **team** | Workers must talk to each other: debate, competing hypotheses, cross-layer coordination | `references/strategies/team.md` |
-| **workflow** | 10–1000 agents, deterministic fan-out/verify; script holds the plan, not you | `references/strategies/workflow.md` |
-| **loop** | Recurring or grind-until-done work with a verifiable stop condition | `references/strategies/loop.md` |
-| **advisor** | Cost split: cheap executor runs, expensive model consulted rarely (or plans up front) | `references/strategies/advisor.md` |
-| **adversarial** | High-stakes plan worth hardening by debate before cheap execution | `references/strategies/adversarial.md` |
-| **xcli** | Route work to external CLIs (codex/grok/cursor/agy/opencode/hermes) as workers, peers, or second opinions | `references/strategies/xcli.md` |
+## Core workflow
 
-Strategies compose via dimension overrides: `strategy=staged engine=codex` (Codex implements,
-Claude reviews) · `strategy=loop topology=parallel` (each cycle fans out) · `strategy=parallel
-review=panel:3`.
+1. Inspect the task, plan, repository state, host capabilities, and stop condition.
+2. Resolve strategy, dimensions, roles, models, budget, isolation, review, and degradation.
+3. Initialize `.orchestrate/` with [workspace](scripts/workspace); record the resolved run.
+4. Create task briefs with [task-brief](scripts/task-brief) and validate them with
+   [brief-check](scripts/brief-check).
+5. Dispatch only ready work. Monitor without duplicating agents and integrate through the selected
+   strategy's owner.
+6. Package review evidence with [review-package](scripts/review-package), enforce configured gates,
+   and send failures back to the correct worker or owner.
+7. Append durable progress and finish or hand off only when the stop condition is verified.
 
-## Universal rules (all strategies)
+Use [toolbox](scripts/toolbox) to inventory available tools once and reuse the recorded result.
 
-1. **You coordinate; subagents work.** Never implement in the controller — fresh context per task
-   beats accumulated context. Failed task → fix subagent, not manual fixing (context pollution).
-2. **Artifacts on disk are the interface, never chat.** Briefs, reports, ledgers, diffs — files.
-   Workspace: `.orchestrate/` in the repo root, self-ignoring (`scripts/workspace` creates it).
-3. **Model explicit on EVERY dispatch** — an omitted model silently inherits the session's most
-   expensive one. Tiers: `references/shared/model-routing.md`.
-4. **Gate with typed checks, enforced not trusted.** Review order is fixed: spec THEN quality.
-   Contracts + report schemas: `references/shared/contracts.md`; gates: `references/shared/review-gates.md`.
-5. **Ledger before memory.** Append progress to `.orchestrate/progress.md` after each gated unit;
-   on resume/compaction trust ledger + `git log` over recollection.
-6. **Safety rails always on** — never start on main/master without consent; loop caps + kill
-   switch; on API overload NEVER spawn a duplicate agent (resume/nudge the same one); respect the
-   open-PR bandwidth cap. Full list: `references/shared/safety-rails.md`.
-7. **When NOT to orchestrate:** <50K tokens of coupled work → `solo` (just do it, optionally one
-   reviewer). A strategy that costs more than it returns is a bug.
-8. **Token economy: prime with pointers, work silent, report dense.** Briefs follow the priming
-   anatomy and pass `scripts/brief-check`; every dispatch embeds its ROLE's communication block
-   (`references/shared/token-economy.md`). Quote literals verbatim; never compress safety
-   language. Reviewers report everything — filtering is the controller's job.
+## Artifact contract
 
-## Files
+Every run owns `.orchestrate/run.md`, `progress.md`, task briefs, worker reports, review findings,
+and any raw evidence required to reproduce a gate. Record resolved dimensions, exact role/model
+assignments, budgets, branch/worktree ownership, decisions, failures, and the verified stop
+condition.
 
-- `references/triage.md` — auto-selection decision procedure
-- `references/strategies/*.md` — one per strategy: roles, step flow, failure handling, example
-- `references/shared/*.md` — contracts · review-gates · model-routing · isolation · monitoring · safety-rails · handoff · token-economy · hosts
-- `references/prompts/*.md` — dispatch templates (implementer, reviewers, verifier, sub-orchestrator, …)
-- `scripts/` — `workspace` · `task-brief PLAN N` · `review-package BASE HEAD` · `brief-check BRIEF` · `toolbox [--refresh]`
-- `config.yaml` — saved aliases (named dimension presets)
+## Completion and handoff
 
-Read ONLY the strategy file you selected plus the shared files it names. Do not preload everything.
+Complete only when every in-scope task has a terminal status, required reviews passed, integration
+is verified, temporary worktrees or processes are accounted for, and the goal or one-shot stop
+condition is satisfied. On interruption or controller transfer, emit the durable handoff defined in
+[shared handoff](references/shared-handoff.md); never force the next controller to reconstruct state
+from chat.

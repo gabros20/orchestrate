@@ -40,7 +40,7 @@
     "priceCurrency": "USD"
   },
   "license": "https://opensource.org/licenses/MIT",
-  "sameAs": ["https://github.com/gabros20/orchestrate"]
+  "sameAs": ["https://github.com/gabros20/orchestrate-skill"]
 }
 </script>
 
@@ -311,8 +311,8 @@
 <header>
   <div class="eyebrow">An agent skill · one command, nine run shapes</div>
   <nav class="toplinks" aria-label="external links">
-    <a href="https://github.com/gabros20/orchestrate" target="_blank" rel="noopener">GitHub</a>
-    <a href="https://github.com/gabros20/orchestrate#install" target="_blank" rel="noopener">Install</a>
+    <a href="https://github.com/gabros20/orchestrate-skill" target="_blank" rel="noopener">GitHub</a>
+    <a href="https://github.com/gabros20/orchestrate-skill#install" target="_blank" rel="noopener">Install</a>
     <a href="/llms.txt">llms.txt</a>
   </nav>
   <h1><span class="sl">/</span>orchestrate</h1>
@@ -430,7 +430,7 @@
     <span class="g-dim">isolation=</span><span class="g-val">worktree|branch|off</span>   <span class="g-dim">workers=</span><span class="g-val">N</span>
     <span class="g-dim">trigger=</span><span class="g-val">once|goal:"tests green"|interval:5m|schedule:"0 6 * * *"</span>
     <span class="g-dim">budget=</span><span class="g-val">cycles|agents|tokens</span>   <span class="g-dim">alias=</span><span class="g-val">saved-preset</span></div>
-      <p>Full reference: <a href="https://github.com/gabros20/orchestrate/blob/main/docs/usage.md">docs/usage.md</a> — every dimension, every value, selection precedence.</p>
+      <p>Full reference: <a href="https://github.com/gabros20/orchestrate-skill/blob/main/docs/usage.md">docs/usage.md</a> — every dimension, every value, selection precedence.</p>
     </div>
   </details>
 </section>
@@ -563,11 +563,11 @@
   <h2>Start here</h2>
   <p>Install once, point it at a plan. Bare invocation triages and explains its pick.</p>
   <div class="term"><span class="c"># install</span>
-npx skills add gabros20/orchestrate
+npx skills add gabros20/orchestrate-skill -g
 
 <span class="c"># run</span>
-<span class="p">/orchestrate</span> docs/feature-plan.md
-<span class="p">/orchestrate</span> "keep fixing until the suite passes" strategy=loop trigger=goal:"pytest green"</div>
+<span class="p">$orchestrate</span> docs/feature-plan.md
+<span class="p">$orchestrate</span> "keep fixing until the suite passes" strategy=loop trigger=goal:"pytest green"</div>
   <p style="margin-top:14px">The same install runs on any <a href="https://agentskills.io">Agent&nbsp;Skills</a>
   host — <b>Claude Code</b> is the reference; on the others the skill detects its host at kickoff,
   binds what's native, and degrades honestly where a primitive is missing.</p>
@@ -577,7 +577,7 @@ npx skills add gabros20/orchestrate
       <div class="tblwrap"><table>
         <tr><th>host</th><th>native subagents</th><th>model pin</th><th>worth knowing</th></tr>
         <tr><td class="dim">Claude Code</td><td>deep, parallel, background</td><td>✓</td><td>the reference — every primitive native</td></tr>
-        <tr><td class="dim">Codex CLI</td><td>6 threads, depth 1</td><td>✓</td><td>no background shells; installs to <code>~/.agents/skills</code></td></tr>
+        <tr><td class="dim">Codex CLI</td><td>6 threads, depth 1</td><td>✓</td><td>invoke with <code>$orchestrate</code>; installs under <code>$CODEX_HOME/skills</code></td></tr>
         <tr><td class="dim">Cursor CLI</td><td>parallel + background</td><td>✓</td><td>headless ask-user is broken — human gates need ACP</td></tr>
         <tr><td class="dim">Antigravity</td><td>async, depth 10, messaging</td><td>—</td><td>subagents inherit the parent's model</td></tr>
         <tr><td class="dim">opencode</td><td>synchronous only</td><td>✓</td><td>parallel via <code>opencode serve</code> or external processes</td></tr>
@@ -587,7 +587,7 @@ npx skills add gabros20/orchestrate
       <p style="margin-top:12px"><code class="mono">team</code> needs Claude Code or Antigravity and
       <code class="mono">workflow</code> needs Claude Code; every other strategy runs everywhere —
       worst case as headless-CLI fan-out. Full bindings and quirks:
-      <a href="https://github.com/gabros20/orchestrate/blob/main/skills/orchestrate/references/shared/hosts.md">shared/hosts.md</a>.</p>
+      <a href="https://github.com/gabros20/orchestrate-skill/blob/main/skills/orchestrate/references/shared-hosts.md">shared-hosts.md</a>.</p>
     </div>
   </details>
   <p style="margin-top:18px">An <b>alias</b> is a preset you name yourself in <code class="mono">config.yaml</code>.
@@ -601,7 +601,7 @@ npx skills add gabros20/orchestrate
     <tr><td class="dim">architect</td><td><code>advisor</code> + <code>worker:sonnet</code></td><td>big-model thinking, small-model doing</td></tr>
   </table></div>
   <p style="margin-top:16px">Copy-paste starting points for more scenarios:
-  <a href="https://github.com/gabros20/orchestrate/blob/main/docs/recipes.md">docs/recipes.md</a>.</p>
+  <a href="https://github.com/gabros20/orchestrate-skill/blob/main/docs/recipes.md">docs/recipes.md</a>.</p>
 
   <details class="disc">
     <summary>model tiers — who runs on what</summary>
@@ -623,7 +623,7 @@ npx skills add gabros20/orchestrate
   <details class="disc">
     <summary>what appears on disk</summary>
     <div>
-      <div class="files"><span class="hl">~/.claude/skills/orchestrate/</span>
+      <div class="files"><span class="hl">$CODEX_HOME/skills/orchestrate/</span> <span class="d">(client path varies)</span>
 ├─ SKILL.md                    <span class="d">the router — grammar, catalog, universal rules</span>
 ├─ config.yaml                 <span class="d">your saved aliases</span>
 ├─ scripts/                    <span class="d">workspace · task-brief · review-package · brief-check · toolbox</span>
@@ -635,14 +635,14 @@ npx skills add gabros20/orchestrate
 ├─ raw/                        <span class="d">redirected command output — dumps never enter context</span>
 ├─ toolbox.md                  <span class="d">probed orientation recipes — read, don't re-probe</span>
 └─ progress.md                 <span class="d">THE LEDGER — resume trusts this + git log, not memory</span></div>
-      <p>Layout details: <a href="https://github.com/gabros20/orchestrate/blob/main/docs/usage.md">docs/usage.md</a>.</p>
+      <p>Layout details: <a href="https://github.com/gabros20/orchestrate-skill/blob/main/docs/usage.md">docs/usage.md</a>.</p>
     </div>
   </details>
 </section>
 
 <footer>
   <span><span class="mono">/orchestrate</span> — strategy-selectable subagent orchestration</span>
-  <span><a href="https://github.com/gabros20/orchestrate">github.com/gabros20/orchestrate</a> · MIT</span>
+  <span><a href="https://github.com/gabros20/orchestrate-skill">github.com/gabros20/orchestrate-skill</a> · MIT</span>
 </footer>
 </div>
 <script>

@@ -8,3 +8,5 @@ node_modules/
 skills-lock.json
 .claude/skills/mediabunny
 .claude/skills/remotion-*
+__pycache__/
+*.pyc

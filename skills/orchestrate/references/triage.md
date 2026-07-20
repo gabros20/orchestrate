@@ -1,7 +1,21 @@
 # Triage — picking a strategy when the user didn't
 
+Purpose: Select the lowest-cost orchestration strategy that satisfies the task's dependency, coordination, and review needs.
+
+Read when:
+- No explicit strategy or saved alias was supplied.
+
+Skip when:
+- The user forced a valid strategy and host compatibility is already resolved.
+
+Inputs:
+- Task or plan, repository shape, host capabilities, dependencies, risk, and budget.
+
+Produces:
+- Selected strategy, resolved degradations, and a one-line rationale.
+
 Run this BEFORE dispatching anything. It costs one cheap assessment, not a subagent, unless the
-codebase is unknown (then dispatch `prompts/triage-assessor.md` on a mid-tier model).
+codebase is unknown (then dispatch `prompt-triage-assessor.md` on a mid-tier model).
 
 ## Step 0 — should you orchestrate at all?
 
@@ -12,7 +26,7 @@ Estimate total context the work needs (files to read + plan + expected diffs).
 - A loop earns its cost only when ALL four hold (Karpathy test): the task repeats or grinds;
   verification is automated; the token budget can absorb retries; the agent has real tools to see
   failures. Miss one → don't pick `loop`.
-- **Host gate** (non-Claude-Code hosts only): resolve the host first (`shared/hosts.md`). `team`
+- **Host gate** (non-Claude-Code hosts only): resolve the host first (`shared-hosts.md`). `team`
   needs Claude Code or Antigravity; `workflow` needs Claude Code; in-session parallel fan-out is
   missing on opencode/Hermes. An unsupported pick maps to its degradation (team→hierarchical,
   workflow→scripted xcli fan-out, parallel→headless engines in worktrees) — name the downgrade in
@@ -56,7 +70,7 @@ parallel/workflow.
 1. State the pick in one line: `strategy=X because <signals>`. Apply user dimension overrides.
 2. Write `.orchestrate/run.md`: task, resolved dimensions, budget, timestamp.
 3. Only if two strategies fit equally and the cost difference is large → ask the user
-   (AskUserQuestion on Claude Code; host equivalent per `shared/hosts.md`) with the trade-off.
+   (AskUserQuestion on Claude Code; host equivalent per `shared-hosts.md`) with the trade-off.
    Otherwise proceed.
 
 ## Re-triage triggers (mid-run)

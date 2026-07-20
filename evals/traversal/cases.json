@@ -1,0 +1,50 @@
+[
+  {
+    "id": "auto-triage",
+    "prompt": "Orchestrate this plan; choose the strategy for me.",
+    "expected_references": ["references/triage.md", "references/shared-hosts.md", "references/shared-safety-rails.md"],
+    "forbidden_references": ["references/strategy-team.md", "references/strategy-workflow.md"]
+  },
+  {
+    "id": "staged-dual-review",
+    "prompt": "Run plan.md with fresh implementers and spec then quality review.",
+    "expected_references": ["references/strategy-staged.md", "references/shared-contracts.md", "references/shared-review-gates.md", "references/prompt-implementer.md", "references/prompt-spec-reviewer.md", "references/prompt-quality-reviewer.md"],
+    "forbidden_references": ["references/strategy-parallel.md", "references/prompt-integrator.md"]
+  },
+  {
+    "id": "parallel-worktrees",
+    "prompt": "Run these independent cards in four worktrees and integrate them.",
+    "expected_references": ["references/strategy-parallel.md", "references/shared-isolation.md", "references/prompt-implementer.md", "references/prompt-integrator.md"],
+    "forbidden_references": ["references/strategy-team.md", "references/prompt-planner-debate.md"]
+  },
+  {
+    "id": "hierarchical-domains",
+    "prompt": "Give each platform domain its own sub-orchestrator and budget.",
+    "expected_references": ["references/strategy-hierarchical.md", "references/shared-model-routing.md", "references/prompt-sub-orchestrator.md"],
+    "forbidden_references": ["references/strategy-advisor.md", "references/prompt-advisor.md"]
+  },
+  {
+    "id": "goal-loop",
+    "prompt": "Repeat implementation cycles until tests pass, maximum eight cycles.",
+    "expected_references": ["references/strategy-loop.md", "references/shared-safety-rails.md", "references/shared-monitoring.md", "references/prompt-evolve.md"],
+    "forbidden_references": ["references/strategy-workflow.md", "references/prompt-planner-debate.md"]
+  },
+  {
+    "id": "adversarial-plan",
+    "prompt": "Have two independent planners challenge this high-risk migration and synthesize the safest plan.",
+    "expected_references": ["references/strategy-adversarial.md", "references/prompt-planner-debate.md", "references/shared-review-gates.md"],
+    "forbidden_references": ["references/strategy-advisor.md", "references/prompt-evolve.md"]
+  },
+  {
+    "id": "external-codex",
+    "prompt": "Use Codex CLI workers for the implementation tasks and capture their outputs.",
+    "expected_references": ["references/strategy-xcli.md", "references/shared-hosts.md", "references/shared-monitoring.md", "references/shared-token-economy.md"],
+    "forbidden_references": ["references/strategy-team.md", "references/prompt-sub-orchestrator.md"]
+  },
+  {
+    "id": "controller-handoff",
+    "prompt": "Pause this orchestration run and prepare it for another controller to resume.",
+    "expected_references": ["references/shared-handoff.md", "references/shared-contracts.md"],
+    "forbidden_references": ["references/strategy-workflow.md", "references/prompt-implementer.md"]
+  }
+]

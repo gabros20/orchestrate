@@ -7,10 +7,8 @@ Versioning: [SemVer](https://semver.org/) — **MAJOR** = invocation grammar or 
 breaks, **MINOR** = new strategies/dimensions/aliases or new reference material that changes
 behavior, **PATCH** = fixes, doc corrections, prompt tuning with unchanged behavior.
 
-The skill's current version lives in `skills/orchestrate/SKILL.md` frontmatter (`version:`) and is
-tagged in git as `v<version>`. Every release PR updates **both** plus this file, and must pass
-`scripts/check-sync` (block byte-identity, honest numbers, replicated invariants — CI-enforced on
-every PR).
+The release procedure synchronizes `.codex-plugin/plugin.json`, this changelog, git tag
+`v<version>`, and the matching GitHub Release. Runtime `SKILL.md` contains no version metadata.
 
 ## [Unreleased]
 
@@ -22,6 +20,28 @@ every PR).
   language as inline code — data, not buttons) and the section-nav pills gained a `#` anchor
   prefix, so metadata tags and in-page links no longer look like the same component.
 
+## [1.5.0] — 2026-07-17
+
+### Added
+- Codex plugin packaging and `agents/openai.yaml` client metadata.
+- Activation, traversal, output, and compression-ablation evaluation fixtures.
+- A repository-local baseline gate for frontmatter, flat direct routing, reference primacy headers,
+  long-reference contents lists, plugin/client metadata, runtime scripts, and eval fixtures.
+- Explicit mission, product-lifecycle boundary, artifact contract, completion, and durable handoff
+  sections in the runtime router.
+- Repository-specific `AGENTS.md` and `CLAUDE.md` guidance, enforced by the baseline gate.
+
+### Changed
+- Flattened all 29 references into one directly routed layer with semantic `strategy-*`, `shared-*`,
+  and `prompt-*` filenames; no required reference depends on directory discovery.
+- Kept the orchestration-specific byte-identity, honest-number, replicated-invariant, and host-layer
+  checks as a second gate after universal skill validation.
+- Moved version and repository metadata out of runtime `SKILL.md`.
+- Adopted the `orchestrate-skill` repository/package name while preserving `orchestrate` as the
+  runtime skill identifier.
+- Split Codex installation from the cross-agent `~/.agents/skills` target and made replacement
+  transactional.
+
 ## [1.4.0] — 2026-07-14
 
 ### Added
@@ -29,7 +49,7 @@ every PR).
   with Claude Code as the reference implementation. Design: `docs/designs/v1.4.0-multi-cli-support.md`
   (built on eight sourced research reports covering the agentskills.io standard, skills.sh, and
   each target CLI).
-  - New `references/shared/hosts.md` — host detection (from the agent's own toolset), a
+  - New `references/shared-hosts.md` — host detection (from the agent's own toolset), a
     capability matrix across Claude Code / Codex / Cursor / Antigravity / opencode / Grok Build /
     Hermes, bindings for six abstract primitives (dispatch, parallel, message, ask-user,
     worktree, loop), a stated-never-silent degradation ladder (native → xcli shell-out → solo
@@ -186,7 +206,7 @@ unstructured returns without degrading the context workers receive. Design (twic
 external gpt-5.6-sol advisor): `docs/designs/v1.1.0-token-optimization.md`.
 
 ### Added
-- `references/shared/token-economy.md` — role-scoped communication blocks (WORKER / REVIEWER /
+- `references/shared-token-economy.md` — role-scoped communication blocks (WORKER / REVIEWER /
   MINIMAL + team exemption), the priming anatomy ("prime with pointers, not payloads", pinned
   `read: <path> [@ <sha>]` pointer grammar, brief probe-test), raw-output
   redirect-at-execution convention (`.orchestrate/raw/`), controller diet, cache/session
@@ -220,7 +240,7 @@ external gpt-5.6-sol advisor): `docs/designs/v1.1.0-token-optimization.md`.
 - `xcli` strategy + model routing updated for the new Codex model family (verified against the
   official model docs): `gpt-5.6-sol` / `gpt-5.6-terra` / `gpt-5.6-luna` with the new reasoning
   effort ladder `low…ultra` (`ultra` fans out Codex-side subagents — documented as a fan-out
-  decision, not an effort bump). Engine tier map added to `shared/model-routing.md`.
+  decision, not an effort bump). Engine tier map added to `shared-model-routing.md`.
 
 ## [1.0.1] — 2026-07-13
 
@@ -249,12 +269,14 @@ external gpt-5.6-sol advisor): `docs/designs/v1.1.0-token-optimization.md`.
 - Docs (`docs/`), visual guide (`site/` → orchestrate-skill.vercel.app), skills.sh-standard
   install (`install.sh`, `npx skills add gabros20/orchestrate`).
 
-[Unreleased]: https://github.com/gabros20/orchestrate/compare/v1.3.1...HEAD
-[1.3.1]: https://github.com/gabros20/orchestrate/compare/v1.3.0...v1.3.1
-[1.3.0]: https://github.com/gabros20/orchestrate/compare/v1.2.1...v1.3.0
-[1.2.1]: https://github.com/gabros20/orchestrate/compare/v1.2.0...v1.2.1
-[1.2.0]: https://github.com/gabros20/orchestrate/compare/v1.1.0...v1.2.0
-[1.1.0]: https://github.com/gabros20/orchestrate/compare/v1.0.2...v1.1.0
-[1.0.2]: https://github.com/gabros20/orchestrate/compare/v1.0.1...v1.0.2
-[1.0.1]: https://github.com/gabros20/orchestrate/compare/v1.0.0...v1.0.1
-[1.0.0]: https://github.com/gabros20/orchestrate/releases/tag/v1.0.0
+[Unreleased]: https://github.com/gabros20/orchestrate-skill/compare/v1.5.0...HEAD
+[1.5.0]: https://github.com/gabros20/orchestrate-skill/compare/v1.4.0...v1.5.0
+[1.4.0]: https://github.com/gabros20/orchestrate-skill/compare/v1.3.1...v1.4.0
+[1.3.1]: https://github.com/gabros20/orchestrate-skill/compare/v1.3.0...v1.3.1
+[1.3.0]: https://github.com/gabros20/orchestrate-skill/compare/v1.2.1...v1.3.0
+[1.2.1]: https://github.com/gabros20/orchestrate-skill/compare/v1.2.0...v1.2.1
+[1.2.0]: https://github.com/gabros20/orchestrate-skill/compare/v1.1.0...v1.2.0
+[1.1.0]: https://github.com/gabros20/orchestrate-skill/compare/v1.0.2...v1.1.0
+[1.0.2]: https://github.com/gabros20/orchestrate-skill/compare/v1.0.1...v1.0.2
+[1.0.1]: https://github.com/gabros20/orchestrate-skill/compare/v1.0.0...v1.0.1
+[1.0.0]: https://github.com/gabros20/orchestrate-skill/releases/tag/v1.0.0

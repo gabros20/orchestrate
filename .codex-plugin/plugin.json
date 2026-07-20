@@ -1,0 +1,28 @@
+{
+  "name": "orchestrate-skill",
+  "version": "1.5.0",
+  "description": "Select and run bounded multi-agent strategies with durable artifacts, explicit models, typed review gates, and safe recovery.",
+  "author": {
+    "name": "Tamás Gábor",
+    "url": "https://github.com/gabros20"
+  },
+  "homepage": "https://orchestrate-skill.vercel.app",
+  "repository": "https://github.com/gabros20/orchestrate-skill",
+  "license": "MIT",
+  "keywords": ["agent-skill", "multi-agent", "orchestration", "subagents", "coding-agents"],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Orchestrate",
+    "shortDescription": "Multi-agent strategy selection, dispatch, and gates",
+    "longDescription": "Choose and execute staged, parallel, hierarchical, team, workflow, loop, advisor, adversarial, or external-CLI agent strategies with durable state and review gates.",
+    "developerName": "Tamás Gábor",
+    "category": "Developer Tools",
+    "capabilities": ["Interactive", "Write"],
+    "websiteURL": "https://orchestrate-skill.vercel.app",
+    "defaultPrompt": [
+      "Use $orchestrate to execute this implementation plan.",
+      "Use $orchestrate to fan these independent tasks out safely."
+    ],
+    "brandColor": "#3d6bb6"
+  }
+}

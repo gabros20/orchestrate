@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # brief-check <brief-file> — validate a task brief against the priming anatomy
-# (references/shared/token-economy.md). Exit 0 = dispatchable; non-zero = one
+# (references/shared-token-economy.md). Exit 0 = dispatchable; non-zero = one
 # reason per line on stderr. Validates controller-COMPOSED briefs, never raw
 # scripts/task-brief output (that's an input to composition).
 set -euo pipefail

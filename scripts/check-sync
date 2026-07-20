@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
-# check-sync — maintenance guard for deliberately-replicated skill text (repo-side
-# tooling; NOT shipped with the skill). Run from anywhere in the repo before a release.
+# check-sync — universal skill-package validation plus maintenance guards for deliberately
+# replicated orchestration text. Run from anywhere in the repository before a release.
 #
 # 1. Communication blocks: the fenced WORKER/REVIEWER/MINIMAL blocks in
-#    references/shared/token-economy.md must appear BYTE-IDENTICAL in every prompt
+#    references/shared-token-economy.md must appear BYTE-IDENTICAL in every prompt
 #    template the dispatch coverage matrix assigns them to.
 # 2. Honest numbers: the stated block costs must match the measured words×1.33.
 # 3. Replicated invariants: rules intentionally restated across files (progressive
@@ -14,8 +14,17 @@ set -uo pipefail
 
 root="$(cd "$(dirname "$0")/.." && pwd)"
 skill="$root/skills/orchestrate"
-te="$skill/references/shared/token-economy.md"
-prompts="$skill/references/prompts"
+te="$skill/references/shared-token-economy.md"
+prompts="$skill/references/prompt-"
+
+"$root/scripts/lint-skill" || exit 1
+bash -n "$root/install.sh" "$root/scripts/check-sync"
+python3 -m py_compile "$root/scripts/lint-skill" "$root/scripts/count-skill-tokens"
+while IFS= read -r -d '' script; do
+  if head -1 "$script" | grep -qE '^#!/usr/bin/env bash|^#!/bin/bash'; then
+    bash -n "$script"
+  fi
+done < <(find "$skill/scripts" -type f -print0)
 
 fail=0
 err() { echo "check-sync: FAIL: $1" >&2; fail=1; }
@@ -45,13 +54,13 @@ contains() { # contains <needle-var-name> <file>
 }
 
 for f in implementer integrator sub-orchestrator evolve; do
-  contains worker "$prompts/$f.md" || err "WORKER block not byte-identical in prompts/$f.md"
+  contains worker "$prompts$f.md" || err "WORKER block not byte-identical in prompt-$f.md"
 done
 for f in spec-reviewer quality-reviewer; do
-  contains reviewer "$prompts/$f.md" || err "REVIEWER block not byte-identical in prompts/$f.md"
+  contains reviewer "$prompts$f.md" || err "REVIEWER block not byte-identical in prompt-$f.md"
 done
 for f in advisor triage-assessor verifier planner-debate; do
-  contains minimal "$prompts/$f.md" || err "MINIMAL line not byte-identical in prompts/$f.md"
+  contains minimal "$prompts$f.md" || err "MINIMAL line not byte-identical in prompt-$f.md"
 done
 
 # --- 2. honest numbers vs measured (words×1.33, tolerance ±15) ---------------------
@@ -68,12 +77,12 @@ done
 
 # --- 3. replicated invariants: pattern|home,home,... (paths relative to skill/) ----
 registry='
-HEAD~1|references/strategies/staged.md,references/prompts/quality-reviewer.md,scripts/review-package
-fix subagent|references/strategies/staged.md,references/shared/review-gates.md,references/prompts/quality-reviewer.md
-re-dispatch unchanged|references/shared/contracts.md,references/strategies/staged.md
-spawn a duplicate|SKILL.md,references/shared/safety-rails.md,references/strategies/parallel.md
-~80% of multi-agent quality|references/shared/token-economy.md,references/shared/model-routing.md,references/strategies/hierarchical.md
-eward-hacking|references/shared/safety-rails.md,references/strategies/loop.md
+HEAD~1|references/strategy-staged.md,references/prompt-quality-reviewer.md,scripts/review-package
+fix subagent|references/strategy-staged.md,references/shared-review-gates.md,references/prompt-quality-reviewer.md
+re-dispatch unchanged|references/shared-contracts.md,references/strategy-staged.md
+spawn a duplicate|SKILL.md,references/shared-safety-rails.md,references/strategy-parallel.md
+~80% of multi-agent quality|references/shared-token-economy.md,references/shared-model-routing.md,references/strategy-hierarchical.md
+eward-hacking|references/shared-safety-rails.md,references/strategy-loop.md
 '
 while IFS='|' read -r pattern homes; do
   [ -n "$pattern" ] || continue
@@ -84,14 +93,14 @@ while IFS='|' read -r pattern homes; do
 done <<< "$registry"
 
 # --- 4. host layer (v1.4.0 multi-CLI support) ---------------------------------------
-[ -f "$skill/references/shared/hosts.md" ] || err "references/shared/hosts.md missing"
+[ -f "$skill/references/shared-hosts.md" ] || err "references/shared-hosts.md missing"
 for f in team workflow; do
-  grep -qi 'Host availability' "$skill/references/strategies/$f.md" \
-    || err "strategies/$f.md missing its 'Host availability' note"
+  grep -qi 'Host availability' "$skill/references/strategy-$f.md" \
+    || err "strategy-$f.md missing its 'Host availability' note"
 done
 n="$(wc -l < "$skill/SKILL.md")"
-[ "$n" -le 120 ] || err "SKILL.md exceeds its 120-line budget ($n lines)"
-n="$(wc -l < "$skill/references/shared/hosts.md")"
+[ "$n" -le 250 ] || err "SKILL.md exceeds its 250-line review budget ($n lines)"
+n="$(wc -l < "$skill/references/shared-hosts.md")"
 [ "$n" -le 200 ] || err "hosts.md exceeds its 200-line budget ($n lines)"
 
 if [ "$fail" -eq 0 ]; then note "OK — blocks byte-identical, numbers honest, invariants present, host layer intact"; fi

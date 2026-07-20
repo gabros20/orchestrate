@@ -1,0 +1,6 @@
+interface:
+  display_name: "Orchestrate"
+  short_description: "Multi-agent strategy selection, dispatch, and gates"
+  default_prompt: "Use $orchestrate to execute this plan with the smallest effective agent topology."
+policy:
+  allow_implicit_invocation: true

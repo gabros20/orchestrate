@@ -1,0 +1,310 @@
+#!/usr/bin/env python3
+"""Repository-local structural validator for one independently packaged agent skill."""
+
+from __future__ import annotations
+
+import json
+import math
+import os
+import re
+import sys
+from pathlib import Path
+
+
+ROOT = Path(__file__).resolve().parents[1]
+errors: list[str] = []
+warnings: list[str] = []
+
+
+def fail(message: str) -> None:
+    errors.append(message)
+
+
+def warn(message: str) -> None:
+    warnings.append(message)
+
+
+def source_template() -> bool:
+    github_repo = os.environ.get("GITHUB_REPOSITORY")
+    return ROOT.name == "skill-template" and github_repo in (None, "", "gabros20/skill-template")
+
+
+def json_has_placeholder(value: object) -> bool:
+    if isinstance(value, str):
+        return "TODO" in value or "__SKILL" in value
+    if isinstance(value, list):
+        return any(json_has_placeholder(item) for item in value)
+    if isinstance(value, dict):
+        return any(json_has_placeholder(item) for item in value.values())
+    return False
+
+
+placeholder_dir = ROOT / "skills" / "__SKILL_NAME__"
+if placeholder_dir.exists():
+    if source_template():
+        print("lint-skill: source template detected; instantiated-pack validation skipped")
+        sys.exit(0)
+    fail("uninstantiated template: run scripts/init before treating this repository as a skill")
+
+skills_root = ROOT / "skills"
+skill_dirs = sorted(path for path in skills_root.iterdir() if path.is_dir()) if skills_root.exists() else []
+if len(skill_dirs) != 1:
+    fail(f"expected exactly one primary skill directory under skills/; found {len(skill_dirs)}")
+
+if errors:
+    for message in errors:
+        print(f"lint-skill: FAIL: {message}", file=sys.stderr)
+    sys.exit(1)
+
+skill_dir = skill_dirs[0]
+skill_name = skill_dir.name
+skill_md = skill_dir / "SKILL.md"
+if not skill_md.is_file():
+    fail(f"missing {skill_md.relative_to(ROOT)}")
+    skill_text = ""
+else:
+    skill_text = skill_md.read_text(encoding="utf-8")
+
+if not re.fullmatch(r"[a-z0-9]+(?:-[a-z0-9]+)*", skill_name) or len(skill_name) > 64:
+    fail(f"invalid skill directory name: {skill_name}")
+
+frontmatter_match = re.match(r"\A---\n(.*?)\n---\n", skill_text, re.DOTALL)
+description = ""
+if not frontmatter_match:
+    fail("SKILL.md must start with a valid YAML frontmatter block")
+else:
+    frontmatter = frontmatter_match.group(1)
+    keys = re.findall(r"^([A-Za-z0-9_-]+):", frontmatter, re.MULTILINE)
+    if keys != ["name", "description"]:
+        fail(f"SKILL.md frontmatter must contain only name and description in that order; found {keys}")
+    name_match = re.search(r"^name:\s*([^\n]+)$", frontmatter, re.MULTILINE)
+    if not name_match or name_match.group(1).strip(" '\"") != skill_name:
+        fail(f"frontmatter name must match skill directory '{skill_name}'")
+    description_match = re.search(
+        r"^description:\s*(?:[>|][-+]?\s*)?\n((?:^[ \t]+.*(?:\n|$))+)",
+        frontmatter,
+        re.MULTILINE,
+    )
+    if description_match:
+        description = " ".join(line.strip() for line in description_match.group(1).splitlines()).strip()
+    else:
+        inline_match = re.search(r"^description:\s*(.+)$", frontmatter, re.MULTILINE)
+        description = inline_match.group(1).strip(" '\"") if inline_match else ""
+    if not description:
+        fail("frontmatter description is empty")
+    if len(description) > 800:
+        fail(f"description exceeds the 800-character review threshold ({len(description)})")
+    elif len(description) > 600:
+        warn(f"description exceeds the 600-character target ({len(description)})")
+    if "TODO" in description or "__SKILL" in description:
+        fail("frontmatter description still contains a placeholder")
+
+line_count = len(skill_text.splitlines())
+word_count = len(re.findall(r"\b\w+\b", skill_text))
+token_estimate = math.ceil(word_count * 1.35)
+if line_count > 500:
+    fail(f"SKILL.md exceeds the 500-line platform guideline ({line_count})")
+elif line_count > 250:
+    warn(f"SKILL.md exceeds the collection's 250-line review threshold ({line_count})")
+if token_estimate > 3500:
+    warn(f"SKILL.md exceeds the 3,500-token review threshold (estimated {token_estimate})")
+
+runtime_files = [path for path in skill_dir.rglob("*") if path.is_file()]
+for path in runtime_files:
+    try:
+        text = path.read_text(encoding="utf-8")
+    except UnicodeDecodeError:
+        continue
+    if re.search(r"__SKILL(?:_[A-Z]+)*__|\bTODO(?:\b|:|\s|—)", text):
+        fail(f"runtime placeholder remains in {path.relative_to(ROOT)}")
+
+openai_yaml = skill_dir / "agents" / "openai.yaml"
+if not openai_yaml.is_file():
+    fail(f"missing recommended client metadata: {openai_yaml.relative_to(ROOT)}")
+else:
+    openai_text = openai_yaml.read_text(encoding="utf-8")
+    for key in ("display_name", "short_description", "default_prompt"):
+        match = re.search(rf"^\s+{key}:\s+\"([^\"]+)\"\s*$", openai_text, re.MULTILINE)
+        if not match:
+            fail(f"agents/openai.yaml must contain a quoted interface.{key}")
+    short_match = re.search(r'^\s+short_description:\s+"([^"]+)"\s*$', openai_text, re.MULTILINE)
+    if short_match and not 25 <= len(short_match.group(1)) <= 64:
+        fail("agents/openai.yaml short_description must be 25-64 characters")
+    prompt_match = re.search(r'^\s+default_prompt:\s+"([^"]+)"\s*$', openai_text, re.MULTILINE)
+    if prompt_match and f"${skill_name}" not in prompt_match.group(1):
+        fail(f"agents/openai.yaml default_prompt must explicitly mention ${skill_name}")
+
+plugin_path = ROOT / ".codex-plugin" / "plugin.json"
+plugin: dict[str, object] = {}
+if not plugin_path.is_file():
+    fail("missing .codex-plugin/plugin.json")
+else:
+    try:
+        plugin = json.loads(plugin_path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as exc:
+        fail(f"invalid plugin.json: {exc}")
+    expected_plugin_name = f"{skill_name}-skill"
+    if plugin.get("name") != expected_plugin_name:
+        fail(f"plugin name must be '{expected_plugin_name}'")
+    if plugin.get("skills") != "./skills/":
+        fail("plugin.json skills must be './skills/'")
+    version = plugin.get("version")
+    if not isinstance(version, str) or not re.fullmatch(r"\d+\.\d+\.\d+", version):
+        fail("plugin.json version must be strict semantic versioning")
+    if not isinstance(plugin.get("description"), str) or not plugin.get("description"):
+        fail("plugin.json description is required")
+    author = plugin.get("author")
+    if not isinstance(author, dict) or not isinstance(author.get("name"), str) or not author.get("name"):
+        fail("plugin.json author.name is required")
+    interface = plugin.get("interface")
+    if not isinstance(interface, dict):
+        fail("plugin.json interface is required")
+    else:
+        for key in ("displayName", "shortDescription", "longDescription", "developerName", "category"):
+            if not isinstance(interface.get(key), str) or not interface.get(key):
+                fail(f"plugin.json interface.{key} is required")
+        if not isinstance(interface.get("capabilities"), list):
+            fail("plugin.json interface.capabilities must be an array")
+        prompts = interface.get("defaultPrompt")
+        if isinstance(prompts, str):
+            prompts = [prompts]
+        if not isinstance(prompts, list) or not prompts or not all(isinstance(item, str) for item in prompts):
+            fail("plugin.json interface.defaultPrompt must contain at least one prompt")
+        elif not any(f"${skill_name}" in item for item in prompts):
+            fail(f"plugin.json defaultPrompt must explicitly mention ${skill_name}")
+
+changelog = ROOT / "CHANGELOG.md"
+if not changelog.is_file():
+    fail("missing CHANGELOG.md")
+elif plugin:
+    release_match = re.search(r"^## \[(\d+\.\d+\.\d+)\]", changelog.read_text(encoding="utf-8"), re.MULTILINE)
+    if not release_match:
+        fail("CHANGELOG.md has no released semantic version heading")
+    elif plugin.get("version") != release_match.group(1):
+        fail(
+            f"plugin version {plugin.get('version')} does not match latest CHANGELOG release "
+            f"{release_match.group(1)}"
+        )
+
+markdown_link_pattern = re.compile(r"\[[^\]]*\]\(([^)]+)\)")
+direct_references: set[Path] = set()
+for raw_target in markdown_link_pattern.findall(skill_text):
+    target = raw_target.strip().split(maxsplit=1)[0].strip("<>")
+    target = target.split("#", 1)[0]
+    if not target or re.match(r"^[a-zA-Z][a-zA-Z0-9+.-]*:", target):
+        continue
+    resolved = (skill_dir / target).resolve()
+    try:
+        resolved.relative_to(skill_dir.resolve())
+    except ValueError:
+        fail(f"SKILL.md link escapes the runtime skill root: {raw_target}")
+        continue
+    if not resolved.exists():
+        fail(f"broken SKILL.md link: {raw_target}")
+    if target.startswith("references/") and target.endswith(".md"):
+        direct_references.add(resolved)
+
+references_dir = skill_dir / "references"
+references = sorted(references_dir.rglob("*.md")) if references_dir.exists() else []
+for reference in references:
+    relative_reference = reference.relative_to(references_dir)
+    if relative_reference.parent != Path("."):
+        fail(f"reference must be one level below SKILL.md: references/{relative_reference}")
+    if reference.resolve() not in direct_references:
+        fail(f"reference is not directly linked from SKILL.md: references/{relative_reference}")
+    reference_text = reference.read_text(encoding="utf-8")
+    if reference_text.startswith("---\n"):
+        fail(f"reference must not contain YAML frontmatter: references/{relative_reference}")
+    opening = "\n".join(reference_text.splitlines()[:80])
+    for label in ("Purpose:", "Read when:", "Skip when:", "Inputs:", "Produces:"):
+        if label not in opening:
+            fail(f"references/{relative_reference} opening is missing '{label}'")
+    reference_lines = reference_text.splitlines()
+    if len(reference_lines) > 100 and not re.search(r"^## Contents\s*$", opening, re.MULTILINE):
+        fail(f"references/{relative_reference} exceeds 100 lines without an early '## Contents'")
+    reference_words = len(re.findall(r"\b\w+\b", reference_text))
+    reference_tokens = math.ceil(reference_words * 1.35)
+    if reference_tokens > 2500:
+        warn(f"references/{relative_reference} exceeds the 2,500-token review threshold (estimated {reference_tokens})")
+
+for markdown_file in [skill_md, *references]:
+    if not markdown_file.is_file():
+        continue
+    markdown_text = markdown_file.read_text(encoding="utf-8")
+    for raw_target in markdown_link_pattern.findall(markdown_text):
+        target = raw_target.strip().split(maxsplit=1)[0].strip("<>")
+        target = target.split("#", 1)[0]
+        if not target or re.match(r"^[a-zA-Z][a-zA-Z0-9+.-]*:", target):
+            continue
+        resolved = (markdown_file.parent / target).resolve()
+        try:
+            resolved.relative_to(skill_dir.resolve())
+        except ValueError:
+            fail(f"runtime Markdown link escapes the skill root in {markdown_file.relative_to(ROOT)}: {raw_target}")
+            continue
+        if not resolved.exists():
+            fail(f"broken runtime Markdown link in {markdown_file.relative_to(ROOT)}: {raw_target}")
+
+runtime_scripts = skill_dir / "scripts"
+if runtime_scripts.exists():
+    for script in runtime_scripts.iterdir():
+        if script.is_file() and not os.access(script, os.X_OK):
+            fail(f"runtime script is not executable: {script.relative_to(ROOT)}")
+
+eval_paths = {
+    "activation": ROOT / "evals" / "activation" / "cases.json",
+    "traversal": ROOT / "evals" / "traversal" / "cases.json",
+    "output": ROOT / "evals" / "output" / "cases.json",
+    "compression-ablation": ROOT / "evals" / "compression-ablation" / "cases.json",
+}
+eval_data: dict[str, list[object]] = {}
+for eval_name, eval_path in eval_paths.items():
+    if not eval_path.is_file():
+        fail(f"missing {eval_path.relative_to(ROOT)}")
+        continue
+    try:
+        data = json.loads(eval_path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as exc:
+        fail(f"invalid {eval_path.relative_to(ROOT)}: {exc}")
+        continue
+    if not isinstance(data, list) or not data:
+        fail(f"{eval_path.relative_to(ROOT)} must be a non-empty JSON array")
+        continue
+    if json_has_placeholder(data):
+        fail(f"{eval_path.relative_to(ROOT)} still contains placeholder cases")
+    eval_data[eval_name] = data
+
+activation = eval_data.get("activation", [])
+if activation:
+    trigger_values = {case.get("should_trigger") for case in activation if isinstance(case, dict)}
+    if trigger_values != {True, False}:
+        fail("activation evals must include both should-trigger and should-not-trigger cases")
+
+for case in eval_data.get("traversal", []):
+    if not isinstance(case, dict):
+        fail("each traversal case must be an object")
+        continue
+    for key in ("expected_references", "forbidden_references"):
+        paths = case.get(key)
+        if not isinstance(paths, list):
+            fail(f"traversal case '{case.get('id', '<unknown>')}' must define {key} as an array")
+            continue
+        for reference_path in paths:
+            if not isinstance(reference_path, str) or not (skill_dir / reference_path).is_file():
+                fail(f"traversal case '{case.get('id', '<unknown>')}' names missing {key} path: {reference_path}")
+
+for required in ("README.md", "AGENTS.md", "CLAUDE.md", "CHANGELOG.md", "CONTRIBUTING.md", "LICENSE"):
+    if not (ROOT / required).is_file():
+        fail(f"missing repository contract file: {required}")
+
+for message in warnings:
+    print(f"lint-skill: WARN: {message}")
+if errors:
+    for message in errors:
+        print(f"lint-skill: FAIL: {message}", file=sys.stderr)
+    sys.exit(1)
+
+print(
+    f"lint-skill: OK — {skill_name}, {line_count} SKILL.md lines, "
+    f"~{token_estimate} tokens, {len(references)} direct reference(s)"
+)

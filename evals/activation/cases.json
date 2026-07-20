@@ -1,0 +1,18 @@
+[
+  {"id":"positive-plan","prompt":"Run this implementation plan with subagents and review every completed task.","should_trigger":true},
+  {"id":"positive-parallel","prompt":"Fan these six independent migrations out in worktrees and integrate them.","should_trigger":true},
+  {"id":"positive-hierarchical","prompt":"Split this platform rewrite into frontend, backend, and infrastructure domains with sub-orchestrators.","should_trigger":true},
+  {"id":"positive-team","prompt":"Create an agent team to debate these competing root-cause hypotheses.","should_trigger":true},
+  {"id":"positive-loop","prompt":"Keep assigning fresh agents until the full test suite is green, capped at ten cycles.","should_trigger":true},
+  {"id":"positive-adversarial","prompt":"Have independent planners attack this migration plan before workers execute it.","should_trigger":true},
+  {"id":"positive-xcli","prompt":"Use Codex and Grok as independent external reviewers for this diff.","should_trigger":true},
+  {"id":"positive-typo","prompt":"orchastrate this plan and fan otu the independant tasks", "should_trigger":true},
+  {"id":"negative-small-fix","prompt":"Rename this local variable and update the one affected test.","should_trigger":false},
+  {"id":"negative-explanation","prompt":"Explain how this function handles retries.","should_trigger":false},
+  {"id":"negative-product-lifecycle","prompt":"Decide which product, design, engineering, marketing, and sales stages this startup needs.","should_trigger":false},
+  {"id":"negative-domain","prompt":"Design the onboarding flow for this mobile application.","should_trigger":false},
+  {"id":"negative-single-review","prompt":"Review this five-line diff for an off-by-one error.","should_trigger":false},
+  {"id":"negative-monitor","prompt":"Wait for this one existing command to finish and report its exit code.","should_trigger":false},
+  {"id":"negative-architecture","prompt":"Choose a multi-tenant data architecture for this SaaS app.","should_trigger":false},
+  {"id":"negative-automation","prompt":"Create a deterministic nightly backup shell script.","should_trigger":false}
+]
