@@ -10,6 +10,37 @@ behavior, **PATCH** = fixes, doc corrections, prompt tuning with unchanged behav
 The release procedure synchronizes `.codex-plugin/plugin.json`, this changelog, git tag
 `v<version>`, and the matching GitHub Release. Runtime `SKILL.md` contains no version metadata.
 
+## [1.7.0] — 2026-07-21
+
+Informed by Cursor's agent-swarm write-up (2026) via a 3-model cross-lineage panel review —
+corroborates the pack's existing context doctrine, notably its context-efficiency stance, no
+causal claims.
+
+### Added
+- Swarm-economics routing (`shared-model-routing.md` rule 11): hybrid (strong planner + cheapest
+  eligible worker) applies only when a brief clears the eligibility gate (brief-check, narrow
+  scope, exact verification, no open design seam) — preferred there, never auto-selected outside
+  it; else rule 2's floor holds. Planners judged by induced worker tokens, not their own bill.
+- Model prompt-sensitivity note (`shared-model-routing.md` rule 10): wording sensitivity varies by
+  model — re-tune dispatch templates per model at a recorded boundary, never mid-run.
+- Review-lens decorrelation (input + engine-lineage axes, transcripts demoted to forensics-by-path,
+  review-economics note) — `shared-review-gates.md`.
+- Decision registry (`decisions.md`, IDs/owners, doc-first reconciliation) + guarded on-demand
+  field guide (≤40 lines, entry criteria) — `shared-contracts.md` + `shared-token-economy.md`.
+- Thrash-signals note (conflict/rework without gate movement, seam growth incl. megafile) →
+  repartition — `shared-monitoring.md`.
+- Split-brain rule: cross-cutting decisions ID/owner-recorded before delegation, no two
+  cards/subtrees leave one open (`strategy-parallel.md`, `strategy-hierarchical.md`).
+- Eligibility-gate eval fixture (`evals/output/cases.json`).
+
+### Changed
+- Integrator resolves collisions mechanically first, semantic disagreement bounces to the owning
+  worker only when intent is needed (`strategy-parallel.md` step 5).
+- `strategy-xcli.md` grok block restamped: CLI 0.2.106 defaults to `grok-4.5` (live-verified
+  2026-07-20) + routing rules 8–9.
+- Reference-pack size on disk +654 tokens (~2.5%, `scripts/count-skill-tokens`: 26,625 → 27,279) —
+  a one-time authoring cost, not per-run spend.
+
 ## [1.6.0] — 2026-07-20
 
 ### Added

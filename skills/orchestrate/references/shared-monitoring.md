@@ -68,3 +68,7 @@ State files: `~/.claude/daemon/roster.json`, `~/.claude/jobs/<id>/state.json`.
    Antigravity; elsewhere resume its session with a nudge prompt) — if it still returns nothing,
    read its transcript; don't respawn blind.
 3. Silence is not success: no report + no artifact = failed, treat it as BLOCKED.
+4. Thrash signals — repeated conflicts/rework WITHOUT acceptance-gate movement, a growing
+   contested seam/file (megafile: flag it, controller queues an isolated decomposition task), or
+   duplicate structural expansion — are REPARTITION signals, not push-harder ones; no absolute
+   commit/LOC thresholds, activity ≠ progress → repartition (`strategy-parallel.md`).

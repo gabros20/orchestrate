@@ -45,6 +45,9 @@ Prompt: `prompt-sub-orchestrator.md`.
   do (no cross-domain edits, no scope invention). Briefs follow the priming anatomy + pass
   `scripts/brief-check` (`shared-token-economy.md`); sub-orchestrators apply the same standard to
   their own worker briefs.
+- Planners and sub-orchestrators make cross-cutting design decisions THEMSELVES and record them
+  with IDs and owners in `decisions.md` (`shared-contracts.md`) — never delegate a cross-cutting
+  decision to a worker; no two delegated subtrees may decide the same question.
 - **Peek before deep**: have each sub-orchestrator sample structure (cheap greps/reads) before
   committing its worker fan-out.
 - Token budget drives shape (it explains ~80% of multi-agent quality variance): give each branch

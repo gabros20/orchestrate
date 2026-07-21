@@ -123,7 +123,11 @@ A quality brief contains, in order:
    fan-out, inline the one canonical payload every worker needs rather than making N workers
    rediscover it.
    Every worker/reviewer brief also includes
-   `read: .orchestrate/toolbox.md — orientation recipes`.
+   `read: .orchestrate/toolbox.md — orientation recipes`. When `.orchestrate/field-guide.md`
+   exists, briefs RELEVANT to it also include `read: .orchestrate/field-guide.md` — no file →
+   no pointer → zero cost. Controller entry criteria (curation gate): a surprise not derivable
+   from the repo or conventions files, not a decision (`decisions.md`) or orientation
+   (`toolbox.md`), and names the wasted turn it prevents.
 4. **Interfaces & constraints to honor** — exact values, formats, relationships (verbatim).
 5. **Verification** — the command(s)/check(s) that prove done.
 6. **Report contract** — schema, cap, file path to write it.

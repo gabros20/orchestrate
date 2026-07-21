@@ -18,5 +18,15 @@
     "id": "overload-safety",
     "prompt": "A worker received an overload error during parallel execution.",
     "assertions": ["does not spawn a duplicate worker", "resumes or nudges the existing worker", "records the event", "respects open-work and budget caps"]
+  },
+  {
+    "id": "eligibility-gate-transcription-grade",
+    "prompt": "Orchestrate this plan; the card's brief passes brief-check with narrow declared scope, exact verification, and no unresolved design seam (decisions cited by ID).",
+    "assertions": ["routes the worker to the cheapest eligible tier", "the planner is judged by the worker tokens its plan induces, not its own bill"]
+  },
+  {
+    "id": "eligibility-gate-prose-driven",
+    "prompt": "Orchestrate this plan; the card's brief is prose-driven with an unresolved design seam.",
+    "assertions": ["routes to a mid-tier worker, not the cheapest tier", "recognizes the brief fails the eligibility gate (open design seam), so the transcription-grade posture is not unlocked"]
   }
 ]

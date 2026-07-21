@@ -33,11 +33,11 @@ are read on demand. Terseness is a grammar, not a vibe — line shapes below are
 
 | Role | Returns (max) |
 |---|---|
-| implementer | <15 lines: Status · commits · 1-line tests · concerns · report path |
+| implementer | <15 lines: Status · commits · 1-line tests · concerns · report path · optional `surprise:` line |
 | reviewer | verdict first (✅/❌/⚠️) · counts by severity · findings FILE path (see below) |
 | verifier | `works|broken` · expected · observed · evidence path |
-| sub-orchestrator | <1500 tokens: verdict · findings summary · artifact paths |
-| parallel worker | verdict first, <1000 tokens: branch/PR ref · report path |
+| sub-orchestrator | <1500 tokens: verdict · findings summary · artifact paths · optional `surprise:` line |
+| parallel worker | verdict first, <1000 tokens: branch/PR ref · report path · optional `surprise:` line |
 | triage assessor | scale · independence · verifiability · recommended strategy + why |
 | search/explore worker | `path:line — symbol — ≤10-word note` per hit + `totals: <n> files` (or `No match.`) |
 
@@ -53,6 +53,13 @@ Reviewer "read-only" means the REPO; `.orchestrate/` is the one place a reviewer
 - `run.md` — resolved dimensions, budget, task, timestamp (written at kickoff)
 - `task-N-brief.md` / `task-N-report.md` — per-task handoffs (report named off brief); briefs
   follow the priming anatomy and pass `scripts/brief-check` (`shared-token-economy.md`)
+- `decisions.md` — cross-cutting decisions, one line each: ID + owner (small runs: keep in
+  `run.md`). Briefs CITE IDs, never restate.
+  Contradictions reconcile in the record FIRST, by the owner (integrator only when explicitly
+  designated, never invents design intent), then propagate outward.
+- `field-guide.md` — optional, created only on the first controller-accepted surprise (any
+  WORKER-role report may append one `surprise:` line; controller curates), per-run scope, hard
+  ≤40-line cap; entry criteria in `shared-token-economy.md`.
 - `card-<k>.md` — parallel task cards
 - `review-<b7>..<h7>.diff` — review packages
 - `review-task<N>-<kind>-r<round>.md` — reviewer findings files

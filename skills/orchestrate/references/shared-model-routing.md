@@ -48,12 +48,13 @@ Produces:
 8. Effort knobs exist beyond model choice: Claude `--effort low..max`, codex
    `-c model_reasoning_effort=low..ultra` (medium default; `ultra` fans out Codex-side subagents —
    treat as a fan-out decision, not an effort bump), grok-4.5 API `reasoning_effort=low|medium|high`
-   (high default; no CLI flag as of grok CLI 0.2.101). Cheap stage = low effort; judge stage = high.
+   (high default; no CLI flag as of grok CLI 0.2.106). Cheap stage = low effort; judge stage = high.
 9. Engine tier map — codex (verified 2026-07-13): `gpt-5.6-luna` ≈ cheap worker ·
    `gpt-5.6-terra` ≈ standard worker/reviewer · `gpt-5.6-sol` ≈ reasoner/advisor/peer.
    Grok (verified 2026-07-14): `grok-4.5` = flagship (500k ctx, coding/agentic/reasoning) ≈
-   reasoner/advisor/peer — API-only for now; the grok CLI exposes a separate, shorter list
-   (`grok models`). Kimi (verified 2026-07-20, live 0.28.0): `k3` = flagship (1M ctx on
+   reasoner/advisor/peer; grok CLI (0.2.106, verified 2026-07-20) defaults to `grok-4.5` as its
+   sole listed model — lists drift, re-verify with `grok models` before pinning. Kimi (verified
+   2026-07-20, live 0.28.0): `k3` = flagship (1M ctx on
    Allegretto+ membership, 256k below; `reasoning_effort: low|high|max`, default `high` — set via
    config.toml or `/effort`, NOT a CLI
    flag) ≈ reasoner/advisor/peer · `kimi-for-coding` ≈ balanced worker/reviewer (256k ctx) ·
@@ -61,7 +62,16 @@ Produces:
    not a cheap tier; no cheap tier exists). Switching model or effort mid-session invalidates
    Kimi's prompt cache — pin both per session. Model lists drift — re-verify slugs before pinning
    (`strategy-xcli.md`).
-10. **Host caveat** (non-Claude-Code hosts): per-dispatch pinning is native on Codex (agents
+10. Sensitivity to emphasized/literal wording varies by model — re-tune dispatch templates per
+    model at a recorded boundary, never mid-run (cache hygiene, `shared-token-economy.md`).
+11. **Hybrid preferred when the brief is transcription-grade**: planner spend converts
+    prose-driven tasks into transcription-grade ones — buy the conversion, don't upgrade the
+    worker. Eligible only if the brief passes `scripts/brief-check`, scope is narrow and declared,
+    verification is exact, and no design/cross-task seam is unresolved; otherwise rule 2's floor
+    applies unchanged. Judge a planner by the **worker tokens its plans induce**, not its own bill —
+    terse plans are not free (Cursor 2026 swarm data: similar quality across mixes, ~8× cost
+    spread, workers ≥69–90% of tokens — bounded observation, not a causal law).
+12. **Host caveat** (non-Claude-Code hosts): per-dispatch pinning is native on Codex (agents
     TOML), Cursor (`model:` frontmatter), and opencode (agent files) — but Antigravity subagents
     inherit the parent model, Hermes accepts a per-task model then silently ignores it, and there is
     no documented per-dispatch pin on Kimi. On those hosts, tier separation routes

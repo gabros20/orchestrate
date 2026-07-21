@@ -1,6 +1,6 @@
 {
   "name": "orchestrate-skill",
-  "version": "1.6.0",
+  "version": "1.7.0",
   "description": "Select and run bounded multi-agent strategies with durable artifacts, explicit models, typed review gates, and safe recovery.",
   "author": {
     "name": "Tamás Gábor",

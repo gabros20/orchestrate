@@ -50,6 +50,12 @@ non-compliant code is wasted tokens.
 
 - Panel: N reviewers, each ONE lens (security / performance / architecture / testing / a11y…).
   Diverse lenses catch what redundant copies can't.
+- Lenses may also decorrelate by INPUT — diff-only · codebase-only (still brief + constraints, no
+  diff) · diff+report+brief (standard) — or by ENGINE LINEAGE (xcli peers/peer tier); worker
+  transcripts are post-mortem forensics only (`shared-monitoring.md` paths), referenced, never
+  pasted into a dispatch.
+- Review compute is high-return — cheaper than the work it audits; decorrelated lenses stack, no
+  single lens catches everything (Cursor 2026, bounded observation).
 - Dedup rules: same file:line + same issue → merge, credit all finders; conflicting severity →
   take the HIGHER; conflicting recommendations → keep both, attributed.
 - Severity calibration: impact × likelihood; externally exploitable → always Critical/High.

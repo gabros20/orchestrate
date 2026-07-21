@@ -77,10 +77,10 @@ grok -p "task" --output-format json          # plain|json|streaming-json
 grok --cwd /path -m <model> -s "$(uuidgen)" -p "task"   # session id MUST be a UUID (CLI ≥0.2.x)
 grok -r <id> -p "follow-up"                  # resume; -c = continue last
 ```
-- Models (verified 2026-07-14): the API flagship is **`grok-4.5`** (500k context, built for
-  coding/agentic work, reasoning effort `low|medium|high`, high default) — but the CLI ships its
-  own shorter list; 0.2.101 exposes only `grok-composer-2.5-fast` (default) and `grok-build`, and
-  `-m grok-4.5` errors until the CLI catches up. Run `grok models` before pinning.
+- Models (verified 2026-07-14 API / 2026-07-20 CLI): the flagship is **`grok-4.5`** (500k
+  context, built for coding/agentic work, reasoning effort `low|medium|high`, high default) — grok
+  CLI 0.2.106 now defaults to it as the sole listed model too. Lists drift — run `grok models`
+  before pinning.
 - Approval is all-or-nothing (`--always-approve`) — prefer read-only tasks, or babysit.
 - Sessions on disk: `~/.grok/sessions`. Long-lived JSON-RPC: `grok agent stdio` (ACP).
 - No reasoning-effort flag in the CLI; effort is an API-side knob.
